@@ -1,0 +1,6 @@
+asgiref==3.9.1
+Django==5.2.6
+setuptools==80.9.0
+sqlparse==0.5.3
+tzdata==2025.2
+wheel==0.45.1
