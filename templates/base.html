@@ -1,0 +1,329 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    <title>موپلی | {% block title %}{% endblock %}</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all-fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/plyr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+    <div class="preloader d-none" >
+        <div class="loader-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <header class="header" dir="rtl">
+        <div class="main-navigation">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container position-relative">
+                    <a class="navbar-brand" href="index-2.html">
+                        <img src="{% static 'images/logo.png' %}" class="logo-dark-mode" alt="logo">
+                        <img src="{% static 'images/logo-dark.png' %}" class="logo-light-mode" alt="logo">
+                    </a>
+                    <div class="mobile-menu-right">
+                        <div class="nav-search-wrap">
+                            <div class="search-btn">
+                                <button type="button" class="nav-right-link search-box-outer"><i
+                                        class="icon-search"></i></button>
+                            </div>
+
+                            <div class="search-area">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="کلمه را وارد کنید...">
+                                        <button type="submit" class="search-icon-btn"><i
+                                                class="icon-search"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        <div class="color-mode theme-mode-control">
+                            <button type="button" class="nav-right-link light-btn"><i class="icon-sun"></i></button>
+                            <button type="button" class="nav-right-link dark-btn"><i class="icon-moon-2"></i></button>
+                        </div>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#main_nav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-mobile-icon"><i class="icon-menu-2"></i></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="main_nav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">ژانر فیلم</a>
+                                <div class="dropdown-menu mega-menu fade-down">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <a class="dropdown-item" href="movie-category.html">اکشن</a>
+                                            <a class="dropdown-item" href="movie-category.html">انیمیشن</a>
+                                            <a class="dropdown-item" href="movie-category.html">ماجراجویی</a>
+                                            <a class="dropdown-item" href="movie-category.html">بیوگرافی</a>
+                                            <a class="dropdown-item" href="movie-category.html">کمدی</a>
+                                            <a class="dropdown-item" href="movie-category.html">جنایی</a>
+                                            <a class="dropdown-item" href="movie-category.html">مستند</a>
+                                            <a class="dropdown-item" href="movie-category.html">درام</a>
+                                            <a class="dropdown-item" href="movie-category.html">خانوادگی</a>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <a class="dropdown-item" href="movie-category.html">فانتزی</a>
+                                            <a class="dropdown-item" href="movie-category.html">نمایش بازی</a>
+                                            <a class="dropdown-item" href="movie-category.html">تاریخچه</a>
+                                            <a class="dropdown-item" href="movie-category.html">وحشتناک</a>
+                                            <a class="dropdown-item" href="movie-category.html">کونگ فو</a>
+                                            <a class="dropdown-item" href="movie-category.html">موسیقی</a>
+                                            <a class="dropdown-item" href="movie-category.html">موسیقی</a>
+                                            <a class="dropdown-item" href="movie-category.html">معمایی</a>
+                                            <a class="dropdown-item" href="movie-category.html">اساطیری</a>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <a class="dropdown-item" href="movie-category.html">اخبار</a>
+                                            <a class="dropdown-item" href="movie-category.html">روانی</a>
+                                            <a class="dropdown-item" href="movie-category.html">عاشقانه</a>
+                                            <a class="dropdown-item" href="movie-category.html">علمی تخیلی</a>
+                                            <a class="dropdown-item" href="movie-category.html">ورزش</a>
+                                            <a class="dropdown-item" href="movie-category.html">ریلی شو</a>
+                                            <a class="dropdown-item" href="movie-category.html">هیجان انگیز</a>
+                                            <a class="dropdown-item" href="movie-category.html">نمایش تلویزیونی</a>
+                                            <a class="dropdown-item" href="movie-category.html">جنگ</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">ژانر سریال</a>
+                                <div class="dropdown-menu mega-menu fade-down">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <a class="dropdown-item" href="movie-category.html">اکشن</a>
+                                            <a class="dropdown-item" href="movie-category.html">انیمیشن</a>
+                                            <a class="dropdown-item" href="movie-category.html">ماجراجویی</a>
+                                            <a class="dropdown-item" href="movie-category.html">بیوگرافی</a>
+                                            <a class="dropdown-item" href="movie-category.html">کمدی</a>
+                                            <a class="dropdown-item" href="movie-category.html">جنایی</a>
+                                            <a class="dropdown-item" href="movie-category.html">مستند</a>
+                                            <a class="dropdown-item" href="movie-category.html">درام</a>
+                                            <a class="dropdown-item" href="movie-category.html">خانوادگی</a>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <a class="dropdown-item" href="movie-category.html">فانتزی</a>
+                                            <a class="dropdown-item" href="movie-category.html">نمایش بازی</a>
+                                            <a class="dropdown-item" href="movie-category.html">تاریخچه</a>
+                                            <a class="dropdown-item" href="movie-category.html">وحشتناک</a>
+                                            <a class="dropdown-item" href="movie-category.html">کونگ فو</a>
+                                            <a class="dropdown-item" href="movie-category.html">موسیقی</a>
+                                            <a class="dropdown-item" href="movie-category.html">موسیقی</a>
+                                            <a class="dropdown-item" href="movie-category.html">معمایی</a>
+                                            <a class="dropdown-item" href="movie-category.html">اساطیری</a>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <a class="dropdown-item" href="movie-category.html">اخبار</a>
+                                            <a class="dropdown-item" href="movie-category.html">روانی</a>
+                                            <a class="dropdown-item" href="movie-category.html">عاشقانه</a>
+                                            <a class="dropdown-item" href="movie-category.html">علمی تخیلی</a>
+                                            <a class="dropdown-item" href="movie-category.html">ورزش</a>
+                                            <a class="dropdown-item" href="movie-category.html">ریلی شو</a>
+                                            <a class="dropdown-item" href="movie-category.html">هیجان انگیز</a>
+                                            <a class="dropdown-item" href="movie-category.html">نمایش تلویزیونی</a>
+                                            <a class="dropdown-item" href="movie-category.html">جنگ</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item live"><a class="nav-link" href="live.html">وبلاگ</a></li>
+                            <li class="nav-item live"><a class="nav-link" href="live.html">خرید اشتراک</a></li>
+                        </ul>
+                        <div class="nav-right">
+                            <div class="nav-search-wrap">
+                                <div class="search-btn">
+                                    <button type="button" class="nav-right-link search-box-outer"><i
+                                            class="icon-search"></i></button>
+                                </div>
+
+                                <div class="search-area">
+                                    <form action="#">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="کلمه را وارد نمایید...">
+                                            <button type="submit" class="search-icon-btn"><i
+                                                    class="icon-search"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <div class="color-mode theme-mode-control">
+                                <button type="button" class="nav-right-link light-btn"><i class="icon-sun"></i></button>
+                                <button type="button" class="nav-right-link dark-btn"><i class="icon-moon-2"></i></button>
+                            </div>
+                            <div class="nav-right-btn">
+                                <a href="#" class="theme-btn"><i class="far fa-sign-in"></i>ورود</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer-area" dir="rtl">
+        <div class="footer-widget">
+            <div class="container">
+                <div class="footer-widget-wrapper pt-100 pb-50">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="footer-widget-box about-us">
+                                <a href="#" class="footer-logo">
+                                    <img src="{% static 'images/logo.png' %}" class="logo-dark-mode" alt="logo">
+                                    <img src="{% static 'images/logo-dark.png' %}" class="logo-light-mode" alt="logo">
+                                </a>
+                                <p class="mb-3">
+                                    ما انواع مختلفی از معابر موجود داریم که اکثریت آنها دچار تغییر شده اند
+                                     به نوعی با تزریق کلمات طنز باورپذیر.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-2">
+                            <div class="footer-widget-box list">
+                                <h4 class="footer-widget-title">موپلی</h4>
+                                <ul class="footer-list">
+                                    <li><a href="#">درباره ما</a></li>
+                                    <li><a href="#">شاهدات</a></li>
+                                    <li><a href="#">با ما تماس بگیرید</a></li>
+                                    <li><a href="#">شرایط خدمات</a></li>
+                                    <li><a href="#">خط مشی رازداری</a></li>
+                                    <li><a href="#">اخبار به‌روزرسانی</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-2">
+                            <div class="footer-widget-box list">
+                                <h4 class="footer-widget-title">ژانر</h4>
+                                <ul class="footer-list">
+                                    <li><a href="#">اکشن</a></li>
+                                    <li><a href="#">بیوگرافی</a></li>
+                                    <li><a href="#">مستند</a></li>
+                                    <li><a href="#">ماجراجویی</a></li>
+                                    <li><a href="#">ریلی تایم</a></li>
+                                    <li><a href="#">روانی</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-2">
+                            <div class="footer-widget-box list">
+                                <h4 class="footer-widget-title">پشتیبانی</h4>
+                                <ul class="footer-list">
+                                    <li><a href="#">مرکز راهنمایی</a></li>
+                                    <li><a href="#">سؤالات متداول</a></li>
+                                    <li><a href="#">حساب من</a></li>
+                                    <li><a href="#">درخواست فیلم</a></li>
+                                    <li><a href="#">پشتیبانی</a></li>
+                                    <li><a href="#">مرکز رسانه</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="footer-widget-box list">
+                                <h4 class="footer-widget-title">خبرنامه</h4>
+                                <div class="footer-newsletter">
+                                    <p>برای دریافت آخرین به روز رسانی و اخبار، در خبرنامه ما مشترک شوید</p>
+                                    <div class="subscribe-form">
+                                        <form action="#">
+                                            <input type="email" class="form-control" placeholder="ایمیل آدرس">
+                                            <button class="theme-btn" type="submit">
+                                                <span class="icon-paper-plane"></span>عضویت
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="footer-top-link">
+                                <a href="#">IMDB برتر</a>
+                                <a href="#">نسخه جدید</a>
+                                <a href="#">فیلم‌ها</a>
+                                <a href="#">نمایش‌های تلویزیونی</a>
+                                <a href="#">ویدیوها</a>
+                                <a href="#">اقدام</a>
+                                <a href="#">فانتزی</a>
+                                <a href="#">انیمیشن</a>
+                                <a href="#">موسیقی</a>
+                                <a href="#">جرم</a>
+                                <a href="#">وحشتناک</a>
+                                <a href="#">ورزش</a>
+                                <a href="#">درام</a>
+                                <a href="#">تماشا کنید</a>
+                                <a href="#">نقشه سایت</a>
+                                <a href="#">شو کمدی</a>
+                                <a href="#">کمدی</a>
+                                <a href="#">تماشا کنید</a>
+                                <a href="#">آخرین فیلم</a>
+                                <a href="#">فیلم آینده</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright" >
+            <div class="container">
+                <div class="row" >
+                    <div class="col-md-6 align-self-center">
+                        <p class="copyright-text">
+                            © کلیه حقوق مادی و معنوی این وبسایت متعلق به <a href="#"> موپلی </a> میباشد.
+                        </p>
+                    </div>
+                    <div class="col-md-6 align-self-center">
+                        <ul class="footer-social">
+                            <li><a href="https://t.me/moplay"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="https://instagram.com/moplay"><i class="fab fa-telegram"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" id="scroll-top"><i class="far fa-arrow-up-from-arc"></i></a>
+
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/modernizr.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/jquery.appear.min.js' %}"></script>
+    <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/counter-up.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/plyr.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
