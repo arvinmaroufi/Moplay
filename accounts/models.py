@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import UserManager
+import random
+from django.utils import timezone
+from datetime import timedelta
 
 
 class User(AbstractUser):
@@ -20,3 +23,32 @@ class User(AbstractUser):
         verbose_name = 'کاربر'
         verbose_name_plural = 'کاربران'
         ordering = ['date_joined']
+
+
+class VerificationCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=5)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    def is_valid(self):
+        time_elapsed = timezone.now() - self.created_at
+        return not self.is_used and time_elapsed < timedelta(minutes=2)
+
+    def mark_as_used(self):
+        self.delete()
+
+    @classmethod
+    def generate_code(cls, user):
+        cls.objects.filter(user=user).delete()
+        code = str(random.randint(10000, 99999))
+        return cls.objects.create(user=user, code=code)
+
+    @classmethod
+    def cleanup_expired_codes(cls):
+        expired_time = timezone.now() - timedelta(minutes=2)
+        cls.objects.filter(created_at__lt=expired_time).delete()
+
+    def save(self, *args, **kwargs):
+        self.cleanup_expired_codes()
+        super().save(*args, **kwargs)
