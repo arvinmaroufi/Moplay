@@ -4,6 +4,7 @@ from .forms import RegisterForm, LoginForm
 from .models import User, VerificationCode
 from django.utils import timezone
 from .utils import send_verification_email
+from django.contrib.auth import login as auth_login, logout as auth_logout
 
 
 def register(request):
@@ -63,3 +64,9 @@ def login(request):
         'form': form
     }
     return render(request, 'accounts/login.html', context)
+
+
+def user_logout(request):
+    auth_logout(request)
+    messages.success(request, 'با موفقیت خارج شدید')
+    return redirect('core:home')
