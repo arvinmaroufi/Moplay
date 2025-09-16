@@ -169,3 +169,37 @@ def verify_code(request):
     }
 
     return render(request, 'accounts/verify_code.html', context)
+
+
+def resend_verification_code(request):
+    if request.user.is_authenticated:
+        return redirect('core:home')
+
+    user_id = request.session.get('pending_user_id')
+    user_email = request.session.get('pending_user_email')
+
+    if not user_id or not user_email:
+        messages.error(request, 'لطفا ابتدا اطلاعات ورود را وارد کنید')
+        return redirect('accounts:login')
+
+    try:
+        user = User.objects.get(id=user_id, email=user_email)
+
+        verification_code = VerificationCode.generate_code(user)
+        send_verification_email(user, verification_code.code)
+
+        request.session['pending_user_created_at'] = str(timezone.now())
+
+        messages.info(request, 'کد تایید جدید به ایمیل شما ارسال شد')
+        return redirect('accounts:verify_code')
+
+    except User.DoesNotExist:
+        if 'pending_user_id' in request.session:
+            del request.session['pending_user_id']
+        if 'pending_user_email' in request.session:
+            del request.session['pending_user_email']
+        if 'pending_user_created_at' in request.session:
+            del request.session['pending_user_created_at']
+
+        messages.error(request, 'کاربر یافت نشد')
+        return redirect('accounts:login')
