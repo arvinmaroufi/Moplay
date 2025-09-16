@@ -120,6 +120,8 @@ MEDIA_URL = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'accounts.User'
+
 
 # jalali date settings (optional)
 JALALI_DATE_DEFAULTS = {
