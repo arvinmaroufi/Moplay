@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}تایید کد{% endblock %}
+{% load static %}
+
+{% block content %}
+    <style>
+        .verify-countdown {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+
+        .resend-code {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .form-control:disabled {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+    </style>
+
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">تایید کد</h2>
+            </div>
+        </div>
+
+        <div class="auth-area py-100" dir="rtl">
+            <div class="container">
+                <div class="col-md-5 col-lg-4 mx-auto">
+                    <div class="auth-wrap">
+                        <div class="auth-header">
+                            <img src="{% static 'images/logo.png' %}" class="logo-dark-mode" alt="">
+                            <img src="{% static 'images/logo-dark.png' %}" class="logo-light-mode" alt="">
+                            <p>کد تایید را وارد کنید</p>
+                        </div>
+
+                        <div class="auth-form">
+                            <form method="POST" action="{% url 'accounts:verify_code' %}" id="verify-form">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label>کد 5 رقمی را وارد کنید</label>
+                                    <input type="text" name="code" maxlength="5" class="form-control" placeholder="12345" required id="code-input">
+                                </div>
+                                <div class="auth-btn">
+                                    <button type="submit" class="theme-btn" id="submit-btn">تایید</button>
+                                </div>
+                                <div class="verify-countdown" id="verify-countdown"></div>
+                            </form>
+
+                            <div class="resend-code" id="resend-section" style="display: none;">
+                                <p>کد منقضی شده است</p>
+                                <form method="POST" action="{% url 'accounts:resend_code' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="theme-btn">دریافت کد جدید</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const initialTimeLeft = {{ remaining_time }};
+        let timeLeft = initialTimeLeft;
+        const countdownElement = document.getElementById('verify-countdown');
+        const resendSection = document.getElementById('resend-section');
+        const codeInput = document.getElementById('code-input');
+        const submitButton = document.getElementById('submit-btn');
+        const verifyForm = document.getElementById('verify-form');
+
+        function updateCountdown() {
+            const minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            countdownElement.textContent = `زمان باقیمانده: ${minutes}:${seconds}`;
+
+            if (timeLeft > 0) {
+                timeLeft--;
+                setTimeout(updateCountdown, 1000);
+            } else {
+                countdownElement.textContent = 'زمان به پایان رسیده است';
+                countdownElement.classList.add('countdown-expired');
+                resendSection.style.display = 'block';
+
+                if (codeInput) {
+                    codeInput.disabled = true;
+                }
+                if (submitButton) {
+                    submitButton.disabled = true;
+                }
+            }
+        }
+
+        updateCountdown();
+
+        verifyForm.addEventListener('submit', function(e) {
+            if (timeLeft <= 0) {
+                e.preventDefault();
+                alert('زمان تایید کد به پایان رسیده است. لطفا کد جدید دریافت کنید.');
+            }
+        });
+    </script>
+{% endblock %}
