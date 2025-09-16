@@ -24,6 +24,54 @@
     <link rel="stylesheet" href="{% static 'css/plyr.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+    <style>
+        .alert-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+
+        .alert {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            animation: slideInRight 0.5s forwards;
+            transition: all 0.5s ease;
+        }
+
+        .alert.fade-out {
+            animation: slideOutRight 0.5s forwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .alert-dismissible .btn-close {
+            padding: 0.75rem;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -187,6 +235,18 @@
         </div>
     </header>
 
+    <!-- show all messages -->
+    {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     {% block content %}{% endblock %}
 
     <footer class="footer-area" dir="rtl">
@@ -324,6 +384,37 @@
     <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
     <script src="{% static 'js/plyr.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    alert.classList.add('fade-out');
+
+                    setTimeout(function() {
+                        if (alert.parentNode) {
+                            alert.parentNode.removeChild(alert);
+                        }
+                    }, 500);
+                });
+            }, 5000);
+
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('btn-close')) {
+                    var alert = e.target.closest('.alert');
+                    if (alert) {
+                        alert.classList.add('fade-out');
+                        setTimeout(function() {
+                            if (alert.parentNode) {
+                                alert.parentNode.removeChild(alert);
+                            }
+                        }, 500);
+                    }
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
