@@ -226,7 +226,11 @@
                                 <button type="button" class="nav-right-link dark-btn"><i class="icon-moon-2"></i></button>
                             </div>
                             <div class="nav-right-btn">
-                                <a href="#" class="theme-btn"><i class="far fa-sign-in"></i>ورود</a>
+                                {% if request.user.is_authenticated %}
+                                    <a href="#dashboard" class="theme-btn"><i class="far fa-user"></i>پنل کاربری</a>
+                                {% else %}
+                                    <a href="{% url 'accounts:login' %}" class="theme-btn"><i class="far fa-sign-in"></i>ورود</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
