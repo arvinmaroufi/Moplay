@@ -3,8 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from . import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
-from jalali_date import datetime2jalali, date2jalali
-from jalali_date.admin import ModelAdminJalaliMixin
+from jalali_date import datetime2jalali
 
 
 # personalized actions
@@ -16,7 +15,6 @@ activate_users.short_description = "فعال کردن کاربران انتخا�
 
 
 def deactivate_users(modeladmin, request, queryset):
-    """Action برای غیرفعال کردن کاربران انتخاب شده"""
     updated = queryset.update(is_active=False)
     modeladmin.message_user(
         request, _(f"{updated} کاربر با موفقیت غیرفعال شدند."), messages.SUCCESS)
@@ -24,7 +22,7 @@ deactivate_users.short_description = "غیرفعال کردن کاربران ا�
 
 
 @admin.register(models.User)
-class CustomUserAdmin(ModelAdminJalaliMixin, UserAdmin):
+class CustomUserAdmin(UserAdmin):
     fieldsets = (
         ('عمومی', {'fields': ('email', 'password')}),
         ('اطلاعات شخصی', {'fields': ('first_name', 'last_name', 'phone', 'about_me', 'profile_photo')}),
