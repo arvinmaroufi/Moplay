@@ -117,4 +117,3 @@ class ChangePasswordForm(forms.Form):
             raise ValidationError('رمز عبور جدید و تکرار آن مطابقت ندارند')
 
         return cleaned_data
-    
