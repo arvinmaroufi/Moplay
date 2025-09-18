@@ -35,7 +35,7 @@ def mark_notification_as_read(request, notification_id):
     except Notification.DoesNotExist:
         messages.error(request, 'اعلان یافت نشد')
 
-    return redirect('accounts:dashboard')
+    return redirect('dashboard:dashboard')
 
 
 @login_required
