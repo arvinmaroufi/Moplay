@@ -3,6 +3,8 @@ from django.contrib.auth.admin import UserAdmin
 from . import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
+from jalali_date import datetime2jalali, date2jalali
+from jalali_date.admin import ModelAdminJalaliMixin
 
 
 # personalized actions
@@ -22,7 +24,7 @@ deactivate_users.short_description = "غیرفعال کردن کاربران ا�
 
 
 @admin.register(models.User)
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(ModelAdminJalaliMixin, UserAdmin):
     fieldsets = (
         ('عمومی', {'fields': ('email', 'password')}),
         ('اطلاعات شخصی', {'fields': ('first_name', 'last_name', 'phone', 'about_me', 'profile_photo')}),
@@ -45,8 +47,12 @@ class CustomUserAdmin(UserAdmin):
         }),
     )
 
-    list_display = ['email', 'first_name', 'last_name', 'phone', 'is_staff', 'is_active']
+    list_display = ['email', 'first_name', 'last_name', 'phone', 'is_staff', 'is_active', 'get_date_joined_jalali']
     search_fields = ['email', 'phone', 'first_name', 'last_name']
     list_filter = ['is_staff', 'is_superuser', 'is_active', 'groups']
     ordering = ['date_joined']
     actions = [activate_users, deactivate_users]
+
+    @admin.display(description='تاریخ پیوستن', ordering='date_joined')
+    def get_date_joined_jalali(self, obj):
+        return datetime2jalali(obj.date_joined).strftime('%a، %d %b %Y')
