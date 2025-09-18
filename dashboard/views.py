@@ -8,6 +8,37 @@ from django.contrib.auth import logout as auth_logout
 
 
 @login_required
+def mark_notification_as_read(request, notification_id):
+    """
+    Mark a notification as read by the current user
+
+    Parameters:
+        request: HTTP request object
+        notification_id: ID of the notification to mark as read
+
+    Returns:
+        Redirect to dashboard with appropriate message
+    """
+    try:
+        notification = Notification.objects.get(id=notification_id)
+        has_access = (
+                notification.users.filter(id=request.user.id).exists() or
+                notification.is_for_all_users
+        )
+
+        if has_access:
+            notification.mark_as_read(request.user)
+            messages.success(request, 'اعلان با موفقیت خوانده شد')
+        else:
+            messages.error(request, 'دسترسی غیرمجاز')
+
+    except Notification.DoesNotExist:
+        messages.error(request, 'اعلان یافت نشد')
+
+    return redirect('accounts:dashboard')
+
+
+@login_required
 def dashboard(request):
     user = request.user
     password_form = None
