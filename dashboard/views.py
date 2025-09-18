@@ -116,4 +116,4 @@ def dashboard(request):
         'form': profile_form,
         'password_form': password_form
     }
-    return render(request, 'accounts/dashboard.html', context)
+    return render(request, 'dashboard/dashboard.html', context)
