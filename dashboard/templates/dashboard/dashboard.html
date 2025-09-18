@@ -1,0 +1,771 @@
+{% extends 'base.html' %}
+{% block title %}پنل کاربری من{% endblock %}
+{% load static %}
+{% load jalali_tags %}
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">پنل کاربری من</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">پنل کاربری من</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="profile-area py-100" dir="rtl">
+            <div class="container">
+                <div class="profile-intro">
+                    <div class="row">
+                        <div class="col-lg-4 col-xl-4">
+                            <div class="intro-left">
+                                <div class="intro-img">
+                                    {% if user.profile_photo %}
+                                        <img src="{{ user.profile_photo.url }}" alt="{{ user.username }}">
+                                    {% else %}
+                                        <img src="{% static 'images/profile.png' %}" alt="{{ user.username }}">
+                                    {% endif %}
+                                </div>
+                                <div class="intro-content">
+                                    {% if user.first_name and user.last_name %}
+                                        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                                    {% else %}
+                                        <h4>{{ user.email }}</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-xl-8">
+                            <div class="intro-right">
+                                <div class="intro-item">
+                                    <div class="intro-content">
+                                        <h4 class="intro-amount">۷۹۰,۰۰۰<span>/ماهانه</span></h4>
+                                        <p>اکانت پرمیوم</p>
+                                    </div>
+                                    <div class="intro-icon">
+                                        <i class="icon-subscription"></i>
+                                    </div>
+                                </div>
+                                <div class="intro-item">
+                                    <div class="intro-content">
+                                        <h4>۲۰</h4>
+                                        <p>علاقه مندی ها</p>
+                                    </div>
+                                    <div class="intro-icon">
+                                        <i class="icon-computer-play-1"></i>
+                                    </div>
+                                </div>
+                                <div class="intro-item">
+                                    <div class="intro-content">
+                                        <h4>۴۳۰,۰۰۰</h4>
+                                        <p>موجودی حساب</p>
+                                    </div>
+                                    <div class="intro-icon">
+                                        <i class="icon-money-bag"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-menu">
+                        <ul class="nav nav-underline" id="pills-profile-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-profile-tab1" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile1" type="button" role="tab"
+                                        aria-controls="pills-profile1" aria-selected="true">اکانت من
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-profile-tab2" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile2" type="button" role="tab"
+                                        aria-controls="pills-profile2" aria-selected="false">علاقه مندی
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-profile-tab3" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile3" type="button" role="tab"
+                                        aria-controls="pills-profile3" aria-selected="false">
+                                    اعلانات
+                                    {% if recent_notifications_count > 0 %}
+                                        <span class="badge">{{ recent_notifications_count }}</span>
+                                    {% endif %}
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-profile-tab4" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile4" type="button" role="tab"
+                                        aria-controls="pills-profile4" aria-selected="false">تنظیمات
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-profile-tab5" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile5" type="button" role="tab"
+                                        aria-controls="pills-profile5" aria-selected="false">افزایش موجودی
+                                </button>
+                            </li>
+                            <li class="nav-item ms-auto" role="presentation" style="margin-right: auto;">
+                                <form method="post" action="{% url 'accounts:logout' %}">
+                                    {% csrf_token %}
+                                    <button class="nav-link" type="submit"><i class="far fa-sign-out"></i>خروج</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="profile-menu-content">
+                    <div class="tab-content" id="profile-pills-tabContent">
+
+                        <div class="tab-pane fade show active" id="pills-profile1" role="tabpanel"
+                             aria-labelledby="pills-profile-tab1" tabindex="0">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="profile-menu-info">
+                                        <div class="profile-details">
+                                            <h4 class="title">اطلاعات اکانت</h4>
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                <tr>
+                                                    <th>نام</th>
+                                                    <td>{{ user.first_name|default:'ثبت نشده' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>نام خانوادگی</th>
+                                                    <td>{{ user.last_name|default:'ثبت نشده' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>ایمیل</th>
+                                                    <td>{{ user.email }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>شماره تماس</th>
+                                                    <td>{{ user.phone|default:'ثبت نشده' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>تاریخ ثبت نام</th>
+                                                    <td>{{ user.date_joined|to_jalali:'%Y/%m/%d' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>تاریخ آخرین ورود</th>
+                                                    <td>{{ user.last_login|to_jalali:'%Y/%m/%d' }}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="profile-menu-info">
+                                        <div class="profile-about">
+                                            <h4 class="title">درباره من</h4>
+                                            <p class="mt-3">{{ user.about_me|default:'ثبت نشده' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-profile2" role="tabpanel"
+                             aria-labelledby="pills-profile-tab2" tabindex="0">
+                            <div class="row row-cols-xl-5">
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">اچ دی</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/06.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">آواتار ۲</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">اکشن,</a>
+                                                    <a href="#">فانتزی</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">اچ دی</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/07.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">ماموریت غیر ممکن</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">اکشن,</a>
+                                                    <a href="#">فانتزی</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-episode">قسمت<small>۱۰</small></span>
+                                        <span class="movie-quality">اچ دی</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/s1.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">لوکی</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-season">فصل ۰۲</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">اکشن,</a>
+                                                    <a href="#">فانتزی</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">کیفیت پرده سینما</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/10.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">پروانه غریب</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">اکشن,</a>
+                                                    <a href="#">فانتزی</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-episode">قسمت<small>۱۰</small></span>
+                                        <span class="movie-quality">اچ دی</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/s3.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">ستاره دنباله دار</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-season">فصل ۰۳</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">اکشن,</a>
+                                                    <a href="#">فضایی</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">اچ دی</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/11.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">انتقال دنده</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">اکشن,</a>
+                                                    <a href="#">فانتزی</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-episode">قسمت<small>۱۰</small></span>
+                                        <span class="movie-quality">اس دی</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/s7.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">بال های کشنده</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-season">فصل ۰۹</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">اکشن,</a>
+                                                    <a href="#">فانتزی</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">کیفیت پرده سینما</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/13.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">آموزش اژدها ۲</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">انیمیشن</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">اچ دی</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/14.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">پرنده عصبانی ۲</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">انیمیشن</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-episode">قسمت<small>۱۰</small></span>
+                                        <span class="movie-quality">اچ دی</span>
+                                        <div class="movie-img">
+                                            <img src="{% static 'images/s10.jpg' %}" alt="">
+                                            <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="#">عصای مرموز</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-season">فصل ۰۱</span>
+                                                <div class="movie-genre">
+                                                    <a href="#">اکشن,</a>
+                                                    <a href="#">جنایی</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pagination-area mt-30">
+                                <div aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item active"><a class="page-link" href="#">۱</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">۲</a></li>
+                                        <li class="page-item"><span class="page-link">...</span></li>
+                                        <li class="page-item"><a class="page-link" href="#">۳</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true"><i class="fas fa-arrow-left"></i></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-profile3" role="tabpanel"
+                             aria-labelledby="pills-profile-tab3" tabindex="0">
+                            <div class="profile-menu-info">
+                                <div class="profile-notification">
+                                    <h4 class="title">اعلانات</h4>
+                                    <div class="table-responsive">
+                                        {% if notifications %}
+                                            <table class="table table-borderless">
+                                                <thead>
+                                                <tr>
+                                                    <th>#شماره</th>
+                                                    <th>آیکون</th>
+                                                    <th>اعلانات</th>
+                                                    <th>وضعیت</th>
+                                                    <th>عملکرد</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for notification in notifications %}
+                                                        <tr>
+                                                            <td>{{ forloop.counter }}</td>
+                                                            <td>
+                                                                <span class="icon"><i class="far fa-bell"></i></span>
+                                                            </td>
+                                                            <td>
+                                                                <p>{{ notification.message }}</p>
+                                                                <small class="text-muted">{{ notification.created_at|date:"Y/m/d H:i" }}</small>
+                                                            </td>
+                                                            <td>
+                                                                {% if notification.is_read %}
+                                                                    <span class="badge badge-success">خوانده شده</span>
+                                                                {% else %}
+                                                                    {% if notification.is_recent %}
+                                                                        <span class="badge badge-danger">جدید</span>
+                                                                    {% else %}
+                                                                        <span class="badge badge-secondary">خوانده نشده</span>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if notification.is_read %}
+                                                                    <button class="btn btn-sm btn-outline-secondary rounded-2" disabled>
+                                                                        <i class="far fa-eye-slash"></i>
+                                                                    </button>
+                                                                {% else %}
+                                                                    <form method="post" action="{% url 'dashboard:mark_notification_as_read' notification.id %}" class="d-inline">
+                                                                        {% csrf_token %}
+                                                                        <button type="submit" class="btn btn-sm btn-outline-secondary rounded-2">
+                                                                            <i class="far fa-eye"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% else %}
+                                            <p class="text-center">اعلانی یافت نشد</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-profile4" role="tabpanel"
+                             aria-labelledby="pills-profile-tab4" tabindex="0">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="profile-menu-info">
+                                        <h4 class="title">ویرایش اطلاعات پروفایل</h4>
+
+
+
+                                        <div class="profile-form">
+                                            <form method="post" action="{% url 'dashboard:dashboard' %}" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="edit_profile" value="true">
+                                                <div class="profile-img">
+                                                    {% if user.profile_photo %}
+                                                        <img src="{{ user.profile_photo.url }}" alt="{{ user.username }}" id="profile-image-preview">
+                                                    {% else %}
+                                                        <img src="{% static 'images/profile.png' %}" alt="{{ user.username }}" id="profile-image-preview">
+                                                    {% endif %}
+                                                    <button class="profile-file-btn" type="button" onclick="document.getElementById('profile-photo-input').click()">
+                                                        <i class="far fa-camera"></i>
+                                                    </button>
+                                                    <input type="file" name="profile_photo" id="profile-photo-input" class="profile-file-input"
+                                                           accept="image/*" style="display: none;" onchange="previewImage(this)">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>نام *</label>
+                                                            <input type="text" maxlength="150" name="first_name" class="form-control"
+                                                                   value="{{ form.first_name.value|default:user.first_name|default:'' }}"
+                                                                   placeholder="نام" required>
+                                                            {% if form.first_name.errors %}
+                                                                <div class="text-danger mt-1">
+                                                                    {% for error in form.first_name.errors %}
+                                                                        {{ error }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>نام خانوادگی *</label>
+                                                            <input type="text" maxlength="150" name="last_name" class="form-control"
+                                                                   value="{{ form.last_name.value|default:user.last_name|default:'' }}"
+                                                                   placeholder="نام خانوادگی" required>
+                                                            {% if form.last_name.errors %}
+                                                                <div class="text-danger mt-1">
+                                                                    {% for error in form.last_name.errors %}
+                                                                        {{ error }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>ایمیل</label>
+                                                            <input type="email" class="form-control"
+                                                                   value="{{ user.email }}" placeholder="ایمیل شما" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>شماره تماس</label>
+                                                            <input type="text" maxlength="11" name="phone" class="form-control"
+                                                                   value="{{ form.phone.value|default:user.phone|default:'' }}"
+                                                                   placeholder="شماره تماس">
+                                                            {% if form.phone.errors %}
+                                                                <div class="text-danger mt-1">
+                                                                    {% for error in form.phone.errors %}
+                                                                        {{ error }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>درباره من</label>
+                                                            <textarea name="about_me" cols="30" rows="4" class="form-control"
+                                                                      placeholder="درباره من">{{ form.about_me.value|default:user.about_me|default:'' }}</textarea>
+                                                            {% if form.about_me.errors %}
+                                                                <div class="text-danger mt-1">
+                                                                    {% for error in form.about_me.errors %}
+                                                                        {{ error }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button class="theme-btn" type="submit"><span
+                                                                class="far fa-save"></span> ذخیره تغییرات
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-6">
+                                    <div class="profile-menu-info">
+                                        <h4 class="title">تغییر رمز عبور</h4>
+                                        <div class="profile-form">
+                                            <form method="post" action="{% url 'dashboard:dashboard' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="change_password" value="true">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>رمز عبور فعلی</label>
+                                                            <input type="password" name="current_password" class="form-control"
+                                                                   placeholder="رمز عبور فعلی" required>
+                                                            {% if password_form.current_password.errors %}
+                                                                <div class="text-danger mt-1">
+                                                                    {% for error in password_form.current_password.errors %}
+                                                                        {{ error }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>رمز عبور جدید</label>
+                                                            <input type="password" name="new_password" class="form-control"
+                                                                   placeholder="رمز عبور جدید" required>
+                                                            {% if password_form.new_password.errors %}
+                                                                <div class="text-danger mt-1">
+                                                                    {% for error in password_form.new_password.errors %}
+                                                                        {{ error }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>تایید رمز عبور</label>
+                                                            <input type="password" name="confirm_password" class="form-control"
+                                                                   placeholder="تکرار رمز عبور جدید" required>
+                                                            {% if password_form.non_field_errors %}
+                                                                <div class="text-danger mt-1">
+                                                                    {% for error in password_form.non_field_errors %}
+                                                                        {{ error }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button class="theme-btn" type="submit"><span
+                                                                class="far fa-key"></span> ذخیره تغییرات
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-profile5" role="tabpanel"
+                             aria-labelledby="pills-profile-tab5" tabindex="0">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="profile-menu-info">
+                                        <h4 class="title">خلاصه موجودی</h4>
+                                        <div class="row g-4">
+                                            <div class="col-md-6 col-lg-12 col-xl-6">
+                                                <div class="profile-balance-item">
+                                                    <div class="profile-balance-info">
+                                                        <h3>۲۵۰,۰۰۰</h3>
+                                                        <p>موجودی فعلی</p>
+                                                    </div>
+                                                    <span class="icon"><i class="fal fa-wallet"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-12 col-xl-6">
+                                                <div class="profile-balance-item">
+                                                    <div class="profile-balance-info">
+                                                        <h3>۷۸۰,۰۰۰</h3>
+                                                        <p>کل مبلغ خرج</p>
+                                                    </div>
+                                                    <span class="icon"><i class="fal fa-sack-dollar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="profile-menu-info">
+                                        <h4 class="title">افزایش موجودی</h4>
+                                        <div class="profile-form">
+                                            <form action="#">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>میزان</label>
+                                                            <input type="number" class="form-control"
+                                                                   placeholder="مبلغ را وارد کنید">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="method"
+                                                                   id="method1" checked="">
+                                                            <label class="form-check-label" for="method1">
+                                                                درگاه آنلاین
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="method"
+                                                                   id="method2">
+                                                            <label class="form-check-label" for="method2">
+                                                                حواله
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button class="theme-btn" type="submit"><span
+                                                                class="far fa-wallet"></span> افزایش موجودی
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    document.getElementById('profile-image-preview').src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const markAsReadButtons = document.querySelectorAll('.mark-as-read');
+
+            markAsReadButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const notificationId = this.getAttribute('data-notification-id');
+                    const row = this.closest('tr');
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                    // ارسال درخواست AJAX به سرور
+                    fetch(`/accounts/notifications/${notificationId}/mark-as-read/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken,
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `csrfmiddlewaretoken=${csrfToken}`
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('خطا در بروزرسانی وضعیت اعلان');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            this.innerHTML = '<i class="far fa-eye-slash"></i>';
+                            this.disabled = true;
+                            this.classList.remove('mark-as-read');
+
+                            const statusBadge = row.querySelector('.badge');
+                            statusBadge.textContent = 'خوانده شده';
+                            statusBadge.className = 'badge badge-success';
+
+                            const notificationBadge = document.querySelector('#pills-profile-tab3 .badge');
+                            if (notificationBadge) {
+                                const currentCount = parseInt(notificationBadge.textContent);
+                                if (currentCount > 1) {
+                                    notificationBadge.textContent = currentCount - 1;
+                                } else {
+                                    notificationBadge.remove();
+                                }
+                            }
+                        } else {
+                            console.error('خطا در بروزرسانی وضعیت اعلان:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}
