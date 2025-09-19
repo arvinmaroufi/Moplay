@@ -210,6 +210,13 @@ class Series(models.Model):
     def last_chapter(self):
         return self.chapterseries_set.order_by('-order').first()
 
+    @property
+    def last_video(self):
+        last_chapter = self.last_chapter
+        if last_chapter:
+            return last_chapter.videoseries_set.order_by('-order').first()
+        return None
+
 
 class ChapterSeries(models.Model):
     series = models.ForeignKey(Series, on_delete=models.CASCADE, verbose_name='سریال مربوطه')
