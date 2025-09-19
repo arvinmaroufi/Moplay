@@ -196,3 +196,18 @@ class Series(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ChapterSeries(models.Model):
+    series = models.ForeignKey(Series, on_delete=models.CASCADE, verbose_name='سریال مربوطه')
+    title = models.CharField(max_length=150, verbose_name='عنوان فصل')
+    order = models.PositiveIntegerField(verbose_name='ترتیب فصل')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به‌روزرسانی')
+
+    class Meta:
+        verbose_name = 'فصل سریال'
+        verbose_name_plural = 'فصل های سریال'
+
+    def __str__(self):
+        return self.title
