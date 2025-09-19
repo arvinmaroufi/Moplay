@@ -82,3 +82,18 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Director(models.Model):
+    name = models.CharField(max_length=200, unique=True, verbose_name='اسم کارگردان')
+    slug = models.SlugField(max_length=200, unique=True, verbose_name='نامک')
+    bio = models.TextField(blank=True, null=True, verbose_name='بیوگرافی')
+    photo = models.ImageField(upload_to='directors_photos/', null=True, blank=True, verbose_name='عکس کارگردان')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'کارگردان'
+        verbose_name_plural = 'کارگردانان'
+
+    def __str__(self):
+        return self.name
