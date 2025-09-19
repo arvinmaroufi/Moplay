@@ -206,6 +206,10 @@ class Series(models.Model):
     def published_comments_count(self):
         return self.series_comments.filter(status='published').count()
 
+    @property
+    def last_chapter(self):
+        return self.chapterseries_set.order_by('-order').first()
+
 
 class ChapterSeries(models.Model):
     series = models.ForeignKey(Series, on_delete=models.CASCADE, verbose_name='سریال مربوطه')
