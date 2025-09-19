@@ -202,6 +202,10 @@ class Series(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def published_comments_count(self):
+        return self.series_comments.filter(status='published').count()
+
 
 class ChapterSeries(models.Model):
     series = models.ForeignKey(Series, on_delete=models.CASCADE, verbose_name='سریال مربوطه')
