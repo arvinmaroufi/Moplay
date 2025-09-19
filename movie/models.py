@@ -42,3 +42,16 @@ class Language(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Year(models.Model):
+    year = models.CharField(max_length=4, unique=True, verbose_name='سال')
+    slug = models.SlugField(max_length=4, unique=True, verbose_name='نامک')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'سال'
+        verbose_name_plural = 'سال ها'
+
+    def __str__(self):
+        return self.year
