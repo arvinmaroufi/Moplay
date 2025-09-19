@@ -243,3 +243,18 @@ class MovieComment(models.Model):
 
     def __str__(self):
         return self.movie.title
+
+
+class SeriesComment(models.Model):
+    series = models.ForeignKey(Series, on_delete=models.CASCADE, related_name='series_comments', verbose_name='سریال مربوطه')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='series_comments', verbose_name='نویسنده دیدگاه')
+    content = models.TextField(verbose_name='متن دیدگاه')
+    status = models.CharField(choices=STATUS, max_length=10, default='published', verbose_name='وضعیت')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'دیدگاه سریال'
+        verbose_name_plural = 'دیدگاه های سریال ها'
+
+    def __str__(self):
+        return self.series.title
