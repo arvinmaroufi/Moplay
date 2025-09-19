@@ -97,3 +97,18 @@ class Director(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Actor(models.Model):
+    name = models.CharField(max_length=200, unique=True, verbose_name='اسم بازیگر')
+    slug = models.SlugField(max_length=200, unique=True, verbose_name='نامک')
+    bio = models.TextField(blank=True, null=True, verbose_name='بیوگرافی')
+    photo = models.ImageField(upload_to='actors_photos/', null=True, blank=True, verbose_name='عکس بازیگر')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'بازیگر'
+        verbose_name_plural = 'بازیگران'
+
+    def __str__(self):
+        return self.name
