@@ -68,3 +68,17 @@ class Country(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=50, unique=True, verbose_name='عنوان برچسب')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='نامک')
+    views = models.PositiveIntegerField(default=0, verbose_name='بازدید ها')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'برچسب'
+        verbose_name_plural = 'برچسب ها'
+
+    def __str__(self):
+        return self.title
