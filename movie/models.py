@@ -211,3 +211,19 @@ class ChapterSeries(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class VideoSeries(models.Model):
+    chapter = models.ForeignKey(ChapterSeries, on_delete=models.CASCADE, verbose_name='فصل مربوطه')
+    quality_480p = models.URLField(max_length=500, blank=True, null=True, verbose_name='لینک کیفیت 480p')
+    quality_720p = models.URLField(max_length=500, blank=True, null=True, verbose_name='لینک کیفیت 720p')
+    quality_1080p = models.URLField(max_length=500, blank=True, null=True, verbose_name='لینک کیفیت 1080p')
+    subtitle = models.URLField(max_length=500, blank=True, null=True, verbose_name='لینک زیرنویس قسمت')
+    order = models.PositiveIntegerField(verbose_name='ترتیب ویدیو')
+
+    class Meta:
+        verbose_name = 'قسمت سریال'
+        verbose_name_plural = 'قسمت های سریال'
+
+    def __str__(self):
+        return self.chapter.title
