@@ -23,3 +23,15 @@ class LanguageAdmin(admin.ModelAdmin):
     @admin.display(description='تاریخ ایجاد', ordering='created_at')
     def get_created_at_jalali(self, obj):
         return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
+
+
+@admin.register(models.Year)
+class YearAdmin(admin.ModelAdmin):
+    list_display = ['year', 'slug', 'get_created_at_jalali']
+    prepopulated_fields = {'slug': ('year',)}
+    list_filter = ['created_at']
+    search_fields = ['year']
+
+    @admin.display(description='تاریخ ایجاد', ordering='created_at')
+    def get_created_at_jalali(self, obj):
+        return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
