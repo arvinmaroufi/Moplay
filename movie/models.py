@@ -155,3 +155,44 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Series(models.Model):
+    title = models.CharField(max_length=200, unique=True, verbose_name='عنوان سریال')
+    slug = models.SlugField(max_length=200, unique=True, verbose_name='نامک')
+    genre = models.ManyToManyField(Genre, related_name='series_genre', verbose_name='ژانر')
+    tags = models.ManyToManyField(Tag, related_name='series_tag', verbose_name='برچسب')
+    language = models.ManyToManyField(Language, related_name='series_language', verbose_name='زبان سریال')
+    description = models.TextField(verbose_name='خلاصه داستان')
+    vertical_banner = models.ImageField(upload_to='series/series_vertical_banner/', help_text='برای نمایش بهتر، تصویر را با ابعاد 800x1050 پیکسل بارگذاری کنید',
+                                        null=True, blank=True, verbose_name='بنر عمودی سریال')
+    horizontal_banner = models.ImageField(upload_to='series/series_horizontal_banner/', help_text='برای نمایش بهتر، تصویر را با ابعاد 3320x1280 پیکسل بارگذاری کنید',
+                                          null=True, blank=True, verbose_name='بنر افقی سریال')
+    actors = models.ManyToManyField(Actor, related_name='series_actor', verbose_name='بازیگران')
+    similar_series = models.ManyToManyField('self', blank=True, null=True, related_name='similar', verbose_name='سریال های مشابه')
+    country = models.ManyToManyField(Country, related_name='series_country', verbose_name='کشور سازنده')
+    director = models.ManyToManyField(Director, related_name='series_director', verbose_name='کارگردانان')
+    duration = models.CharField(max_length=5, verbose_name='مدت زمان سریال (لطفا مدت زمان را به دقیقه وارد کنید)')
+    chapter_count = models.PositiveIntegerField(verbose_name='تعداد فصل ها')
+    release_date = models.ForeignKey(Year, related_name='series_year', on_delete=models.CASCADE, verbose_name='تاریخ انتشار')
+    score = models.CharField(max_length=10, default='0.0/10', verbose_name='امتیاز')
+    age_range = models.CharField(max_length=20, default='بالای 14 سال', verbose_name='رنج سنی')
+    views = models.PositiveIntegerField(default=0, verbose_name='بازدید ها')
+    trailer = models.URLField(max_length=500, verbose_name='لینک تریلر سریال')
+    subtitle_url = models.URLField(max_length=500, blank=True, null=True, verbose_name='لینک زیرنویس سریال')
+    dubbed_or_subtitle = models.CharField(choices=DUBBED_OR_SUBTITLE_CHOICES, max_length=10, default='dubbed', verbose_name='وضعیت دوبله یا زیرنویس')
+    subscription_status = models.CharField(choices=SUBSCRIPTION_STATUS_CHOICES, max_length=12, default='subscription', verbose_name='وضعیت اشتراکی')
+    is_recommended = models.BooleanField(default=False, verbose_name='آیا سریال، پیشنهادی است؟')
+    status = models.CharField(choices=STATUS, max_length=10, default='published', verbose_name='وضعیت')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به‌روزرسانی')
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['title']),
+        ]
+        verbose_name = 'سریال'
+        verbose_name_plural = 'سریال ها'
+
+    def __str__(self):
+        return self.title
