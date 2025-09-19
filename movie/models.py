@@ -118,7 +118,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=200, unique=True, verbose_name='عنوان فیلم')
     slug = models.SlugField(max_length=200, unique=True, verbose_name='نامک')
     genre = models.ManyToManyField(Genre, related_name='movies_genre', verbose_name='ژانر')
-    tags = models.ManyToManyField(Tag, related_name='movies_tag', null=True, blank=True, verbose_name='برچسب')
+    tags = models.ManyToManyField(Tag, related_name='movies_tag', verbose_name='برچسب')
     language = models.ManyToManyField(Language, related_name='movies_language', verbose_name='زبان فیلم')
     description = models.TextField(verbose_name='خلاصه داستان')
     vertical_banner = models.ImageField(upload_to='movies/movie_vertical_banner/', help_text='برای نمایش بهتر، تصویر را با ابعاد 800x1050 پیکسل بارگذاری کنید',
