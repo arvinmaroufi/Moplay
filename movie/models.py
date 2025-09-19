@@ -157,6 +157,10 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def published_comments_count(self):
+        return self.movie_comments.filter(status='published').count()
+
 
 class Series(models.Model):
     title = models.CharField(max_length=200, unique=True, verbose_name='عنوان سریال')
