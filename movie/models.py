@@ -1,3 +1,17 @@
 from django.db import models
 
-# Create your models here.
+
+STATUS = (
+    ("draft", "پیش نویس شود"),
+    ("published", "منتشر شود"),
+)
+
+DUBBED_OR_SUBTITLE_CHOICES = (
+    ('dubbed', 'دوبله فارسی'),
+    ('subtitled', 'زیرنویس فارسی'),
+)
+
+SUBSCRIPTION_STATUS_CHOICES = (
+    ('free', 'رایگان'),
+    ('subscription', 'اشتراکی'),
+)
