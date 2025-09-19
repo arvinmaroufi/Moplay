@@ -46,3 +46,14 @@ class CountryAdmin(admin.ModelAdmin):
     @admin.display(description='تاریخ ایجاد', ordering='created_at')
     def get_created_at_jalali(self, obj):
         return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
+
+
+@admin.register(models.Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['title', 'slug', 'views', 'get_created_at_jalali']
+    list_filter = ['created_at']
+    search_fields = ['title']
+
+    @admin.display(description='تاریخ ایجاد', ordering='created_at')
+    def get_created_at_jalali(self, obj):
+        return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
