@@ -15,3 +15,17 @@ SUBSCRIPTION_STATUS_CHOICES = (
     ('free', 'رایگان'),
     ('subscription', 'اشتراکی'),
 )
+
+
+class Genre(models.Model):
+    title = models.CharField(max_length=50, unique=True, verbose_name='عنوان ژانر')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='نامک')
+    thumbnail = models.ImageField(upload_to='genre_thumbnails/', null=True, blank=True, verbose_name='تصویر ژانر')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'ژانر'
+        verbose_name_plural = 'ژانر ها'
+
+    def __str__(self):
+        return self.title
