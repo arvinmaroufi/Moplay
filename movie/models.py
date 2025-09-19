@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import User
 
 
 STATUS = (
@@ -227,3 +228,18 @@ class VideoSeries(models.Model):
 
     def __str__(self):
         return self.chapter.title
+
+
+class MovieComment(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='movie_comments', verbose_name='فیلم مربوطه')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='movie_comments', verbose_name='نویسنده دیدگاه')
+    content = models.TextField(verbose_name='متن دیدگاه')
+    status = models.CharField(choices=STATUS, max_length=10, default='published', verbose_name='وضعیت')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'دیدگاه فیلم'
+        verbose_name_plural = 'دیدگاه های فیلم ها'
+
+    def __str__(self):
+        return self.movie.title
