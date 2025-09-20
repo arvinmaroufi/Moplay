@@ -178,3 +178,11 @@ class SeriesAdmin(admin.ModelAdmin):
 class VideoSeriesInline(admin.TabularInline):
     model = models.VideoSeries
     extra = 0
+
+
+@admin.register(models.ChapterSeries)
+class ChapterSeriesAdmin(admin.ModelAdmin):
+    list_display = ['series', 'title', 'order', 'created_at']
+    list_filter = ['series', 'created_at']
+    search_fields = ['title', 'series__title']
+    inlines = [VideoSeriesInline]
