@@ -1,6 +1,36 @@
 from django.contrib import admin
 from . import models
 from jalali_date import datetime2jalali
+from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
+
+
+# personalized actions
+
+# actions for movie in series
+def make_published(modeladmin, request, queryset):
+    updated = queryset.update(status='published')
+    modeladmin.message_user(request, _(f"{updated} مورد با موفقیت فعال شدند."), messages.SUCCESS)
+make_published.short_description = "فعال کردن فیلم/سریال های انتخاب شده"
+
+
+def make_draft(modeladmin, request, queryset):
+    updated = queryset.update(status='draft')
+    modeladmin.message_user(request, _(f"{updated} مورد با موفقیت غیرفعال شدند."), messages.SUCCESS)
+make_draft.short_description = "غیرفعال کردن فیلم/سریال های انتخاب شده"
+
+
+# actions for comments
+def make_comment_published(modeladmin, request, queryset):
+    updated = queryset.update(status='published')
+    modeladmin.message_user(request, _(f"{updated} دیدگاه با موفقیت فعال شدند."), messages.SUCCESS)
+make_comment_published.short_description = "فعال کردن دیدگاه های انتخاب شده"
+
+
+def make_comment_draft(modeladmin, request, queryset):
+    updated = queryset.update(status='draft')
+    modeladmin.message_user(request, _(f"{updated} دیدگاه با موفقیت غیرفعال شدند."), messages.SUCCESS)
+make_comment_draft.short_description = "غیرفعال کردن دیدگاه های انتخاب شده"
 
 
 @admin.register(models.Genre)
