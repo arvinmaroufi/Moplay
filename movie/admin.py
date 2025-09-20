@@ -135,3 +135,41 @@ class ChapterSeriesInline(admin.TabularInline):
     model = models.ChapterSeries
     extra = 0
     readonly_fields = ['created_at', 'updated_at']
+
+
+@admin.register(models.Series)
+class SeriesAdmin(admin.ModelAdmin):
+    list_display = ['title', 'slug', 'dubbed_or_subtitle', 'subscription_status', 'status', 'views', 'chapter_count', 'get_created_at_jalali']
+    list_filter = ['status', 'dubbed_or_subtitle', 'subscription_status', 'created_at', 'genre', 'country']
+    search_fields = ['title', 'description']
+    prepopulated_fields = {'slug': ('title',)}
+    filter_horizontal = ['genre', 'tags', 'language', 'actors', 'similar_series', 'country', 'director']
+    readonly_fields = ['views', 'created_at', 'updated_at']
+    inlines = [ChapterSeriesInline, SeriesCommentInline]
+    fieldsets = (
+        ('اطلاعات اصلی', {
+            'fields': ('title', 'slug', 'description', 'vertical_banner', 'horizontal_banner')
+        }),
+        ('دسته‌بندی و برچسب‌ها', {
+            'fields': ('genre', 'tags', 'language', 'country')
+        }),
+        ('افراد مرتبط', {
+            'fields': ('actors', 'director', 'similar_series')
+        }),
+        ('مشخصات فنی', {
+            'fields': ('duration', 'chapter_count', 'release_date', 'score', 'age_range')
+        }),
+        ('لینک‌های رسانه', {
+            'fields': ('trailer', 'subtitle_url')
+        }),
+        ('تنظیمات نمایش', {
+            'fields': ('dubbed_or_subtitle', 'subscription_status', 'is_recommended', 'status')
+        }),
+        ('آمار و تاریخ‌ها', {
+            'fields': ('views', 'created_at', 'updated_at')
+        }),
+    )
+
+    @admin.display(description='تاریخ ایجاد', ordering='created_at')
+    def get_created_at_jalali(self, obj):
+        return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
