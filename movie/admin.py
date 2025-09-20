@@ -173,3 +173,8 @@ class SeriesAdmin(admin.ModelAdmin):
     @admin.display(description='تاریخ ایجاد', ordering='created_at')
     def get_created_at_jalali(self, obj):
         return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
+
+
+class VideoSeriesInline(admin.TabularInline):
+    model = models.VideoSeries
+    extra = 0
