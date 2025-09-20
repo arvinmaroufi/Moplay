@@ -255,6 +255,7 @@ class SeriesCommentAdmin(admin.ModelAdmin):
     list_filter = ['status', 'created_at', 'series']
     search_fields = ['series__title']
     readonly_fields = ['created_at']
+    actions = [make_comment_published, make_comment_draft]
 
     @admin.display(description='تاریخ ایجاد', ordering='created_at')
     def get_created_at_jalali(self, obj):
