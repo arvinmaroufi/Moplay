@@ -202,3 +202,15 @@ class VideoSeriesAdmin(admin.ModelAdmin):
     def get_subtitle(self, obj):
         return "دارد" if obj.subtitle else "ندارد"
     get_subtitle.short_description = 'زیرنویس'
+
+
+@admin.register(models.MovieComment)
+class MovieCommentAdmin(admin.ModelAdmin):
+    list_display = ['movie', 'author', 'status', 'get_created_at_jalali']
+    list_filter = ['status', 'created_at', 'movie']
+    search_fields = ['movie__title']
+    readonly_fields = ['created_at']
+
+    @admin.display(description='تاریخ ایجاد', ordering='created_at')
+    def get_created_at_jalali(self, obj):
+        return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
