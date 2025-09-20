@@ -186,3 +186,19 @@ class ChapterSeriesAdmin(admin.ModelAdmin):
     list_filter = ['series', 'created_at']
     search_fields = ['title', 'series__title']
     inlines = [VideoSeriesInline]
+
+
+@admin.register(models.VideoSeries)
+class VideoSeriesAdmin(admin.ModelAdmin):
+    list_display = ['chapter', 'order', 'get_subtitle', 'get_series_name']
+    list_filter = ['chapter__series']
+    search_fields = ['chapter__title', 'chapter__series__title']
+
+    def get_series_name(self, obj):
+        return obj.chapter.series.title
+    get_series_name.short_description = 'سریال'
+    get_series_name.admin_order_field = 'chapter__series__title'
+
+    def get_subtitle(self, obj):
+        return "دارد" if obj.subtitle else "ندارد"
+    get_subtitle.short_description = 'زیرنویس'
