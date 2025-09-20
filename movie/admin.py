@@ -177,6 +177,7 @@ class SeriesAdmin(admin.ModelAdmin):
     filter_horizontal = ['genre', 'tags', 'language', 'actors', 'similar_series', 'country', 'director']
     readonly_fields = ['views', 'created_at', 'updated_at']
     inlines = [ChapterSeriesInline, SeriesCommentInline]
+    actions = [make_published, make_draft]
     fieldsets = (
         ('اطلاعات اصلی', {
             'fields': ('title', 'slug', 'description', 'vertical_banner', 'horizontal_banner')
