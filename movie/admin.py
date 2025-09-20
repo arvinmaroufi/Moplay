@@ -214,3 +214,15 @@ class MovieCommentAdmin(admin.ModelAdmin):
     @admin.display(description='تاریخ ایجاد', ordering='created_at')
     def get_created_at_jalali(self, obj):
         return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
+
+
+@admin.register(models.SeriesComment)
+class SeriesCommentAdmin(admin.ModelAdmin):
+    list_display = ['series', 'author', 'status', 'get_created_at_jalali']
+    list_filter = ['status', 'created_at', 'series']
+    search_fields = ['series__title']
+    readonly_fields = ['created_at']
+
+    @admin.display(description='تاریخ ایجاد', ordering='created_at')
+    def get_created_at_jalali(self, obj):
+        return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
