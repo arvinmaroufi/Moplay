@@ -129,3 +129,9 @@ class SeriesCommentInline(admin.TabularInline):
     model = models.SeriesComment
     extra = 0
     readonly_fields = ['created_at']
+
+
+class ChapterSeriesInline(admin.TabularInline):
+    model = models.ChapterSeries
+    extra = 0
+    readonly_fields = ['created_at', 'updated_at']
