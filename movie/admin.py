@@ -123,3 +123,9 @@ class MovieAdmin(admin.ModelAdmin):
     @admin.display(description='تاریخ ایجاد', ordering='created_at')
     def get_created_at_jalali(self, obj):
         return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y')
+
+
+class SeriesCommentInline(admin.TabularInline):
+    model = models.SeriesComment
+    extra = 0
+    readonly_fields = ['created_at']
