@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% block title %}سریال ها{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">سریال ها</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">سریال ها</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- filters -->
+        <div class="filter-area" dir="rtl">
+            <div class="container">
+                <form method="GET" action="{% url 'movie:series' %}" id="filter-form">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-lg-3">
+                            <div class="filter-search">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="search" placeholder="نام سریال را وارد نمایید . . ."
+                                           value="{{ current_filters.search }}">
+                                    <button type="submit"><i class="icon-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="filter-content">
+                                <div class="filter-sort">
+                                    <div class="filter-select">
+                                        <select class="select" name="sort" onchange="this.form.submit()">
+                                            <option value="">مرتب سازی</option>
+                                            <option value="newest" {% if current_filters.sort == 'newest' %}selected{% endif %}>جدیدترین</option>
+                                            <option value="oldest" {% if current_filters.sort == 'oldest' %}selected{% endif %}>قدیمی ترین</option>
+                                            <option value="highest_views" {% if current_filters.sort == 'highest_views' %}selected{% endif %}>بیشترین بازدید</option>
+                                            <option value="highest_score" {% if current_filters.sort == 'highest_score' %}selected{% endif %}>بالاترین امتیاز</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-select">
+                                        <select class="select" name="dubbed_or_subtitle" onchange="this.form.submit()">
+                                            <option value="">زیرنویس / دوبله</option>
+                                            <option value="dubbed" {% if current_filters.dubbed_or_subtitle == 'dubbed' %}selected{% endif %}>دوبله فارسی</option>
+                                            <option value="subtitled" {% if current_filters.dubbed_or_subtitle == 'subtitled' %}selected{% endif %}>زیرنویس فارسی</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-select">
+                                        <select class="select" name="subscription_status" onchange="this.form.submit()">
+                                            <option value="">وضعیت اشتراک</option>
+                                            <option value="free" {% if current_filters.subscription_status == 'free' %}selected{% endif %}>رایگان</option>
+                                            <option value="subscription" {% if current_filters.subscription_status == 'subscription' %}selected{% endif %}>اشتراکی</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="filter-btn text-end">
+                                <button type="button" class="theme-btn" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseFilter" aria-expanded="false"
+                                        aria-controls="collapseFilter"><span class="fas fa-sort"></span> فیلتر
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="filter-full-wrap">
+                            <div class="collapse" id="collapseFilter">
+                                <div class="filter-full-content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="filter-item">
+                                                <h4>سال تولید</h4>
+                                                <div class="filter-item-content">
+                                                    {% for year in all_years %}
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="year"
+                                                                   id="year{{ year.id }}" value="{{ year.year }}"
+                                                                   {% if year.year in current_filters.getlist.year %}checked{% endif %}>
+                                                            <label class="form-check-label" for="year{{ year.id }}">{{ year.year }}</label>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="filter-item">
+                                                <h4>ژانر</h4>
+                                                <div class="filter-item-content">
+                                                    {% for genre in all_genres %}
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="genre"
+                                                                   id="genre{{ genre.id }}" value="{{ genre.id }}"
+                                                                   {% if genre.id|stringformat:"s" in current_filters.getlist.genre %}checked{% endif %}>
+                                                            <label class="form-check-label" for="genre{{ genre.id }}">{{ genre.title }}</label>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="filter-item">
+                                                <h4>کشور</h4>
+                                                <div class="filter-item-content">
+                                                    {% for country in all_countries %}
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="country"
+                                                                   id="country{{ country.id }}" value="{{ country.id }}"
+                                                                   {% if country.id|stringformat:"s" in current_filters.getlist.country %}checked{% endif %}>
+                                                            <label class="form-check-label" for="country{{ country.id }}">{{ country.name }}</label>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="text-center">
+                                                <button type="submit" class="theme-btn"><span
+                                                        class="fas fa-sort"></span> فیلتر کن
+                                                </button>
+                                                <a href="{% url 'movie:series' %}" class="theme-btn theme-btn2 ms-2">حذف فیلترها</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="tvshow-area py-80" dir="rtl">
+            <div class="container">
+                <div class="row row-cols-xl-5">
+                    {% if series %}
+                        {% for s in series %}
+                            <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                <div class="movie-item">
+                                    {% if s.chapter_count and s.last_episode_number %}
+                                        <span class="movie-episode">قسمت<small>{{ s.last_episode_number }}</small></span>
+                                    {% else %}
+                                        <span class="movie-episode">ندارد</span>
+                                    {% endif %}
+                                    <span class="movie-quality">{{ s.get_dubbed_or_subtitle_display }}</span>
+                                    <div class="movie-img">
+                                        {% if s.vertical_banner %}
+                                            <img src="{{ s.vertical_banner.url }}"
+                                                 alt="{{ s.title|truncatewords:5 }}">
+                                        {% else %}
+                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ s.title|truncatewords:5 }}">
+                                        {% endif %}
+                                        <a href="#series_detail" class="movie-play"><i class="icon-play-3"></i></a>
+                                    </div>
+                                    <div class="movie-content" dir="rtl">
+                                        <h6 class="movie-title"><a href="#series_detail">{{ s.title|truncatewords:5 }}</a></h6>
+                                        <div class="movie-info">
+                                            <span class="movie-time">
+                                                فصل {{ s.last_chapter.order|default:'ندارد' }}
+                                            </span>
+                                            <div class="movie-genre">
+                                                {% for genre in s.genre.all|slice:":2" %}
+                                                    <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        سریالی یافت نشد!
+                    {% endif %}
+                </div>
+
+                <div class="pagination-area">
+                    <div class="container">
+                        <div class="pagination-wrapper">
+                            {% if series.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if series.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ series.previous_page_number }}{% for key, value in current_filters.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% for page_num in pages_to_show %}
+                                        {% if page_num == '...' %}
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                        {% elif page_num == series.number %}
+                                            <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                                        {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_num }}{% for key, value in current_filters.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                                    {{ page_num }}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if series.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ series.next_page_number }}{% for key, value in current_filters.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paginationLinks = document.querySelectorAll('.pagination a');
+            paginationLinks.forEach(link => {
+                const url = new URL(link.href);
+                const form = document.getElementById('filter-form');
+                const formData = new FormData(form);
+
+                for (const [key, value] of formData.entries()) {
+                    if (key !== 'page') {
+                        if (url.searchParams.has(key)) {
+                            if (Array.isArray(value)) {
+                                url.searchParams.delete(key);
+                                value.forEach(val => url.searchParams.append(key, val));
+                            } else {
+                                url.searchParams.set(key, value);
+                            }
+                        } else {
+                            if (Array.isArray(value)) {
+                                value.forEach(val => url.searchParams.append(key, val));
+                            } else {
+                                url.searchParams.append(key, value);
+                            }
+                        }
+                    }
+                }
+
+                link.href = url.toString();
+            });
+
+            const filterForm = document.getElementById('filter-form');
+            if (filterForm) {
+                filterForm.addEventListener('submit', function(e) {
+                    const pageInput = document.querySelector('input[name="page"]');
+                    if (pageInput) {
+                        pageInput.remove();
+                    }
+                });
+            }
+
+            const autoSubmitCheckboxes = document.querySelectorAll('input[type="checkbox"][name="year"], input[type="checkbox"][name="genre"], input[type="checkbox"][name="country"]');
+            autoSubmitCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    document.getElementById('filter-form').submit();
+                });
+            });
+        });
+    </script>
+{% endblock %}
