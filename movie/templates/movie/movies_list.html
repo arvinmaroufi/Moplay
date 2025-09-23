@@ -152,10 +152,10 @@
                                         {% else %}
                                             <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ movie.title|truncatewords:5 }}">
                                         {% endif %}
-                                        <a href="#movie_detail" class="movie-play"><i class="icon-play-3"></i></a>
+                                        <a href="{% url 'movie:movie_detail' movie.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
                                     </div>
                                     <div class="movie-content" dir="rtl">
-                                        <h6 class="movie-title"><a href="#movie_detail">{{ movie.title|truncatewords:5 }}</a></h6>
+                                        <h6 class="movie-title"><a href="{% url 'movie:movie_detail' movie.slug %}">{{ movie.title|truncatewords:5 }}</a></h6>
                                         <div class="movie-info">
                                             <span class="movie-time">{{ movie.duration|duration_format }}</span>
                                             <div class="movie-genre">
