@@ -189,3 +189,32 @@ def movie_detail(request, slug):
         'similar_series': similar_series,
     }
     return render(request, 'movie/movie_detail.html', context)
+
+
+def series_detail(request, slug):
+    series = get_object_or_404(Series, slug=slug)
+    series.views += 1
+    series.save()
+    chapters = series.chapterseries_set.all()
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content and content.strip():
+            SeriesComment.objects.create(content=content, series=series, author=request.user)
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return HttpResponse('OK')
+
+        return redirect('movie:series_detail', slug=slug)
+
+    # similar movies and series
+    similar_movies = Movie.objects.filter(genre__in=series.genre.all(), status='published').distinct()[:5]
+    similar_series = Series.objects.filter(genre__in=series.genre.all(), status='published').exclude(id=series.id).distinct()[:5]
+
+    context = {
+        'series': series,
+        'chapters': chapters,
+        'similar_movies': similar_movies,
+        'similar_series': similar_series,
+    }
+    return render(request, 'movie/series_detail.html', context)
