@@ -178,7 +178,7 @@ class Series(models.Model):
     country = models.ManyToManyField(Country, related_name='series_country', verbose_name='کشور سازنده')
     director = models.ManyToManyField(Director, related_name='series_director', verbose_name='کارگردانان')
     duration = models.CharField(max_length=5, verbose_name='مدت زمان سریال (لطفا مدت زمان را به دقیقه وارد کنید)')
-    chapter_count = models.PositiveIntegerField(verbose_name='تعداد فصل ها')
+    chapter_count = models.PositiveIntegerField(help_text='این فیلد به صورت خودکار پس از افزودن یا حذف فصل به‌روزرسانی می‌شود', verbose_name='تعداد فصل ها')
     release_date = models.ForeignKey(Year, related_name='series_year', on_delete=models.CASCADE, verbose_name='تاریخ انتشار')
     score = models.CharField(max_length=10, default='0.0/10', verbose_name='امتیاز')
     age_range = models.CharField(max_length=20, default='بالای 14 سال', verbose_name='رنج سنی')
