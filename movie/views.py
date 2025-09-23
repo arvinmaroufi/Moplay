@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
 
 
 def get_pages_to_show(current_page, total_pages):
@@ -161,3 +162,30 @@ def series_list(request):
         'current_filters': request.GET,
     }
     return render(request, 'movie/series_list.html', context)
+
+
+def movie_detail(request, slug):
+    movie = get_object_or_404(Movie, slug=slug)
+    movie.views += 1
+    movie.save()
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content and content.strip():
+            MovieComment.objects.create(content=content, movie=movie, author=request.user)
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return HttpResponse('OK')
+
+        return redirect('movie:movie_detail', slug=slug)
+
+    # similar movies and series
+    similar_movies = Movie.objects.filter(genre__in=movie.genre.all(), status='published').exclude(id=movie.id).distinct()[:5]
+    similar_series = Series.objects.filter(genre__in=movie.genre.all(), status='published').distinct()[:5]
+
+    context = {
+        'movie': movie,
+        'similar_movies': similar_movies,
+        'similar_series': similar_series,
+    }
+    return render(request, 'movie/movie_detail.html', context)
