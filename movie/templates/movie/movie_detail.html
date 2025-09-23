@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+{% block title %}دانلود {{ movie.title }}{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">{{ movie.title }}</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li><a href="{% url 'movie:movies' %}">فیلم ها</a></li>
+                    <li class="active">{{ movie.title }}</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="movie-single py-80" dir="rtl">
+            <div class="container">
+                <div class="movie-single-wrap">
+
+                    <div class="movie-player">
+                        {% if movie.horizontal_banner %}
+                            <video class="player" id="player" crossorigin="" playsinline="" controls="" data-poster="{{ movie.horizontal_banner.url }}">
+                        {% else %}
+                            <video class="player" id="player" crossorigin="" playsinline="" controls="" data-poster="{% static 'images/movie_horizontal_banner.jpg' %}">
+                        {% endif %}
+                            <source src="{{ movie.trailer }}" type="video/mp4" size="1080">
+                        </video>
+                        <div class="movie-player-content">
+                            <div class="movie-action">
+                                <div class="movie-action-left">
+                                    <div class="color-mode theme-mode-control">
+                                        <button type="button" class="light-btn"><i class="far fa-lightbulb-on"></i>حالت
+                                            روشن
+                                        </button>
+                                        <button type="button" class="dark-btn"><i class="far fa-lightbulb"></i>حالت
+                                            تاریک
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="movie-action-right">
+                                    <a href="#"><i class="far fa-heart"></i></a>
+                                    <span><i class="far fa-eye"></i>{{ movie.views }} بازدید</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="movie-single-content mt-20">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-3">
+                                <div class="movie-img">
+                                    {% if movie.vertical_banner %}
+                                        <img src="{{ movie.vertical_banner.url }}"
+                                             alt="{{ movie.title|truncatewords:5 }}">
+                                    {% else %}
+                                        <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ movie.title|truncatewords:5 }}">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-lg-6 border-end">
+                                <div class="movie-info">
+                                    <h4 class="movie-name">
+                                        {{ movie.title }}
+                                    </h4>
+                                    <p>{{ movie.description }}</p>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <div class="movie-info-item">
+                                                <strong>ژانر:</strong>
+                                                {% for genre in movie.genre.all %}
+                                                    <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>کارگردان:</strong>
+                                                <a href="#">{{ movie.director }}</a>
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>بازیگران:</strong>
+                                                {% for a in movie.actors.all|slice:'3' %}
+                                                    <a href="#">{{ a.name }}</a>{% if not forloop.last %}،{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>امتیاز:</strong>
+                                                <span class="rating">{{ movie.score }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="movie-info-item">
+                                                <strong>مدت زمان:</strong>
+                                                <span>{{ movie.duration|duration_format }}</span>
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>کشور:</strong>
+                                                {% for c in movie.country.all %}
+                                                    <a href="#">{{ c.name }}</a>{% if not forloop.last %}،{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>سال تولید:</strong>
+                                                <a href="#">{{ movie.release_date }}</a>
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>دوبله/زیرنویس:</strong>
+                                                <span>{{ movie.get_dubbed_or_subtitle_display }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7 col-lg-3">
+                                <div class="movie-download">
+                                    <h5>تماشا و دانلود:</h5>
+                                    {% if movie.subscription_status == 'subscription' %}
+                                        <a href="#subscription" class="theme-btn"><span class="fas fa-credit-card"></span> ابتدا باید اشتراک تهیه کنید</a>
+                                    {% else %}
+                                        {% if request.user.is_authenticated %}
+                                            <a href="#movie_watch" class="theme-btn"><span class="fas fa-play"></span> تماشای آنلاین</a>
+                                        {% else %}
+                                            <a href="{% url 'accounts:login' %}" class="theme-btn"><span class="fas fa-user"></span> ابتدا وارد شوید</a>
+                                        {% endif %}
+                                        {% if movie.quality_480p %}
+                                            <a href="{{ movie.quality_480p }}" class="theme-btn"><span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 480p</a>
+                                        {% endif %}
+                                        {% if movie.quality_720p %}
+                                            <a href="{{ movie.quality_720p }}" class="theme-btn"><span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 720p</a>
+                                        {% endif %}
+                                        {% if movie.quality_1080p %}
+                                            <a href="{{ movie.quality_1080p }}" class="theme-btn"><span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 1080p</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="movie-keyword">
+                                    <span>کلمه کلیدی :</span>
+                                    {% for tag in movie.tags.all %}
+                                        <a href="#">{{ tag.title }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="movie-comment mt-50">
+                        <ul class="nav nav-underline mb-3" id="movieComment-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="movieComment-tab1" data-bs-toggle="pill"
+                                        data-bs-target="#pills-movieComment1" type="button" role="tab"
+                                        aria-controls="pills-movieComment1" aria-selected="true">دیدگاه ها
+                                    <span>{{ movie.published_comments_count }}</span></button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="movieComment-tabContent">
+                            <div class="tab-pane fade show active" id="pills-movieComment1" role="tabpanel"
+                                 aria-labelledby="movieComment-tab1" tabindex="0">
+                                <div class="movie-comment-wrap">
+
+                                    <div class="comment-list">
+                                        <div class="comment-form">
+                                            <h4>ارسال دیدگاه</h4>
+                                            <form action="{% url 'movie:movie_detail' movie.slug %}" method="POST">
+                                            {% csrf_token %}
+                                                <div class="row">
+                                                    {% if request.user.is_authenticated %}
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <textarea class="form-control" rows="5" name="content"
+                                                                          placeholder="دیدگاه شما"></textarea>
+                                                            </div>
+                                                            <button type="submit" class="theme-btn">ثبت دیدگاه <i class="far fa-paper-plane"></i></button>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                برای ارسال دیدگاه، اول باید وارد شوید
+                                                            </div>
+                                                            <a href="{% url 'accounts:login' %}" class="theme-btn"><i class="far fa-sign-in"></i>ورود</a>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </form>
+                                        </div>
+                                        {% for comment in movie.movie_comments.all %}
+                                            {% if comment.status == 'published' %}
+                                                <div class="comment-item">
+                                                    <div class="comment-img">
+                                                        {% if comment.author.profile_photo %}
+                                                            <img src="{{ comment.author.profile_photo.url }}" alt="{{ comment.author.get_full_name }}">
+                                                        {% else %}
+                                                            <img src="{% static 'images/profile.png' %}" alt="{{ comment.author.get_full_name }}">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="comment-content">
+                                                        <div class="comment-author">
+                                                            <div class="author-info">
+                                                                <h5>{{ comment.author.get_full_name }}</h5>
+                                                                <span><i class="far fa-calendar-alt"></i>{{ comment.created_at|date:"Y/m/d" }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="comment-text">
+                                                            <p>{{ comment.content }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% empty %}
+                                            <p class="text-center py-3">هنوز دیدگاهی ثبت نشده است.</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="movie-area pb-80" dir="rtl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="site-heading-inline">
+                            <h2 class="site-title">شما ممکن دوست داشته باشید</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-cols-xl-5">
+                    {% if similar_movies %}
+                        {% for m in similar_movies %}
+                            <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                <div class="movie-item">
+                                    <span class="movie-quality">{{ m.get_dubbed_or_subtitle_display }}</span>
+                                    <div class="movie-img">
+                                        {% if m.vertical_banner %}
+                                            <img src="{{ m.vertical_banner.url }}" alt="{{ m.title|truncatewords:5 }}">
+                                        {% else %}
+                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ m.title|truncatewords:5 }}">
+                                        {% endif %}
+                                        <a href="{% url 'movie:movie_detail' m.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                    </div>
+                                    <div class="movie-content">
+                                        <h6 class="movie-title"><a href="{% url 'movie:movie_detail' m.slug %}">{{ m.title|truncatewords:5 }}</a></h6>
+                                        <div class="movie-info">
+                                            <span class="movie-time">{{ m.duration|duration_format }}</span>
+                                            <div class="movie-genre">
+                                                {% for genre in m.genre.all|slice:":2" %}
+                                                    <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if similar_series %}
+                        {% for s in similar_series %}
+                            <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                <div class="movie-item">
+                                    {% if s.chapter_count and s.last_episode_number %}
+                                        <span class="movie-episode">قسمت<small>{{ s.last_episode_number }}</small></span>
+                                    {% else %}
+                                        <span class="movie-episode">ندارد</span>
+                                    {% endif %}
+                                    <span class="movie-quality">{{ s.get_dubbed_or_subtitle_display }}</span>
+                                    <div class="movie-img">
+                                        {% if s.vertical_banner %}
+                                            <img src="{{ s.vertical_banner.url }}" alt="{{ s.title|truncatewords:5 }}">
+                                        {% else %}
+                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ s.title|truncatewords:5 }}">
+                                        {% endif %}
+                                        <a href="#series_detail" class="movie-play"><i class="icon-play-3"></i></a>
+                                    </div>
+                                    <div class="movie-content">
+                                        <h6 class="movie-title"><a href="#series_detail">{{ s.title|truncatewords:5 }}</a></h6>
+                                        <div class="movie-info">
+                                            <span class="movie-season">
+                                                فصل {{ s.last_chapter.order|default:'ندارد' }}
+                                            </span>
+                                            <div class="movie-genre">
+                                                {% for genre in s.genre.all|slice:":2" %}
+                                                <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                            {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+    $(document).ready(function() {
+        $('#comment-form').on('submit', function(e) {
+            e.preventDefault();
+
+            var content = $('#comment-content').val();
+
+            if (content.trim() === '') {
+                alert('لطفا متن دیدگاه را وارد کنید');
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: window.location.href,
+                data: {
+                    'content': content,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    location.reload();
+                },
+                error: function() {
+                    alert('خطا در ارسال دیدگاه');
+                }
+            });
+        });
+    });
+    </script>
+{% endblock %}
