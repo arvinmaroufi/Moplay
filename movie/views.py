@@ -228,3 +228,12 @@ def series_detail(request, slug):
         'similar_contents': similar_contents,
     }
     return render(request, 'movie/series_detail.html', context)
+
+
+def movie_watch(request, slug):
+    movie = get_object_or_404(Movie, slug=slug)
+
+    context = {
+        'movie': movie,
+    }
+    return render(request, 'movie/movie_watch.html', context)
