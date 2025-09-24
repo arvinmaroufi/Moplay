@@ -3,6 +3,8 @@ from .models import *
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
+from itertools import chain
+from operator import attrgetter
 
 
 def get_pages_to_show(current_page, total_pages):
@@ -180,13 +182,17 @@ def movie_detail(request, slug):
         return redirect('movie:movie_detail', slug=slug)
 
     # similar movies and series
-    similar_movies = Movie.objects.filter(genre__in=movie.genre.all(), status='published').exclude(id=movie.id).distinct()[:5]
-    similar_series = Series.objects.filter(genre__in=movie.genre.all(), status='published').distinct()[:5]
+    movies = Movie.objects.filter(genre__in=movie.genre.all(), status='published').exclude(id=movie.id).distinct()[:5]
+    series = Series.objects.filter(genre__in=movie.genre.all(), status='published').distinct()[:5]
+    similar_contents = sorted(
+        chain(movies, series),
+        key=attrgetter('created_at'),
+        reverse=True
+    )
 
     context = {
         'movie': movie,
-        'similar_movies': similar_movies,
-        'similar_series': similar_series,
+        'similar_contents': similar_contents,
     }
     return render(request, 'movie/movie_detail.html', context)
 
