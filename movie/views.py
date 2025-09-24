@@ -214,13 +214,17 @@ def series_detail(request, slug):
         return redirect('movie:series_detail', slug=slug)
 
     # similar movies and series
-    similar_movies = Movie.objects.filter(genre__in=series.genre.all(), status='published').distinct()[:5]
-    similar_series = Series.objects.filter(genre__in=series.genre.all(), status='published').exclude(id=series.id).distinct()[:5]
+    m = Movie.objects.filter(genre__in=series.genre.all(), status='published').distinct()[:5]
+    s = Series.objects.filter(genre__in=series.genre.all(), status='published').exclude(id=series.id).distinct()[:5]
+    similar_contents = sorted(
+        chain(m, s),
+        key=attrgetter('created_at'),
+        reverse=True
+    )
 
     context = {
         'series': series,
         'chapters': chapters,
-        'similar_movies': similar_movies,
-        'similar_series': similar_series,
+        'similar_contents': similar_contents,
     }
     return render(request, 'movie/series_detail.html', context)
