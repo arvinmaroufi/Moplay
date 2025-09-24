@@ -123,7 +123,7 @@
                                         <a href="#subscription" class="theme-btn"><span class="fas fa-credit-card"></span> ابتدا باید اشتراک تهیه کنید</a>
                                     {% else %}
                                         {% if request.user.is_authenticated %}
-                                            <a href="#movie_watch" class="theme-btn"><span class="fas fa-play"></span> تماشای آنلاین</a>
+                                            <a href="{% url 'movie:movie_watch' movie.slug %}" class="theme-btn"><span class="fas fa-play"></span> تماشای آنلاین</a>
                                         {% else %}
                                             <a href="{% url 'accounts:login' %}" class="theme-btn"><span class="fas fa-user"></span> ابتدا وارد شوید</a>
                                         {% endif %}
