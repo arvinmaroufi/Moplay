@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}تماشای آنلاین {{ movie.title }}{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <style>
+        .movie-player-wrapper {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .movie-player video {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .download-buttons a {
+            background-color: #29B6F6;
+            border-color: #29B6F6;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .download-buttons a:hover {
+            background-color: #e64a19;
+            transform: translateY(-2px);
+        }
+    </style>
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">تماشای آنلاین {{ movie.title }}</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li><a href="{% url 'movie:movies' %}">فیلم ها</a></li>
+                    <li><a href="{% url 'movie:movie_detail' movie.slug %}">{{ movie.title }}</a></li>
+                    <li class="active">تماشای آنلاین</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="movie-watch py-80" dir="rtl">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10 col-xl-8">
+                        <div class="movie-player-wrapper text-center">
+                            <div class="movie-player">
+                                <video class="player" id="player" crossorigin playsinline controls 
+                                       poster="{% if movie.horizontal_banner %}{{ movie.horizontal_banner.url }}{% else %}{% static 'images/movie_horizontal_banner.jpg' %}{% endif %}">
+                                    <source src="{% if movie.quality_1080p %}{{ movie.quality_1080p }}{% elif movie.quality_720p %}{{ movie.quality_720p }}{% else %}{{ movie.quality_480p }}{% endif %}" type="video/mp4">
+                                    مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+                                </video>
+                            </div>
+
+                            <div class="movie-player-info mt-4">
+                                <h3>{{ movie.title }}</h3>
+
+                                <div class="download-options mt-4">
+                                    <h5>دانلود:</h5>
+                                    <div class="download-buttons justify-content-center">
+                                        {% if movie.quality_480p %}
+                                            <a href="{{ movie.quality_480p }}" class="theme-btn" download>
+                                                <i class="fas fa-download"></i> 480p
+                                            </a>
+                                        {% endif %}
+                                        {% if movie.quality_720p %}
+                                            <a href="{{ movie.quality_720p }}" class="theme-btn" download>
+                                                <i class="fas fa-download"></i> 720p
+                                            </a>
+                                        {% endif %}
+                                        {% if movie.quality_1080p %}
+                                            <a href="{{ movie.quality_1080p }}" class="theme-btn" download>
+                                                <i class="fas fa-download"></i> 1080p
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const player = document.getElementById('player');
+
+            player.addEventListener('timeupdate', function() {
+                if (!isNaN(player.duration) && player.duration > 0) {
+                    localStorage.setItem('moviePosition_{{ movie.id }}', player.currentTime);
+                    localStorage.setItem('movieDuration_{{ movie.id }}', player.duration);
+                }
+            });
+
+            const savedPosition = localStorage.getItem('moviePosition_{{ movie.id }}');
+            const savedDuration = localStorage.getItem('movieDuration_{{ movie.id }}');
+
+            if (savedPosition && savedDuration) {
+                player.addEventListener('loadedmetadata', function() {
+                    if (Math.abs(player.duration - parseFloat(savedDuration)) < 10) {
+                        player.currentTime = parseFloat(savedPosition);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}
