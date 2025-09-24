@@ -1,142 +1,47 @@
 {% extends 'base.html' %}
 {% block title %}دانلود فیلم و سریال بدون سانسور{% endblock %}
 {% load static %}
-
+{% load custom_filters %}
+{#7.0#}
 {% block content %}
     <main class="main">
 
         <div class="hero-section hs-1">
             <div class="container">
                 <div class="hero-slider owl-carousel owl-theme">
-                    <div class="hero-single" style="background: url({% static 'images/slider-1.jpg' %})" dir="rtl">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-md-12 col-lg-6">
-                                    <div class="hero-content">
-                                        <h6 class="hero-sub-title" data-animation="fadeInDown" data-delay=".25s">
-                                            جدیدترین فیلم های ۲۰۲۴</h6>
-                                        <h1 class="hero-title" data-animation="fadeInLeft" data-delay=".50s">
-                                            مرد مورچه ای <span>و</span> زنبور کوانتومانیا
-                                        </h1>
-                                        <div class="hero-info" data-animation="fadeInDown" data-delay=".75s">
-                                            <span class="rating"><span><i class="far fa-star"></i> ۷.۸</span>IMDB</span>
-                                            <span class="year">۲۰۲۴</span>
-                                            <span class="time">۲ ساعت  ۱۰ دقیقه</span>
-                                            <div class="genre">
-                                                <a href="#">اکشن,</a>
-                                                <a href="#">جنایی</a>
+                    {% for item in top_rated_contents %}
+                        <div class="hero-single" style="background: url({% if item.horizontal_banner %}{{ item.horizontal_banner.url }}{% else %}{% static 'images/movie_horizontal_banner.jpg' %}{% endif %})" dir="rtl">
+                            <div class="container">
+                                <div class="row align-items-center">
+                                    <div class="col-md-12 col-lg-6">
+                                        <div class="hero-content">
+                                            <h1 class="hero-title" data-animation="fadeInLeft" data-delay=".50s">
+                                                {{ item.title|truncatewords:5 }}
+                                            </h1>
+                                            <div class="hero-info" data-animation="fadeInDown" data-delay=".75s">
+                                                <span class="rating"><span><i class="far fa-star"></i> {{ item.score }}</span>IMDB</span>
+                                                <span class="year">{{ item.release_date }}</span>
+                                                <span class="time">{{ item.duration|duration_format }}</span>
+                                                <div class="genre">
+                                                    {% for genre in item.genre.all|slice:':2' %}
+                                                        <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <p data-animation="fadeInRight" data-delay="1s">{{ item.description|truncatewords:30 }}</p>
+                                            <div class="hero-btn" data-animation="fadeInUp" data-delay="1.25s">
+                                                {% if item|classname == 'Movie' %}
+                                                    <a href="{% url 'movie:movie_detail' item.slug %}" class="theme-btn"><span class="icon-play-3"></span>مشاهده</a>
+                                                {% else %}
+                                                    <a href="{% url 'movie:series_detail' item.slug %}" class="theme-btn"><span class="icon-play-3"></span>مشاهده</a>
+                                                {% endif %}
                                             </div>
                                         </div>
-                                        <p data-animation="fadeInRight" data-delay="1s">
-                                            انواع مختلفی از پاساژهای موجود است اما اکثر آنها
-                                            دارند
-                                            در برخی از فرم‌های تکه‌های از پیش تعریف‌شده تکراری دچار تغییر شده است
-                                            شوخ طبعی تزریق شده
-                                        </p>
-                                        <div class="hero-btn" data-animation="fadeInUp" data-delay="1.25s">
-                                            <a href="#" class="theme-btn"><span class="icon-play-3"></span>مشاهده</a>
-                                            <a href="#" class="theme-btn theme-btn2">اطلاعات بیشتر</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-lg-6">
-                                    <div class="hero-video" data-animation="fadeInLeft" data-delay=".25s">
-                                        <a href="https://www.youtube.com/watch?v=ckHzmP1evNU"
-                                           class="hero-video-btn popup-youtube">
-                                            <span class="video-icon"><i class="icon-video-3"></i></span>
-                                            <span class="video-text">دیدن تریلر</span>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="hero-single" style="background: url({% static 'images/slider-2.jpg' %})" dir="rtl">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-md-12 col-lg-6">
-                                    <div class="hero-content">
-                                        <h6 class="hero-sub-title" data-animation="fadeInDown" data-delay=".25s">
-                                            جدیدترین فیلم های ۲۰۲۴</h6>
-                                        <h1 class="hero-title" data-animation="fadeInLeft" data-delay=".50s">
-                                            میراث هری پاتر <span>هاگوارتز</span>
-                                        </h1>
-                                        <div class="hero-info" data-animation="fadeInDown" data-delay=".75s">
-                                            <span class="rating"><span><i class="far fa-star"></i> ۹.۲</span>IMDB</span>
-                                            <span class="year">۲۰۲۳</span>
-                                            <span class="time">۳ ساعت  ۱۵ دقیقه</span>
-                                            <div class="genre">
-                                                <a href="#">جادوگری,</a>
-                                                <a href="#">فانتزی</a>
-                                            </div>
-                                        </div>
-                                        <p data-animation="fadeInRight" data-delay="1s">
-                                            انواع مختلفی از پاساژهای موجود است اما اکثر آنها
-                                            دارند
-                                            در برخی از فرم‌های تکه‌های از پیش تعریف‌شده تکراری دچار تغییر شده است
-                                            شوخ طبعی تزریق شده
-                                        </p>
-                                        <div class="hero-btn" data-animation="fadeInUp" data-delay="1.25s">
-                                            <a href="#" class="theme-btn"><span class="icon-play-3"></span>مشاهده</a>
-                                            <a href="#" class="theme-btn theme-btn2">اطلاعات بیشتر</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-lg-6">
-                                    <div class="hero-video" data-animation="fadeInLeft" data-delay=".25s">
-                                        <a href="https://www.youtube.com/watch?v=ckHzmP1evNU"
-                                           class="hero-video-btn popup-youtube">
-                                            <span class="video-icon"><i class="icon-video-3"></i></span>
-                                            <span class="video-text">دیدن تریلر</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="hero-single" style="background: url({% static 'images/slider-3.jpg' %})" dir="rtl">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-md-12 col-lg-6">
-                                    <div class="hero-content">
-                                        <h6 class="hero-sub-title" data-animation="fadeInDown" data-delay=".25s">
-                                            جدیدترین فیلم های ۲۰۲۴</h6>
-                                        <h1 class="hero-title" data-animation="fadeInLeft" data-delay=".50s">
-                                            بزرگ توسط <span>گرک ها</span> فصل ۲
-                                        </h1>
-                                        <div class="hero-info" data-animation="fadeInDown" data-delay=".75s">
-                                            <span class="rating"><span><i class="far fa-star"></i> ۹.۵</span>IMDB</span>
-                                            <span class="year">۲۰۲۴</span>
-                                            <span class="time">۸ ساعت  ۴ دقیقه</span>
-                                            <div class="genre">
-                                                <a href="#">فانتزی,</a>
-                                                <a href="#">درام</a>
-                                            </div>
-                                        </div>
-                                        <p data-animation="fadeInRight" data-delay="1s">
-                                            انواع مختلفی از پاساژهای موجود است اما اکثر آنها
-                                            دارند
-                                            در برخی از فرم‌های تکه‌های از پیش تعریف‌شده تکراری دچار تغییر شده است
-                                            شوخ طبعی تزریق شده
-                                        </p>
-                                        <div class="hero-btn" data-animation="fadeInUp" data-delay="1.25s">
-                                            <a href="#" class="theme-btn"><span class="icon-play-3"></span>مشاهده</a>
-                                            <a href="#" class="theme-btn theme-btn2">اطلاعات بیشتر</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-lg-6">
-                                    <div class="hero-video" data-animation="fadeInLeft" data-delay=".25s">
-                                        <a href="https://www.youtube.com/watch?v=ckHzmP1evNU"
-                                           class="hero-video-btn popup-youtube">
-                                            <span class="video-icon"><i class="icon-video-3"></i></span>
-                                            <span class="video-text">دیدن تریلر</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
