@@ -23,3 +23,8 @@ def duration_format(value):
         return f"{hours} ساعت"
     else:
         return f"{minutes} دقیقه"
+
+
+@register.filter
+def classname(obj):
+    return obj.__class__.__name__
