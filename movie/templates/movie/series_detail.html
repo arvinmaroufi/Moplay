@@ -148,17 +148,17 @@
                                             {% with first_video=series.chapterseries_set.first.videoseries_set.first %}
                                                 {% if first_video %}
                                                     {% if first_video.quality_480p %}
-                                                        <a href="#series_download" class="theme-btn">
+                                                        <a href="{% url 'movie:series_download' series.slug '480p' %}" class="theme-btn">
                                                             <span class="fas fa-arrow-down-to-arc"></span> دانلود: 480p
                                                         </a>
                                                     {% endif %}
                                                     {% if first_video.quality_720p %}
-                                                        <a href="#series_download" class="theme-btn">
+                                                        <a href="{% url 'movie:series_download' series.slug '720p' %}" class="theme-btn">
                                                             <span class="fas fa-arrow-down-to-arc"></span> دانلود: 720p
                                                         </a>
                                                     {% endif %}
                                                     {% if first_video.quality_1080p %}
-                                                        <a href="#series_download" class="theme-btn">
+                                                        <a href="{% url 'movie:series_download' series.slug '1080p' %}" class="theme-btn">
                                                             <span class="fas fa-arrow-down-to-arc"></span> دانلود: 1080p
                                                         </a>
                                                     {% endif %}
