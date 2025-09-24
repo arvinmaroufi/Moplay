@@ -251,3 +251,21 @@ def series_watch(request, series_slug, video_id):
         'series': series,
     }
     return render(request, 'movie/series_watch.html', context)
+
+
+@check_content_access
+def series_download(request, series_slug, quality):
+    series = get_object_or_404(Series, slug=series_slug, status='published')
+    chapters = ChapterSeries.objects.filter(series=series).prefetch_related('videoseries_set')
+
+    valid_qualities = ['480p', '720p', '1080p']
+    if quality not in valid_qualities:
+        quality = '480p'
+
+    context = {
+        'series': series,
+        'chapters': chapters,
+        'quality': quality,
+        'available_qualities': valid_qualities,
+    }
+    return render(request, 'movie/series_download.html', context)
