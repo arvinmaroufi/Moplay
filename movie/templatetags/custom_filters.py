@@ -28,3 +28,8 @@ def duration_format(value):
 @register.filter
 def classname(obj):
     return obj.__class__.__name__
+
+
+@register.filter
+def get_quality_url(video, quality):
+    return getattr(video, f'quality_{quality}', None)
