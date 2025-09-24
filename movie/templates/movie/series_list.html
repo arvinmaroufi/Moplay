@@ -157,10 +157,10 @@
                                         {% else %}
                                             <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ s.title|truncatewords:5 }}">
                                         {% endif %}
-                                        <a href="#series_detail" class="movie-play"><i class="icon-play-3"></i></a>
+                                        <a href="{% url 'movie:series_detail' s.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
                                     </div>
                                     <div class="movie-content" dir="rtl">
-                                        <h6 class="movie-title"><a href="#series_detail">{{ s.title|truncatewords:5 }}</a></h6>
+                                        <h6 class="movie-title"><a href="{% url 'movie:series_detail' s.slug %}">{{ s.title|truncatewords:5 }}</a></h6>
                                         <div class="movie-info">
                                             <span class="movie-time">
                                                 فصل {{ s.last_chapter.order|default:'ندارد' }}
