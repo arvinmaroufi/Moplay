@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from itertools import chain
 from operator import attrgetter
 
@@ -237,3 +237,17 @@ def movie_watch(request, slug):
         'movie': movie,
     }
     return render(request, 'movie/movie_watch.html', context)
+
+
+def series_watch(request, video_id):
+    video = get_object_or_404(VideoSeries, id=video_id)
+    series = video.chapter.series
+
+    if series.status != 'published':
+        raise Http404("سریال موجود نیست")
+
+    context = {
+        'video': video,
+        'series': series,
+    }
+    return render(request, 'movie/series_watch.html', context)
