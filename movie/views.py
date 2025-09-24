@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from itertools import chain
 from operator import attrgetter
+from .decorators import check_content_access
 
 
 def get_pages_to_show(current_page, total_pages):
@@ -230,6 +231,7 @@ def series_detail(request, slug):
     return render(request, 'movie/series_detail.html', context)
 
 
+@check_content_access
 def movie_watch(request, slug):
     movie = get_object_or_404(Movie, slug=slug, status='published')
 
@@ -239,6 +241,7 @@ def movie_watch(request, slug):
     return render(request, 'movie/movie_watch.html', context)
 
 
+@check_content_access
 def series_watch(request, series_slug, video_id):
     series = get_object_or_404(Series, slug=series_slug, status='published')
     video = get_object_or_404(VideoSeries, id=video_id, chapter__series=series)
