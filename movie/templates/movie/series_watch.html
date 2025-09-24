@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% block title %}تماشای آنلاین {{ series.title }} - فصل {{ video.chapter.order }} - قسمت {{ video.order }}{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <style>
+        .series-player-wrapper {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .series-player video {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .download-buttons, .nav-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .download-buttons a, .nav-buttons a {
+            background-color: #29B6F6;
+            border-color: #29B6F6;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .download-buttons a:hover, .nav-buttons a:hover {
+            background-color: #e64a19;
+            transform: translateY(-2px);
+        }
+
+        .chapters-section-title {
+            background: #fff;
+            border-radius: 10px 10px 0 0;
+            padding: 15px 20px;
+            margin-bottom: 0;
+            border: 1px solid #e0e0e0;
+            border-bottom: none;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .chapters-list-wrapper {
+            background: #fff;
+            border-radius: 0 0 10px 10px;
+            border: 1px solid #e0e0e0;
+            border-top: none;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .chapters-list {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .chapter-item {
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .chapter-item.active {
+            border-color: #29B6F6;
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .chapter-header:hover {
+            background-color: #e9ecef;
+        }
+
+        .chapter-header h5 {
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .episode-count {
+            background: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .episodes-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .chapter-item.open .episodes-container {
+            max-height: 500px;
+        }
+
+        .episodes-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            padding: 15px;
+        }
+
+        .episode-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 5px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .episode-link:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .episode-link.current {
+            background-color: #29B6F6;
+            color: white;
+        }
+
+        .episode-number {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .play-icon {
+            margin-top: 5px;
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .episode-link.current .play-icon {
+            opacity: 1;
+        }
+
+        .chapter-header::after {
+            content: "▼";
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-item.open .chapter-header::after {
+            transform: rotate(180deg);
+        }
+
+        .chapters-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chapters-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .chapters-list::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 10px;
+        }
+
+        .chapters-list::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+    </style>
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">تماشای آنلاین {{ series.title }}</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li><a href="{% url 'movie:series' %}">سریال ها</a></li>
+                    <li><a href="{% url 'movie:series_detail' series.slug %}">{{ series.title }}</a></li>
+                    <li class="active">فصل {{ video.chapter.order }} - قسمت {{ video.order }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="series-watch py-80" dir="rtl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="series-player-wrapper text-center">
+                            <div class="series-player">
+                                <video class="player" id="player" crossorigin playsinline controls
+                                       poster="{% if series.horizontal_banner %}{{ series.horizontal_banner.url }}{% else %}{% static 'images/25.jpg' %}{% endif %}">
+                                    <source src="{% if video.quality_1080p %}{{ video.quality_1080p }}{% elif video.quality_720p %}{{ video.quality_720p }}{% else %}{{ video.quality_480p }}{% endif %}" type="video/mp4">
+                                    مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+                                </video>
+                            </div>
+
+                            <div class="series-player-info mt-4">
+                                <h3>{{ series.title }} - فصل {{ video.chapter.order }} - قسمت {{ video.order }}</h3>
+
+                                <div class="download-options mt-4">
+                                    <h5>دانلود:</h5>
+                                    <div class="download-buttons justify-content-center">
+                                        {% if video.quality_480p %}
+                                            <a href="{{ video.quality_480p }}" class="theme-btn" download>
+                                                <i class="fas fa-download"></i> 480p
+                                            </a>
+                                        {% endif %}
+                                        {% if video.quality_720p %}
+                                            <a href="{{ video.quality_720p }}" class="theme-btn" download>
+                                                <i class="fas fa-download"></i> 720p
+                                            </a>
+                                        {% endif %}
+                                        {% if video.quality_1080p %}
+                                            <a href="{{ video.quality_1080p }}" class="theme-btn" download>
+                                                <i class="fas fa-download"></i> 1080p
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if video.subtitle %}
+                                    <div class="download-options mt-4">
+                                        <h5>دانلود زیرنویس:</h5>
+                                        <div class="download-buttons justify-content-center">
+                                            <a href="{{ video.subtitle }}" class="theme-btn" download>
+                                                <i class="fas fa-download"></i> زیرنویس
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="sidebar-widget">
+                            <h4 class="chapters-section-title">فصل‌ها و قسمت‌ها</h4>
+                            <div class="chapters-list-wrapper">
+                                <div class="chapters-list">
+                                    {% for chapter in series.chapterseries_set.all %}
+                                        <div class="chapter-item {% if chapter == video.chapter %}active open{% endif %}" data-chapter-id="{{ chapter.id }}">
+                                            <div class="chapter-header">
+                                                <h5>فصل {{ chapter.order }}</h5>
+                                                <span class="episode-count">{{ chapter.videoseries_set.count }} قسمت</span>
+                                            </div>
+                                            <div class="episodes-container">
+                                                <div class="episodes-list">
+                                                    {% for episode in chapter.videoseries_set.all %}
+                                                        <a href="{% url 'movie:series_watch' series.slug episode.id %}" class="episode-link {% if episode == video %}current{% endif %}">
+                                                            <span class="episode-number">قسمت {{ episode.order }}</span>
+                                                            <span class="play-icon"><i class="icon-play-4"></i></span>
+                                                        </a>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const player = document.getElementById('player');
+
+            player.addEventListener('timeupdate', function() {
+                if (!isNaN(player.duration) && player.duration > 0) {
+                    localStorage.setItem('seriesPosition_{{ video.id }}', player.currentTime);
+                    localStorage.setItem('seriesDuration_{{ video.id }}', player.duration);
+                }
+            });
+
+            const savedPosition = localStorage.getItem('seriesPosition_{{ video.id }}');
+            const savedDuration = localStorage.getItem('seriesDuration_{{ video.id }}');
+
+            if (savedPosition && savedDuration) {
+                player.addEventListener('loadedmetadata', function() {
+                    if (Math.abs(player.duration - parseFloat(savedDuration)) < 10) {
+                        player.currentTime = parseFloat(savedPosition);
+                    }
+                });
+            }
+
+            const chapterHeaders = document.querySelectorAll('.chapter-header');
+
+            chapterHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const chapterItem = this.parentElement;
+                    const isCurrentlyOpen = chapterItem.classList.contains('open');
+
+                    if (isCurrentlyOpen) {
+                        chapterItem.classList.remove('open');
+                    } else {
+                        document.querySelectorAll('.chapter-item').forEach(item => {
+                            item.classList.remove('open');
+                        });
+                        chapterItem.classList.add('open');
+                    }
+                });
+            });
+
+            const currentChapter = document.querySelector('.chapter-item.active');
+            if (currentChapter && !currentChapter.classList.contains('open')) {
+                currentChapter.classList.add('open');
+            }
+        });
+    </script>
+
+{% endblock %}
