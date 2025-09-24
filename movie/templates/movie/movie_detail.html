@@ -234,71 +234,72 @@
                         </div>
                     </div>
                 </div>
-                <div class="row row-cols-xl-5">
-                    {% if similar_movies %}
-                        {% for m in similar_movies %}
-                            <div class="col-6 col-md-4 col-lg-3 col-xl">
-                                <div class="movie-item">
-                                    <span class="movie-quality">{{ m.get_dubbed_or_subtitle_display }}</span>
-                                    <div class="movie-img">
-                                        {% if m.vertical_banner %}
-                                            <img src="{{ m.vertical_banner.url }}" alt="{{ m.title|truncatewords:5 }}">
-                                        {% else %}
-                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ m.title|truncatewords:5 }}">
-                                        {% endif %}
-                                        <a href="{% url 'movie:movie_detail' m.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                {% if similar_contents %}
+                    <div class="row row-cols-xl-5">
+                        {% for item in similar_contents %}
+                            {% if item|classname == 'Movie' %}
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">{{ item.get_dubbed_or_subtitle_display }}</span>
+                                        <div class="movie-img">
+                                            {% if item.vertical_banner %}
+                                                <img src="{{ item.vertical_banner.url }}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% else %}
+                                                <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% endif %}
+                                            <a href="{% url 'movie:movie_detail' item.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="{% url 'movie:movie_detail' item.slug %}">{{ item.title|truncatewords:5 }}</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">{{ item.duration|duration_format }}</span>
+                                                <div class="movie-genre">
+                                                    {% for genre in item.genre.all|slice:":2" %}
+                                                        <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="movie-content">
-                                        <h6 class="movie-title"><a href="{% url 'movie:movie_detail' m.slug %}">{{ m.title|truncatewords:5 }}</a></h6>
-                                        <div class="movie-info">
-                                            <span class="movie-time">{{ m.duration|duration_format }}</span>
-                                            <div class="movie-genre">
-                                                {% for genre in m.genre.all|slice:":2" %}
+                                </div>
+                            {% else %}
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        {% if item.last_episode_number %}
+                                            <span class="movie-episode">قسمت<small>{{ item.last_episode_number }}</small></span>
+                                        {% else %}
+                                            <span class="movie-episode">ندارد</span>
+                                        {% endif %}
+                                        <span class="movie-quality">{{ item.get_dubbed_or_subtitle_display }}</span>
+                                        <div class="movie-img">
+                                            {% if item.vertical_banner %}
+                                                <img src="{{ item.vertical_banner.url }}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% else %}
+                                                <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% endif %}
+                                            <a href="{% url 'movie:series_detail' item.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="{% url 'movie:series_detail' item.slug %}">{{ item.title|truncatewords:5 }}</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-season">
+                                                    فصل {{ item.last_chapter.order|default:'ندارد' }}
+                                                </span>
+                                                <div class="movie-genre">
+                                                    {% for genre in item.genre.all|slice:":2" %}
                                                     <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
                                                 {% endfor %}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         {% endfor %}
-                    {% endif %}
-                    {% if similar_series %}
-                        {% for s in similar_series %}
-                            <div class="col-6 col-md-4 col-lg-3 col-xl">
-                                <div class="movie-item">
-                                    {% if s.chapter_count and s.last_episode_number %}
-                                        <span class="movie-episode">قسمت<small>{{ s.last_episode_number }}</small></span>
-                                    {% else %}
-                                        <span class="movie-episode">ندارد</span>
-                                    {% endif %}
-                                    <span class="movie-quality">{{ s.get_dubbed_or_subtitle_display }}</span>
-                                    <div class="movie-img">
-                                        {% if s.vertical_banner %}
-                                            <img src="{{ s.vertical_banner.url }}" alt="{{ s.title|truncatewords:5 }}">
-                                        {% else %}
-                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ s.title|truncatewords:5 }}">
-                                        {% endif %}
-                                        <a href="#series_detail" class="movie-play"><i class="icon-play-3"></i></a>
-                                    </div>
-                                    <div class="movie-content">
-                                        <h6 class="movie-title"><a href="#series_detail">{{ s.title|truncatewords:5 }}</a></h6>
-                                        <div class="movie-info">
-                                            <span class="movie-season">
-                                                فصل {{ s.last_chapter.order|default:'ندارد' }}
-                                            </span>
-                                            <div class="movie-genre">
-                                                {% for genre in s.genre.all|slice:":2" %}
-                                                <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
-                                            {% endfor %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                    </div>
+                {% else %}
+                    محتوایی برای نمایش وجود ندارد!
+                {% endif %}
             </div>
         </div>
 
