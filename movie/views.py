@@ -167,7 +167,7 @@ def series_list(request):
 
 
 def movie_detail(request, slug):
-    movie = get_object_or_404(Movie, slug=slug)
+    movie = get_object_or_404(Movie, slug=slug, status='published')
     movie.views += 1
     movie.save()
 
@@ -198,7 +198,7 @@ def movie_detail(request, slug):
 
 
 def series_detail(request, slug):
-    series = get_object_or_404(Series, slug=slug)
+    series = get_object_or_404(Series, slug=slug, status='published')
     series.views += 1
     series.save()
     chapters = series.chapterseries_set.all()
@@ -231,7 +231,7 @@ def series_detail(request, slug):
 
 
 def movie_watch(request, slug):
-    movie = get_object_or_404(Movie, slug=slug)
+    movie = get_object_or_404(Movie, slug=slug, status='published')
 
     context = {
         'movie': movie,
