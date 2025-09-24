@@ -129,7 +129,7 @@
                                                 {% if first_chapter %}
                                                     {% with first_video=first_chapter.videoseries_set.first %}
                                                         {% if first_video %}
-                                                            <a href="#series_watch" class="theme-btn">
+                                                            <a href="{% url 'movie:series_watch' series.slug first_video.id %}" class="theme-btn">
                                                                 <span class="fas fa-play"></span> تماشای آنلاین
                                                             </a>
                                                         {% else %}
@@ -208,10 +208,10 @@
                                                         {% else %}
                                                             <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="">
                                                         {% endif %}
-                                                        <a href="#series_watch" class="movie-play"><i class="icon-play-4"></i></a>
+                                                        <a href="{% url 'movie:series_watch' series.slug video.id %}" class="movie-play"><i class="icon-play-4"></i></a>
                                                     </div>
                                                     <div class="movie-content">
-                                                        <h6 class="movie-title"><a href="#series_watch">قسمت {{ video.order }}</a></h6>
+                                                        <h6 class="movie-title"><a href="{% url 'movie:series_watch' series.slug video.id %}">قسمت {{ video.order }}</a></h6>
                                                     </div>
                                                 </div>
                                             </div>
