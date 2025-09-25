@@ -29,7 +29,7 @@
                                             <img src="{{ movie.vertical_banner.url }}"
                                                  alt="{{ movie.title|truncatewords:5 }}">
                                         {% else %}
-                                            <img src="{% static 'images/06.jpg' %}" alt="{{ movie.title|truncatewords:5 }}">
+                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ movie.title|truncatewords:5 }}">
                                         {% endif %}
                                         <a href="{% url 'movie:movie_detail' movie.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
                                     </div>
