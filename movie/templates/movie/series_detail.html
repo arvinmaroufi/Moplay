@@ -74,7 +74,7 @@
                                             <div class="movie-info-item">
                                                 <strong>ژانر:</strong>
                                                 {% for genre in series.genre.all %}
-                                                    <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    <a href="{% url 'movie:genre_series' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
                                                 {% endfor %}
                                             </div>
                                             <div class="movie-info-item">
@@ -329,7 +329,7 @@
                                                 <span class="movie-time">{{ item.duration|duration_format }}</span>
                                                 <div class="movie-genre">
                                                     {% for genre in item.genre.all|slice:":2" %}
-                                                        <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                        <a href="{% url 'movie:genre_movies' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
                                                     {% endfor %}
                                                 </div>
                                             </div>
@@ -361,8 +361,8 @@
                                                 </span>
                                                 <div class="movie-genre">
                                                     {% for genre in item.genre.all|slice:":2" %}
-                                                    <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
-                                                {% endfor %}
+                                                        <a href="{% url 'movie:genre_series' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
                                                 </div>
                                             </div>
                                         </div>
