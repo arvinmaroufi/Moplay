@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="fa">
 
@@ -121,42 +122,16 @@
                     <div class="collapse navbar-collapse" id="main_nav">
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">ژانر فیلم</a>
+                                <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-bs-toggle="dropdown">ژانر فیلم</a>
                                 <div class="dropdown-menu mega-menu fade-down">
                                     <div class="row">
+                                        {% for column in genres_movies|split_into_columns:3 %}
                                         <div class="col-lg-4">
-                                            <a class="dropdown-item" href="movie-category.html">اکشن</a>
-                                            <a class="dropdown-item" href="movie-category.html">انیمیشن</a>
-                                            <a class="dropdown-item" href="movie-category.html">ماجراجویی</a>
-                                            <a class="dropdown-item" href="movie-category.html">بیوگرافی</a>
-                                            <a class="dropdown-item" href="movie-category.html">کمدی</a>
-                                            <a class="dropdown-item" href="movie-category.html">جنایی</a>
-                                            <a class="dropdown-item" href="movie-category.html">مستند</a>
-                                            <a class="dropdown-item" href="movie-category.html">درام</a>
-                                            <a class="dropdown-item" href="movie-category.html">خانوادگی</a>
+                                            {% for genre in column %}
+                                                <a class="dropdown-item" href="{% url 'movie:genre_movies' genre.slug %}">{{ genre.title }}</a>
+                                            {% endfor %}
                                         </div>
-                                        <div class="col-lg-4">
-                                            <a class="dropdown-item" href="movie-category.html">فانتزی</a>
-                                            <a class="dropdown-item" href="movie-category.html">نمایش بازی</a>
-                                            <a class="dropdown-item" href="movie-category.html">تاریخچه</a>
-                                            <a class="dropdown-item" href="movie-category.html">وحشتناک</a>
-                                            <a class="dropdown-item" href="movie-category.html">کونگ فو</a>
-                                            <a class="dropdown-item" href="movie-category.html">موسیقی</a>
-                                            <a class="dropdown-item" href="movie-category.html">موسیقی</a>
-                                            <a class="dropdown-item" href="movie-category.html">معمایی</a>
-                                            <a class="dropdown-item" href="movie-category.html">اساطیری</a>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <a class="dropdown-item" href="movie-category.html">اخبار</a>
-                                            <a class="dropdown-item" href="movie-category.html">روانی</a>
-                                            <a class="dropdown-item" href="movie-category.html">عاشقانه</a>
-                                            <a class="dropdown-item" href="movie-category.html">علمی تخیلی</a>
-                                            <a class="dropdown-item" href="movie-category.html">ورزش</a>
-                                            <a class="dropdown-item" href="movie-category.html">ریلی شو</a>
-                                            <a class="dropdown-item" href="movie-category.html">هیجان انگیز</a>
-                                            <a class="dropdown-item" href="movie-category.html">نمایش تلویزیونی</a>
-                                            <a class="dropdown-item" href="movie-category.html">جنگ</a>
-                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </li>
