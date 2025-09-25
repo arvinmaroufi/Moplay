@@ -160,7 +160,7 @@
                                             <span class="movie-time">{{ movie.duration|duration_format }}</span>
                                             <div class="movie-genre">
                                                 {% for genre in movie.genre.all|slice:":2" %}
-                                                    <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    <a href="{% url 'movie:genre_movies' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
                                                 {% endfor %}
                                             </div>
                                         </div>
@@ -219,20 +219,16 @@
     </main>
 
     <script>
-        // اضافه کردن این کد به انتهای فایل‌های HTML یا در فایل JS جداگانه
         document.addEventListener('DOMContentLoaded', function() {
-            // حفظ پارامترهای فیلتر در لینک‌های صفحه‌بندی
             const paginationLinks = document.querySelectorAll('.pagination a');
             paginationLinks.forEach(link => {
                 const url = new URL(link.href);
                 const form = document.getElementById('filter-form');
                 const formData = new FormData(form);
 
-                // اضافه کردن پارامترهای فیلتر به لینک صفحه‌بندی
                 for (const [key, value] of formData.entries()) {
-                    if (key !== 'page') { // صفحه را از پارامترهای فرم حذف می‌کنیم
+                    if (key !== 'page') {
                         if (url.searchParams.has(key)) {
-                            // اگر چندین مقدار برای یک کلید وجود دارد
                             if (Array.isArray(value)) {
                                 url.searchParams.delete(key);
                                 value.forEach(val => url.searchParams.append(key, val));
@@ -252,10 +248,8 @@
                 link.href = url.toString();
             });
 
-            // مدیریت ارسال فرم برای فیلترها
             const filterForm = document.getElementById('filter-form');
             if (filterForm) {
-                // برای جلوگیری از ارسال صفحه هنگام فیلتر کردن
                 filterForm.addEventListener('submit', function(e) {
                     const pageInput = document.querySelector('input[name="page"]');
                     if (pageInput) {
@@ -263,8 +257,7 @@
                     }
                 });
             }
-
-            // مدیریت چک‌باکس‌ها برای ارسال خودکار فرم
+            
             const autoSubmitCheckboxes = document.querySelectorAll('input[type="checkbox"][name="year"], input[type="checkbox"][name="genre"], input[type="checkbox"][name="country"]');
             autoSubmitCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
