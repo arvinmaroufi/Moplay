@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}سریال های {{ genre.title }}{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">سریال های {{ genre.title }}</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">سریال های {{ genre.title }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="movie-area py-80" dir="rtl">
+            <div class="container">
+                <div class="row row-cols-xl-5">
+                    {% if series %}
+                        {% for s in series %}
+                        <div class="col-6 col-md-4 col-lg-3 col-xl">
+                            <div class="movie-item">
+                                {% if s.last_episode_number %}
+                                    <span class="movie-episode">قسمت<small>{{ s.last_episode_number }}</small></span>
+                                {% else %}
+                                    <span class="movie-episode">ندارد</span>
+                                {% endif %}
+                                <span class="movie-quality">{{ s.get_dubbed_or_subtitle_display }}</span>
+                                <div class="movie-img">
+                                    {% if s.vertical_banner %}
+                                        <img src="{{ s.vertical_banner.url }}" alt="{{ s.title|truncatewords:5 }}">
+                                    {% else %}
+                                        <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ s.title|truncatewords:5 }}">
+                                    {% endif %}
+                                    <a href="{% url 'movie:series_detail' s.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                </div>
+                                <div class="movie-content" dir="rtl">
+                                    <h6 class="movie-title"><a href="{% url 'movie:series_detail' s.slug %}">{{ s.title|truncatewords:5 }}</a></h6>
+                                    <div class="movie-info">
+                                        <span class="movie-time">
+                                            فصل {{ s.last_chapter.order|default:'ندارد' }}
+                                        </span>
+                                        <div class="movie-genre">
+                                            {% for g in s.genre.all|slice:":2" %}
+                                                <a href="{% url 'movie:genre_series' g.slug %}">{{ g.title }}</a>{% if not forloop.last %}،{% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% else %}
+                        سریالی یافت نشد!
+                    {% endif %}
+                </div>
+
+                <div class="pagination-area mt-20">
+                    <div aria-label="Page navigation example">
+                        {% if series.has_other_pages %}
+                            <ul class="pagination">
+                                {% if series.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ series.previous_page_number }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% for page in pages_to_show %}
+                                    {% if page == '...' %}
+                                        <li class="page-item"><span class="page-link">...</span></li>
+                                    {% elif series.number == page %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if series.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ series.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
