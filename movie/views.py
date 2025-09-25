@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from itertools import chain
 from operator import attrgetter
 from .decorators import check_content_access
+from django.contrib.auth.decorators import login_required
 
 
 def get_pages_to_show(current_page, total_pages):
@@ -232,6 +233,7 @@ def series_detail(request, slug):
 
 
 @check_content_access
+@login_required
 def movie_watch(request, slug):
     movie = get_object_or_404(Movie, slug=slug, status='published')
 
@@ -242,6 +244,7 @@ def movie_watch(request, slug):
 
 
 @check_content_access
+@login_required
 def series_watch(request, series_slug, video_id):
     series = get_object_or_404(Series, slug=series_slug, status='published')
     video = get_object_or_404(VideoSeries, id=video_id, chapter__series=series)
@@ -254,6 +257,7 @@ def series_watch(request, series_slug, video_id):
 
 
 @check_content_access
+@login_required
 def series_download(request, series_slug, quality):
     series = get_object_or_404(Series, slug=series_slug, status='published')
     chapters = ChapterSeries.objects.filter(series=series).prefetch_related('videoseries_set')
