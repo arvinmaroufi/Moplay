@@ -23,9 +23,15 @@
                                                 <span class="year">{{ item.release_date }}</span>
                                                 <span class="time">{{ item.duration|duration_format }}</span>
                                                 <div class="genre">
-                                                    {% for genre in item.genre.all|slice:':2' %}
-                                                        <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
-                                                    {% endfor %}
+                                                    {% if item|classname == 'Movie' %}
+                                                        {% for genre in item.genre.all|slice:':2' %}
+                                                            <a href="{% url 'movie:genre_movies' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        {% for genre in item.genre.all|slice:':2' %}
+                                                            <a href="{% url 'movie:genre_series' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <p data-animation="fadeInRight" data-delay="1s">{{ item.description|truncatewords:30 }}</p>
