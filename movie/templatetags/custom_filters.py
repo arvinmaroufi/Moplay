@@ -1,4 +1,5 @@
 from django import template
+from math import ceil
 
 
 register = template.Library()
@@ -33,3 +34,14 @@ def classname(obj):
 @register.filter
 def get_quality_url(video, quality):
     return getattr(video, f'quality_{quality}', None)
+
+
+@register.filter
+def split_into_columns(lst, columns=3):
+    if not lst:
+        return []
+
+    length = len(lst)
+    items_per_column = ceil(length / columns)
+
+    return [lst[i:i + items_per_column] for i in range(0, length, items_per_column)]
