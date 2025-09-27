@@ -112,6 +112,13 @@ class Actor(models.Model):
     slug = models.SlugField(max_length=200, unique=True, verbose_name='نامک')
     bio = models.TextField(blank=True, null=True, verbose_name='بیوگرافی')
     photo = models.ImageField(upload_to='actors_photos/', null=True, blank=True, verbose_name='عکس بازیگر')
+    date_birth = models.DateField(blank=True, null=True, verbose_name='تاریخ تولد')
+    place_birth = models.CharField(max_length=255, blank=True, null=True, verbose_name='محل تولد')
+    education = models.CharField(max_length=255, blank=True, null=True, verbose_name="تحصیلات")
+    awards = models.PositiveIntegerField(default=0, blank=True, null=True, verbose_name="تعداد جوایز")
+    twitter_url = models.URLField(blank=True, null=True, verbose_name="آدرس توییتر")
+    instagram_url = models.URLField(blank=True, null=True, verbose_name="آدرس اینستاگرام")
+    facebook_url = models.URLField(blank=True, null=True, verbose_name="آدرس فیسبوک")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
 
     class Meta:
