@@ -319,3 +319,23 @@ def genre_series(request, slug):
         'pages_to_show': pages_to_show,
     }
     return render(request, 'movie/genre_series.html', context)
+
+
+def directors_list(request):
+    directors = Director.objects.all().order_by('-created_at')
+
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(directors, 15)
+    try:
+        object_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        object_list = paginator.page(1)
+    except EmptyPage:
+        object_list = paginator.page(paginator.num_pages)
+    pages_to_show = get_pages_to_show(object_list.number, paginator.num_pages)
+
+    context = {
+        'directors': object_list,
+        'pages_to_show': pages_to_show,
+    }
+    return render(request, 'movie/directors_list.html', context)
