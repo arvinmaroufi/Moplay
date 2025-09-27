@@ -23,3 +23,9 @@ class DirectorAdminForm(SocialMediaAdminForm):
     class Meta:
         model = models.Director
         fields = '__all__'
+
+
+class ActorAdminForm(SocialMediaAdminForm):
+    class Meta:
+        model = models.Actor
+        fields = '__all__'
