@@ -80,7 +80,7 @@
                                             <div class="movie-info-item">
                                                 <strong>کارگردان:</strong>
                                                 {% for d in series.director.all|slice:'3' %}
-                                                    <a href="#">{{ d.name }}</a>{% if not forloop.last %}،{% endif %}
+                                                    <a href="{% url 'movie:director_detail' d.slug %}">{{ d.name }}</a>{% if not forloop.last %}،{% endif %}
                                                 {% endfor %}
                                             </div>
                                             <div class="movie-info-item">
