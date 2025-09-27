@@ -202,17 +202,31 @@
                                         {% for video in chapter.videoseries_set.all %}
                                             <div class="col-md-6 col-lg-4 col-xl-3">
                                                 <div class="movie-item">
-                                                    <div class="movie-img">
-                                                        {% if series.vertical_banner %}
-                                                            <img src="{{ series.vertical_banner.url }}" alt="">
-                                                        {% else %}
-                                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="">
-                                                        {% endif %}
-                                                        <a href="{% url 'movie:series_watch' series.slug video.id %}" class="movie-play"><i class="icon-play-4"></i></a>
-                                                    </div>
-                                                    <div class="movie-content">
-                                                        <h6 class="movie-title"><a href="{% url 'movie:series_watch' series.slug video.id %}">قسمت {{ video.order }}</a></h6>
-                                                    </div>
+                                                    {% if series.subscription_status == 'subscription' %}
+                                                        <div class="movie-img">
+                                                            {% if series.vertical_banner %}
+                                                                <img src="{{ series.vertical_banner.url }}" alt="">
+                                                            {% else %}
+                                                                <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="">
+                                                            {% endif %}
+                                                            <a href="javascript:void(0)" class="movie-play"><i class="icon-play-4"></i></a>
+                                                        </div>
+                                                        <div class="movie-content">
+                                                            <h6 class="movie-title"><a href="javascript:void(0)">قسمت {{ video.order }}</a></h6>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="movie-img">
+                                                            {% if series.vertical_banner %}
+                                                                <img src="{{ series.vertical_banner.url }}" alt="">
+                                                            {% else %}
+                                                                <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="">
+                                                            {% endif %}
+                                                            <a href="{% url 'movie:series_watch' series.slug video.id %}" class="movie-play"><i class="icon-play-4"></i></a>
+                                                        </div>
+                                                        <div class="movie-content">
+                                                            <h6 class="movie-title"><a href="{% url 'movie:series_watch' series.slug video.id %}">قسمت {{ video.order }}</a></h6>
+                                                        </div>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         {% endfor %}
