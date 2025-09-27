@@ -339,3 +339,23 @@ def directors_list(request):
         'pages_to_show': pages_to_show,
     }
     return render(request, 'movie/directors_list.html', context)
+
+
+def director_detail(request, slug):
+    director = get_object_or_404(Director, slug=slug)
+
+    movies = Movie.objects.filter(director=director, status='published')
+    series = Series.objects.filter(director=director, status='published')
+    contents = sorted(
+        chain(movies, series),
+        key=attrgetter('created_at'),
+        reverse=True
+    )
+
+    context = {
+        'director': director,
+        'movies': movies,
+        'series': series,
+        'contents': contents,
+    }
+    return render(request, 'movie/director_detail.html', context)
