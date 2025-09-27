@@ -3,6 +3,7 @@ from . import models
 from jalali_date import datetime2jalali
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
+from .forms import DirectorAdminForm
 
 
 # personalized actions
@@ -91,9 +92,21 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(models.Director)
 class DirectorAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'get_created_at_jalali']
-    list_filter = ['created_at']
+    form = DirectorAdminForm
+    list_display = ['name', 'slug', 'date_birth', 'place_birth', 'awards', 'get_created_at_jalali']
+    list_filter = ['created_at', 'date_birth']
     search_fields = ['name']
+    fieldsets = (
+        ('اطلاعات اصلی', {
+            'fields': ('name', 'slug', 'bio', 'photo')
+        }),
+        ('اطلاعات شخصی', {
+            'fields': ('date_birth', 'place_birth', 'education', 'awards')
+        }),
+        ('شبکه ‌های اجتماعی', {
+            'fields': ('twitter_url', 'instagram_url', 'facebook_url'),
+        }),
+    )
 
     @admin.display(description='تاریخ ایجاد', ordering='created_at')
     def get_created_at_jalali(self, obj):
