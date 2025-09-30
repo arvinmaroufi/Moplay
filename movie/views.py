@@ -379,3 +379,24 @@ def actors_list(request):
         'pages_to_show': pages_to_show,
     }
     return render(request, 'movie/actors_list.html', context)
+
+
+def actor_detail(request, slug):
+    actor = get_object_or_404(Actor, slug=slug)
+
+    movies = Movie.objects.filter(actors=actor, status='published')
+    series = Series.objects.filter(actors=actor, status='published')
+
+    contents = sorted(
+        chain(movies, series),
+        key=attrgetter('created_at'),
+        reverse=True
+    )
+
+    context = {
+        'actor': actor,
+        'movies': movies,
+        'series': series,
+        'contents': contents,
+    }
+    return render(request, 'movie/actor_detail.html', context)
