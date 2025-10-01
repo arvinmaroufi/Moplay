@@ -400,3 +400,36 @@ def actor_detail(request, slug):
         'contents': contents,
     }
     return render(request, 'movie/actor_detail.html', context)
+
+
+def tag_detail(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    tag.views += 1
+    tag.save()
+
+    movies = Movie.objects.filter(tags=tag, status='published')
+    series = Series.objects.filter(tags=tag, status='published')
+
+    combined_content = sorted(
+        chain(movies, series),
+        key=attrgetter('created_at'),
+        reverse=True
+    )
+
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(combined_content, 15)
+    try:
+        content_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        content_list = paginator.page(1)
+    except EmptyPage:
+        content_list = paginator.page(paginator.num_pages)
+
+    pages_to_show = get_pages_to_show(content_list.number, paginator.num_pages)
+
+    context = {
+        'tag': tag,
+        'content_list': content_list,
+        'pages_to_show': pages_to_show,
+    }
+    return render(request, 'movie/tag_detail.html', context)
