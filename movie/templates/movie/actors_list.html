@@ -29,10 +29,10 @@
                                         {% else %}
                                             <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ actor.title|truncatewords:5 }}">
                                         {% endif %}
-                                        <a href="#actor_detail" class="movie-play"><i class="icon-play-3"></i></a>
+                                        <a href="{% url 'movie:actor_detail' actor.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
                                     </div>
                                     <div class="movie-content" dir="rtl">
-                                        <h6 class="movie-title"><a href="#actor_detail">{{ actor.name|truncatewords:5 }}</a></h6>
+                                        <h6 class="movie-title"><a href="{% url 'movie:actor_detail' actor.slug %}">{{ actor.name|truncatewords:5 }}</a></h6>
                                     </div>
                                 </div>
                             </div>
