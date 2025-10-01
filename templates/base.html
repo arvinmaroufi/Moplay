@@ -276,26 +276,9 @@
                         </div>
                         <div class="col-12">
                             <div class="footer-top-link">
-                                <a href="#">IMDB برتر</a>
-                                <a href="#">نسخه جدید</a>
-                                <a href="#">فیلم‌ها</a>
-                                <a href="#">نمایش‌های تلویزیونی</a>
-                                <a href="#">ویدیوها</a>
-                                <a href="#">اقدام</a>
-                                <a href="#">فانتزی</a>
-                                <a href="#">انیمیشن</a>
-                                <a href="#">موسیقی</a>
-                                <a href="#">جرم</a>
-                                <a href="#">وحشتناک</a>
-                                <a href="#">ورزش</a>
-                                <a href="#">درام</a>
-                                <a href="#">تماشا کنید</a>
-                                <a href="#">نقشه سایت</a>
-                                <a href="#">شو کمدی</a>
-                                <a href="#">کمدی</a>
-                                <a href="#">تماشا کنید</a>
-                                <a href="#">آخرین فیلم</a>
-                                <a href="#">فیلم آینده</a>
+                                {% for tag in popular_tags %}
+                                    <a href="{% url 'movie:tag_detail' tag.slug %}">{{ tag.title }}</a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
