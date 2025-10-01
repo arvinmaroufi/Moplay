@@ -175,7 +175,7 @@
                                 <div class="movie-keyword">
                                     <span>کلمه کلیدی :</span>
                                     {% for tag in series.tags.all %}
-                                        <a href="#">{{ tag.title }}</a>
+                                        <a href="{% url 'movie:tag_detail' tag.slug %}">{{ tag.title }}</a>
                                     {% endfor %}
                                 </div>
                             </div>
