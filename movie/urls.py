@@ -18,4 +18,5 @@ urlpatterns = [
     path('directors/<slug:slug>/', views.director_detail, name='director_detail'),
     path('actors/', views.actors_list, name='actors'),
     path('actors/<slug:slug>/', views.actor_detail, name='actor_detail'),
+    path('tag/<slug:slug>/', views.tag_detail, name='tag_detail'),
 ]
