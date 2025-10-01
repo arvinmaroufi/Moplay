@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block title %}{{ actor.name }}{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">{{ actor.name }}</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li><a href="{% url 'movie:actors' %}">بازیگران</a></li>
+                    <li class="active">{{ actor.name }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="movie-single py-80" dir="rtl">
+            <div class="container">
+                <div class="movie-single-wrap">
+
+                    <div class="movie-single-content">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-3">
+                                <div class="movie-img">
+                                    {% if actor.photo %}
+                                        <img src="{{ actor.photo.url }}" alt="{{ actor.name|truncatewords:5 }}">
+                                    {% else %}
+                                        <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ actor.name|truncatewords:5 }}">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-lg-8">
+                                <div class="movie-info">
+                                    <h4 class="movie-name">
+                                        {{ actor.name }}
+                                    </h4>
+                                    <p>{{ actor.bio|default:'ثبت نشده' }}</p>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <div class="movie-info-item">
+                                                <strong>تاریخ تولد:</strong>
+                                                <span>{{ actor.date_birth|date:"Y/m/d"|default:'ثبت نشده' }}</span>
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>محل تولد:</strong>
+                                                <span>{{ actor.place_birth|default:'ثبت نشده' }}</span>
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>تحصیلات:</strong>
+                                                <span>{{ actor.education|default:'ثبت نشده' }}</span>
+                                            </div>
+                                            <ul class="person-social mt-30">
+                                                {% if actor.twitter_url %}
+                                                    <li><a href="{{ actor.twitter_url }}"><i class="fab fa-x-twitter"></i></a></li>
+                                                {% endif %}
+                                                {% if actor.instagram_url %}
+                                                <li><a href="{{ actor.instagram_url }}"><i class="fab fa-instagram"></i></a></li>
+                                                {% endif %}
+                                                {% if actor.facebook_url %}
+                                                    <li><a href="{{ actor.facebook_url }}"><i class="fab fa-facebook-square"></i></a></li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="movie-info-item">
+                                                <strong>تعداد جوایز:</strong>
+                                                <span>{{ actor.awards|default:'ثبت نشده' }}</span>
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>تعداد فیلم ها:</strong>
+                                                <span>{{ movies.count }}</span>
+                                            </div>
+                                            <div class="movie-info-item">
+                                                <strong>تعداد سریال ها:</strong>
+                                                <span>{{ series.count }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="movie-area pb-80" dir="rtl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="site-heading-inline">
+                            <h2 class="site-title">آثار {{ actor.name }}</h2>
+                        </div>
+                    </div>
+                </div>
+                {% if contents %}
+                    <div class="row row-cols-xl-5">
+                        {% for item in contents %}
+                            {% if item|classname == 'Movie' %}
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">{{ item.get_dubbed_or_subtitle_display }}</span>
+                                        <div class="movie-img">
+                                            {% if item.vertical_banner %}
+                                                <img src="{{ item.vertical_banner.url }}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% else %}
+                                                <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% endif %}
+                                            <a href="{% url 'movie:movie_detail' item.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="{% url 'movie:movie_detail' item.slug %}">{{ item.title|truncatewords:5 }}</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">{{ item.duration|duration_format }}</span>
+                                                <div class="movie-genre">
+                                                    {% for genre in item.genre.all|slice:":2" %}
+                                                        <a href="{% url 'movie:genre_movies' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        {% if item.last_episode_number %}
+                                            <span class="movie-episode">قسمت<small>{{ item.last_episode_number }}</small></span>
+                                        {% else %}
+                                            <span class="movie-episode">ندارد</span>
+                                        {% endif %}
+                                        <span class="movie-quality">{{ item.get_dubbed_or_subtitle_display }}</span>
+                                        <div class="movie-img">
+                                            {% if item.vertical_banner %}
+                                                <img src="{{ item.vertical_banner.url }}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% else %}
+                                                <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% endif %}
+                                            <a href="{% url 'movie:series_detail' item.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content">
+                                            <h6 class="movie-title"><a href="{% url 'movie:series_detail' item.slug %}">{{ item.title|truncatewords:5 }}</a></h6>
+                                            <div class="movie-info">
+                                                <span class="movie-season">
+                                                    فصل {{ item.last_chapter.order|default:'ندارد' }}
+                                                </span>
+                                                <div class="movie-genre">
+                                                    {% for genre in item.genre.all|slice:":2" %}
+                                                        <a href="{% url 'movie:genre_series' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    محتوایی برای نمایش وجود ندارد!
+                {% endif %}
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
