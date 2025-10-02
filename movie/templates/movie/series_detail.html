@@ -106,6 +106,12 @@
                                                 {% endfor %}
                                             </div>
                                             <div class="movie-info-item">
+                                                <strong>زبان:</strong>
+                                                {% for l in series.language.all %}
+                                                    <a href="{% url 'movie:language_detail' l.slug %}">{{ l.name }}</a>{% if not forloop.last %}،{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="movie-info-item">
                                                 <strong>سال تولید:</strong>
                                                 <a href="#">{{ series.release_date }}</a>
                                             </div>
