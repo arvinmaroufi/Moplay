@@ -112,8 +112,8 @@
                                                 {% endfor %}
                                             </div>
                                             <div class="movie-info-item">
-                                                <strong>سال تولید:</strong>
-                                                <a href="#">{{ series.release_date }}</a>
+                                                <strong>سال انتشار:</strong>
+                                                <a href="{% url 'movie:year_detail' series.release_date.slug %}">{{ series.release_date }}</a>
                                             </div>
                                             <div class="movie-info-item">
                                                 <strong>دوبله/زیرنویس:</strong>
