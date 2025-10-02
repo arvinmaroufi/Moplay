@@ -20,4 +20,5 @@ urlpatterns = [
     path('actors/<slug:slug>/', views.actor_detail, name='actor_detail'),
     path('tag/<slug:slug>/', views.tag_detail, name='tag_detail'),
     path('language/<slug:slug>/', views.language_detail, name='language_detail'),
+    path('year/<slug:slug>/', views.year_detail, name='year_detail'),
 ]
