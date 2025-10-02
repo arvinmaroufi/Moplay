@@ -40,7 +40,7 @@
                                                 <span class="movie-time">{{ item.duration|duration_format }}</span>
                                                 <div class="movie-genre">
                                                     {% for genre in item.genre.all|slice:":2" %}
-                                                        <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                        <a href="{% url 'movie:genre_movies' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
                                                     {% endfor %}
                                                 </div>
                                             </div>
@@ -66,7 +66,7 @@
                                                 <span class="movie-time">فصل {{ item.last_chapter.order|default:'ندارد' }}</span>
                                                 <div class="movie-genre">
                                                     {% for genre in item.genre.all|slice:":2" %}
-                                                        <a href="#">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                        <a href="{% url 'movie:genre_series' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
                                                     {% endfor %}
                                                 </div>
                                             </div>
