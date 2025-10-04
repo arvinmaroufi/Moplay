@@ -499,3 +499,36 @@ def year_detail(request, slug):
         'pages_to_show': pages_to_show,
     }
     return render(request, 'movie/year_detail.html', context)
+
+
+def country_detail(request, slug):
+    country = get_object_or_404(Country, slug=slug)
+
+    movies = Movie.objects.filter(country=country, status='published')
+    series = Series.objects.filter(country=country, status='published')
+
+    contents = sorted(
+        chain(movies, series),
+        key=attrgetter('created_at'),
+        reverse=True
+    )
+
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(contents, 15)
+    try:
+        content_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        content_list = paginator.page(1)
+    except EmptyPage:
+        content_list = paginator.page(paginator.num_pages)
+
+    pages_to_show = get_pages_to_show(content_list.number, paginator.num_pages)
+
+    context = {
+        'country': country,
+        'movies': movies,
+        'series': series,
+        'contents': content_list,
+        'pages_to_show': pages_to_show,
+    }
+    return render(request, 'movie/country_detail.html', context)
