@@ -21,4 +21,5 @@ urlpatterns = [
     path('tag/<slug:slug>/', views.tag_detail, name='tag_detail'),
     path('language/<slug:slug>/', views.language_detail, name='language_detail'),
     path('year/<slug:slug>/', views.year_detail, name='year_detail'),
+    path('country/<slug:slug>/', views.country_detail, name='country_detail'),
 ]
