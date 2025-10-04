@@ -101,7 +101,7 @@
                                             <div class="movie-info-item">
                                                 <strong>کشور:</strong>
                                                 {% for c in movie.country.all %}
-                                                    <a href="#">{{ c.name }}</a>{% if not forloop.last %}،{% endif %}
+                                                    <a href="{% url 'movie:country_detail' c.slug %}">{{ c.name }}</a>{% if not forloop.last %}،{% endif %}
                                                 {% endfor %}
                                             </div>
                                             <div class="movie-info-item">
