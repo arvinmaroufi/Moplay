@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from movie.models import Movie, Series
 from itertools import chain
 from operator import attrgetter
+
+
+def redirect_to_home(request):
+    return redirect('core:home')
 
 
 def home(request):
