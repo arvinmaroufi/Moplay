@@ -100,11 +100,10 @@
                             </div>
 
                             <div class="search-area">
-                                <form action="#">
+                                <form action="{% url 'search_results' %}">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="کلمه را وارد کنید...">
-                                        <button type="submit" class="search-icon-btn"><i
-                                                class="icon-search"></i></button>
+                                        <input type="text" name="search" class="form-control" placeholder="عنوان فیلم یا سریال" value="{{ query }}">
+                                        <button type="submit" class="search-icon-btn"><i class="icon-search"></i></button>
                                     </div>
                                 </form>
                             </div>
@@ -160,11 +159,10 @@
                                 </div>
 
                                 <div class="search-area">
-                                    <form action="#">
+                                    <form action="{% url 'search_results' %}">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="کلمه را وارد نمایید...">
-                                            <button type="submit" class="search-icon-btn"><i
-                                                    class="icon-search"></i></button>
+                                            <input type="text" name="search" class="form-control" placeholder="عنوان فیلم یا سریال" value="{{ query }}">
+                                            <button type="submit" class="search-icon-btn"><i class="icon-search"></i></button>
                                         </div>
                                     </form>
                                 </div>
