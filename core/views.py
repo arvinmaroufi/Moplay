@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from movie.models import Movie, Series
 from itertools import chain
 from operator import attrgetter
+from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def redirect_to_home(request):
@@ -35,3 +37,35 @@ def home(request):
         'top_rated_contents': top_rated_contents
     }
     return render(request, 'core/home.html', context)
+
+
+def search_results(request):
+    query = request.GET.get('search', '').strip()
+    page_number = request.GET.get('page', 1)
+
+    if query:
+        movies = Movie.objects.filter(Q(title__icontains=query), status='published')
+        series = Series.objects.filter(Q(title__icontains=query), status='published')
+        items = list(movies) + list(series)
+
+        # pagination
+        paginator = Paginator(items, 15)
+        try:
+            object_list = paginator.page(page_number)
+        except PageNotAnInteger:
+            object_list = paginator.page(1)
+        except EmptyPage:
+            object_list = paginator.page(paginator.num_pages)
+        pages_to_show = get_pages_to_show(object_list.number, paginator.num_pages)
+
+    else:
+        items = []
+        object_list = Paginator(items, 15).get_page(1)
+        pages_to_show = []
+
+    context = {
+        'query': query,
+        'items': object_list,
+        'pages_to_show': pages_to_show,
+    }
+    return render(request, 'core/search_results.html', context)
