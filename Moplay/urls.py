@@ -14,5 +14,6 @@ urlpatterns = [
     # redirect urls
     path('genre/', redirect_to_home, name='redirect_to_home'),
     path('genre/movies/', redirect_to_home, name='redirect_to_home'),
+    path('genre/series/', redirect_to_home, name='redirect_to_home'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
