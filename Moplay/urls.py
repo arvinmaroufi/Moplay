@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from . import settings
-from core.views import redirect_to_home
+from core.views import redirect_to_home, search_results
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -10,6 +10,9 @@ urlpatterns = [
     path('', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('', include('movie.urls')),
+    
+    # search url
+    path('/', search_results, name='search_results'),
 
     # redirect urls
     path('genre/', redirect_to_home, name='redirect_to_home'),
