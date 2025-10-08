@@ -6,7 +6,7 @@ class Contact(models.Model):
     email = models.EmailField(max_length=200, verbose_name='ایمیل')
     subject = models.CharField(max_length=100, verbose_name='موضوع')
     message = models.TextField(max_length=3000, verbose_name='متن پیام')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ارسال')
+    date_send = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ارسال')
 
     class Meta:
         verbose_name = "پیام"
