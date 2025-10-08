@@ -5,6 +5,8 @@ from operator import attrgetter
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import ContactForm
+from django.utils import timezone
+from datetime import timedelta
 
 
 def redirect_to_home(request):
@@ -25,6 +27,7 @@ def get_pages_to_show(current_page, total_pages):
 
 
 def home(request):
+    # top_rated contents
     movies = Movie.objects.filter(status='published')
     series = Series.objects.filter(status='published')
     contents = sorted(
@@ -33,9 +36,14 @@ def home(request):
         reverse=True
     )
     top_rated_contents = sorted(contents, key=lambda x: float(x.score.split('/')[0]), reverse=True)[:3]
+    
+    # latest movies
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+    latest_movies = Movie.objects.filter(created_at__gte=thirty_days_ago, status='published').order_by('-created_at')[:6]
 
     context = {
-        'top_rated_contents': top_rated_contents
+        'top_rated_contents': top_rated_contents,
+        'latest_movies': latest_movies,
     }
     return render(request, 'core/home.html', context)
 
