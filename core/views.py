@@ -4,6 +4,7 @@ from itertools import chain
 from operator import attrgetter
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .forms import ContactForm
 
 
 def redirect_to_home(request):
@@ -69,3 +70,18 @@ def search_results(request):
         'pages_to_show': pages_to_show,
     }
     return render(request, 'core/search_results.html', context)
+
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('core:home')
+    else:
+        form = ContactForm()
+
+    context = {
+        'form': form
+    }
+    return render(request, 'core/contact.html', context)
