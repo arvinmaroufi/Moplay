@@ -268,113 +268,39 @@
                     <div class="col-12">
                         <div class="site-heading-inline">
                             <h2 class="site-title">جدیدترین فیلم ها</h2>
-                            <a href="#" class="theme-btn">مشاهده همه<i class="far fa-angles-left"></i></a>
+                            <a href="{% url 'movie:movies' %}" class="theme-btn">مشاهده همه<i class="far fa-angles-left"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="movie-slider owl-carousel owl-theme" dir="ltr">
-                    <div class="movie-item" dir="rtl">
-                        <span class="movie-quality">اچ دی</span>
-                        <div class="movie-img">
-                            <img src="{% static 'images/01.jpg' %}" alt="">
-                            <a href="movie-single.html" class="movie-play"><i class="icon-play-3"></i></a>
-                        </div>
-                        <div class="movie-content">
-                            <h6 class="movie-title"><a href="movie-single.html">روح آزاد</a></h6>
-                            <div class="movie-info">
-                                <span class="movie-time">۲ساعت ۱۰ دقیقه</span>
-                                <div class="movie-genre">
-                                    <a href="#">اکشن,</a>
-                                    <a href="#">فانتزی</a>
+                    {% if latest_movies %}
+                        {% for movie in latest_movies %}
+                            <div class="movie-item" dir="rtl">
+                                <span class="movie-quality">{{ movie.get_dubbed_or_subtitle_display }}</span>
+                                <div class="movie-img">
+                                    {% if movie.vertical_banner %}
+                                        <img src="{{ movie.vertical_banner.url }}" alt="{{ movie.title|truncatewords:5 }}">
+                                    {% else %}
+                                        <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ movie.title|truncatewords:5 }}">
+                                    {% endif %}
+                                    <a href="{% url 'movie:movie_detail' movie.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                </div>
+                                <div class="movie-content">
+                                    <h6 class="movie-title"><a href="{% url 'movie:movie_detail' movie.slug %}">{{ movie.title|truncatewords:5 }}</a></h6>
+                                    <div class="movie-info">
+                                        <span class="movie-time">{{ movie.duration|duration_format }}</span>
+                                        <div class="movie-genre">
+                                            {% for genre in movie.genre.all|slice:":2" %}
+                                                <a href="{% url 'movie:genre_movies' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="movie-item" dir="rtl">
-                        <span class="movie-quality">اچ دی</span>
-                        <div class="movie-img">
-                            <img src="{% static 'images/02.jpg' %}" alt="">
-                            <a href="movie-single.html" class="movie-play"><i class="icon-play-3"></i></a>
-                        </div>
-                        <div class="movie-content">
-                            <h6 class="movie-title"><a href="movie-single.html">مرد آهنی</a></h6>
-                            <div class="movie-info">
-                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                <div class="movie-genre">
-                                    <a href="#">اکشن,</a>
-                                    <a href="#">فانتزی</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="movie-item" dir="rtl">
-                        <span class="movie-quality">اچ دی</span>
-                        <div class="movie-img">
-                            <img src="{% static 'images/03.jpg' %}" alt="">
-                            <a href="movie-single.html" class="movie-play"><i class="icon-play-3"></i></a>
-                        </div>
-                        <div class="movie-content">
-                            <h6 class="movie-title"><a href="movie-single.html">فراموشی</a></h6>
-                            <div class="movie-info">
-                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                <div class="movie-genre">
-                                    <a href="#">اکشن,</a>
-                                    <a href="#">فانتزی</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="movie-item" dir="rtl">
-                        <span class="movie-quality">اس دی</span>
-                        <div class="movie-img">
-                            <img src="{% static 'images/04.jpg' %}" alt="">
-                            <a href="movie-single.html" class="movie-play"><i class="icon-play-3"></i></a>
-                        </div>
-                        <div class="movie-content">
-                            <h6 class="movie-title"><a href="movie-single.html">ترون</a></h6>
-                            <div class="movie-info">
-                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                <div class="movie-genre">
-                                    <a href="#">اکشن,</a>
-                                    <a href="#">فانتزی</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="movie-item" dir="rtl">
-                        <span class="movie-quality">کیفیت پرده سینما</span>
-                        <div class="movie-img">
-                            <img src="{% static 'images/05.jpg' %}" alt="">
-                            <a href="movie-single.html" class="movie-play"><i class="icon-play-3"></i></a>
-                        </div>
-                        <div class="movie-content">
-                            <h6 class="movie-title"><a href="movie-single.html">فلش</a></h6>
-                            <div class="movie-info">
-                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                <div class="movie-genre">
-                                    <a href="#">اکشن,</a>
-                                    <a href="#">فانتزی</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="movie-item" dir="rtl">
-                        <span class="movie-quality">کیفیت پرده سینما</span>
-                        <div class="movie-img">
-                            <img src="{% static 'images/06.jpg' %}" alt="">
-                            <a href="movie-single.html" class="movie-play"><i class="icon-play-3"></i></a>
-                        </div>
-                        <div class="movie-content">
-                            <h6 class="movie-title"><a href="movie-single.html">آواتار ۲</a></h6>
-                            <div class="movie-info">
-                                <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                <div class="movie-genre">
-                                    <a href="#">اکشن,</a>
-                                    <a href="#">فانتزی</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% else %}
+                        فیلمی یافت نشد!
+                    {% endif %}
                 </div>
             </div>
         </div>
