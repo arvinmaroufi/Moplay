@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block title %}تماس با ما{% endblock %}
+{% load static %}
+
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">تماس با ما</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">تماس با ما</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="contact-area py-100" dir="rtl">
+            <div class="container">
+                <div class="contact-content">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="contact-info">
+                                <div class="contact-info-icon">
+                                    <i class="fab fa-telegram"></i>
+                                </div>
+                                <div class="contact-info-content">
+                                    <h5>آیدی تلگرام</h5>
+                                    <a href="https://t.me/moplay_support"><p>
+                                        moplay_support@</p></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="contact-info">
+                                <div class="contact-info-icon">
+                                    <i class="icon-phone-2"></i>
+                                </div>
+                                <div class="contact-info-content">
+                                    <h5>شماره تماس</h5>
+                                    <a href="tel:021-12345678"><p>021-12345678</p></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="contact-info">
+                                <div class="contact-info-icon">
+                                    <i class="icon-email"></i>
+                                </div>
+                                <div class="contact-info-content">
+                                    <h5>ایمیل</h5>
+                                    <a href="mailto:support@moplay.com"><p>support@moplay.com</p></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="contact-info">
+                                <div class="contact-info-icon">
+                                    <i class="icon-clock"></i>
+                                </div>
+                                <div class="contact-info-content">
+                                    <h5>ساعت کاری</h5>
+                                    <p style="font-size: 15.7px;">پشتیبانی 24 ساعته در 7 روز هفته</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-wrap">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="contact-img">
+                                <img src="{% static 'images/contactus01.jpg' %}" alt="">
+                            </div>
+                        </div>
+                        <div class="col-lg-7 align-self-center">
+                            <div class="contact-form">
+                                <div class="contact-form-header">
+                                    <h2>با ما در تماس باشید</h2>
+                                    <p>تیم پشتیبانی موپلی همواره آماده پاسخگویی به سوالات و دریافت پیشنهادات و انتقادات
+                                        شما عزیزان می‌باشد. در اسرع وقت به پیام‌های شما پاسخ خواهیم داد.</p>
+                                </div>
+                                <form method="post" id="contact-form">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="name" maxlength="100"
+                                                       placeholder="نام" required>
+                                                {% if form.name.errors %}
+                                                    <div class="text-danger mt-1">
+                                                        {% for error in form.name.errors %}
+                                                            {{ error }}
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" name="email" maxlength="200"
+                                                       placeholder="ایمیل" required>
+                                                {% if form.email.errors %}
+                                                    <div class="text-danger mt-1">
+                                                        {% for error in form.email.errors %}
+                                                            {{ error }}
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="subject" maxlength="100"
+                                               placeholder="موضوع پیام" required>
+                                        {% if form.subject.errors %}
+                                            <div class="text-danger mt-1">
+                                                {% for error in form.subject.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea name="message" maxlength="3000" cols="30" rows="5"
+                                                  class="form-control" placeholder="متن پیام" required></textarea>
+                                        {% if form.message.errors %}
+                                            <div class="text-danger mt-1">
+                                                {% for error in form.message.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <button type="submit" class="theme-btn">ارسال پیام <i
+                                            class="far fa-paper-plane"></i></button>
+                                    <div class="col-md-12 mt-3">
+                                        <div class="form-messege text-success"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
