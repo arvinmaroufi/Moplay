@@ -532,3 +532,30 @@ def country_detail(request, slug):
         'pages_to_show': pages_to_show,
     }
     return render(request, 'movie/country_detail.html', context)
+
+
+def suggestions(request):
+    movies = Movie.objects.filter(status='published', is_recommended=True)
+    series = Series.objects.filter(status='published', is_recommended=True)
+    suggestion_contents = sorted(
+        chain(movies, series),
+        key=attrgetter('created_at'),
+        reverse=True
+    )
+
+    # pagination
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(suggestion_contents, 15)
+    try:
+        object_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        object_list = paginator.page(1)
+    except EmptyPage:
+        object_list = paginator.page(paginator.num_pages)
+    pages_to_show = get_pages_to_show(object_list.number, paginator.num_pages)
+
+    context = {
+        'suggestion_contents': object_list,
+        'pages_to_show': pages_to_show,
+    }
+    return render(request, 'movie/suggestions.html', context)
