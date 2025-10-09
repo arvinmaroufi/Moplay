@@ -36,7 +36,16 @@ def home(request):
         reverse=True
     )
     top_rated_contents = sorted(contents, key=lambda x: float(x.score.split('/')[0]), reverse=True)[:3]
-    
+
+    # recommended contents
+    suggestion_movies = Movie.objects.filter(status='published', is_recommended=True)[:4]
+    suggestion_series = Series.objects.filter(status='published', is_recommended=True)[:4]
+    suggestion_contents = sorted(
+        chain(suggestion_movies, suggestion_series),
+        key=attrgetter('created_at'),
+        reverse=True
+    )
+
     # latest movies
     thirty_days_ago = timezone.now() - timedelta(days=30)
     latest_movies = Movie.objects.filter(created_at__gte=thirty_days_ago, status='published').order_by('-created_at')[:6]
@@ -44,6 +53,7 @@ def home(request):
     context = {
         'top_rated_contents': top_rated_contents,
         'latest_movies': latest_movies,
+        'suggestion_contents': suggestion_contents,
     }
     return render(request, 'core/home.html', context)
 
