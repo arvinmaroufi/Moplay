@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}فیلم و سریال های پیشنهادی{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">فیلم و سریال های پیشنهادی</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">فیلم و سریال های پیشنهادی</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="movie-area py-80" dir="rtl">
+            <div class="container">
+                <div class="row row-cols-xl-5">
+                    {% if suggestion_contents %}
+                        {% for item in suggestion_contents %}
+                            {% if item|classname == 'Movie' %}
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        <span class="movie-quality">{{ item.get_dubbed_or_subtitle_display }}</span>
+                                        <div class="movie-img">
+                                            {% if item.vertical_banner %}
+                                                <img src="{{ item.vertical_banner.url }}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% else %}
+                                                <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% endif %}
+                                            <a href="{% url 'movie:movie_detail' item.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content" dir="rtl">
+                                            <h6 class="movie-title">
+                                                <a href="{% url 'movie:movie_detail' item.slug %}">{{ item.title|truncatewords:5 }}</a>
+                                            </h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">{{ item.duration|duration_format }}</span>
+                                                <div class="movie-genre">
+                                                    {% for g in item.genre.all|slice:":2" %}
+                                                        <a href="{% url 'movie:genre_movies' g.slug %}">{{ g.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="col-6 col-md-4 col-lg-3 col-xl">
+                                    <div class="movie-item">
+                                        {% if item.last_episode_number %}
+                                            <span class="movie-episode">قسمت<small>{{ item.last_episode_number }}</small></span>
+                                        {% else %}
+                                            <span class="movie-episode">ندارد</span>
+                                        {% endif %}
+                                        <span class="movie-quality">{{ item.get_dubbed_or_subtitle_display }}</span>
+                                        <div class="movie-img">
+                                            {% if item.vertical_banner %}
+                                                <img src="{{ item.vertical_banner.url }}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% else %}
+                                                <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ item.title|truncatewords:5 }}">
+                                            {% endif %}
+                                            <a href="{% url 'movie:series_detail' item.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                        </div>
+                                        <div class="movie-content" dir="rtl">
+                                            <h6 class="movie-title">
+                                                <a href="{% url 'movie:series_detail' item.slug %}">{{ item.title|truncatewords:5 }}</a>
+                                            </h6>
+                                            <div class="movie-info">
+                                                <span class="movie-time">
+                                                    فصل {{ item.last_chapter.order|default:'ندارد' }}
+                                                </span>
+                                                <div class="movie-genre">
+                                                    {% for g in item.genre.all|slice:":2" %}
+                                                        <a href="{% url 'movie:genre_movies' g.slug %}">{{ g.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        محتوایی برای نمایش وجود ندارد!
+                    {% endif %}
+                </div>
+
+                <div class="pagination-area mt-20">
+                    <div aria-label="Page navigation example">
+                        {% if suggestion_contents.has_other_pages %}
+                            <ul class="pagination">
+                                {% if suggestion_contents.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ suggestion_contents.previous_page_number }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% for page in pages_to_show %}
+                                    {% if page == '...' %}
+                                        <li class="page-item"><span class="page-link">...</span></li>
+                                    {% elif suggestion_contents.number == page %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if suggestion_contents.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ suggestion_contents.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+{% endblock %}
