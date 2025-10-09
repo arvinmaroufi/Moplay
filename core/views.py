@@ -37,9 +37,9 @@ def home(request):
     )
     top_rated_contents = sorted(contents, key=lambda x: float(x.score.split('/')[0]), reverse=True)[:3]
 
-    # recommended contents
-    suggestion_movies = Movie.objects.filter(status='published', is_recommended=True)[:4]
-    suggestion_series = Series.objects.filter(status='published', is_recommended=True)[:4]
+    # suggestion contents
+    suggestion_movies = Movie.objects.filter(status='published', is_recommended=True)[:5]
+    suggestion_series = Series.objects.filter(status='published', is_recommended=True)[:5]
     suggestion_contents = sorted(
         chain(suggestion_movies, suggestion_series),
         key=attrgetter('created_at'),
