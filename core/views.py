@@ -107,3 +107,7 @@ def contact(request):
         'form': form
     }
     return render(request, 'core/contact.html', context)
+
+
+def about(request):
+    return render(request, 'core/about.html')
