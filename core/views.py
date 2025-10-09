@@ -30,30 +30,26 @@ def home(request):
     # top_rated contents
     movies = Movie.objects.filter(status='published')
     series = Series.objects.filter(status='published')
-    contents = sorted(
-        chain(movies, series),
-        key=attrgetter('created_at'),
-        reverse=True
-    )
+    contents = sorted(chain(movies, series), key=attrgetter('created_at'), reverse=True)
     top_rated_contents = sorted(contents, key=lambda x: float(x.score.split('/')[0]), reverse=True)[:3]
 
     # suggestion contents
     suggestion_movies = Movie.objects.filter(status='published', is_recommended=True)[:5]
     suggestion_series = Series.objects.filter(status='published', is_recommended=True)[:5]
-    suggestion_contents = sorted(
-        chain(suggestion_movies, suggestion_series),
-        key=attrgetter('created_at'),
-        reverse=True
-    )
+    suggestion_contents = sorted(chain(suggestion_movies, suggestion_series), key=attrgetter('created_at'), reverse=True)
 
     # latest movies
     thirty_days_ago = timezone.now() - timedelta(days=30)
     latest_movies = Movie.objects.filter(created_at__gte=thirty_days_ago, status='published').order_by('-created_at')[:6]
 
+    # popular movies
+    popular_movies = Movie.objects.filter(status='published').order_by('-views')[:10]
+
     context = {
         'top_rated_contents': top_rated_contents,
-        'latest_movies': latest_movies,
         'suggestion_contents': suggestion_contents,
+        'latest_movies': latest_movies,
+        'popular_movies': popular_movies,
     }
     return render(request, 'core/home.html', context)
 
