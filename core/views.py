@@ -48,12 +48,16 @@ def home(request):
     # latest series
     latest_series = Series.objects.filter(created_at__gte=thirty_days_ago, status='published').order_by('-created_at')[:6]
 
+    # popular series
+    popular_series = Series.objects.filter(status='published').order_by('-views')[:10]
+
     context = {
         'top_rated_contents': top_rated_contents,
         'suggestion_contents': suggestion_contents,
         'latest_movies': latest_movies,
         'popular_movies': popular_movies,
         'latest_series': latest_series,
+        'popular_series': popular_series,
     }
     return render(request, 'core/home.html', context)
 
