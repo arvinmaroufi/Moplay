@@ -2,7 +2,7 @@
 {% block title %}دانلود فیلم و سریال بدون سانسور{% endblock %}
 {% load static %}
 {% load custom_filters %}
-{#7.0#}
+
 {% block content %}
     <main class="main">
 
@@ -59,204 +59,65 @@
                     <div class="col-12">
                         <div class="site-heading-inline">
                             <h2 class="site-title">پیشنهادات</h2>
-                            <a href="#" class="theme-btn">مشاهده همه<i class="far fa-angles-left"></i></a>
+                            <a href="{% url 'movie:suggestions' %}" class="theme-btn">مشاهده همه<i class="far fa-angles-left"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="row row-cols-xl-5">
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-quality">اچ دی</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/06.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">آواتار ۲</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                    <div class="movie-genre">
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">فانتزی</a>
+                    {% for item in suggestion_contents %}
+                        <div class="col-6 col-md-4 col-lg-3 col-xl">
+                            <div class="movie-item">
+                                {% if item|classname == 'Movie' %}
+                                    <span class="movie-quality">{{ item.get_dubbed_or_subtitle_display }}</span>
+                                    <div class="movie-img">
+                                        {% if item.vertical_banner %}
+                                            <img src="{{ item.vertical_banner.url }}" alt="{{ item.title|truncatewords:5 }}">
+                                        {% else %}
+                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ item.title|truncatewords:5 }}">
+                                        {% endif %}
+                                        <a href="{% url 'movie:movie_detail' item.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
                                     </div>
-                                </div>
+                                    <div class="movie-content">
+                                        <h6 class="movie-title"><a href="{% url 'movie:movie_detail' item.slug %}">{{ item.title|truncatewords:5 }}</a></h6>
+                                        <div class="movie-info">
+                                            <span class="movie-time">{{ item.duration|duration_format }}</span>
+                                            <div class="movie-genre">
+                                                {% for genre in item.genre.all|slice:":2" %}
+                                                    <a href="{% url 'movie:genre_movies' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {% if item.last_episode_number %}
+                                        <span class="movie-episode">قسمت<small>{{ item.last_episode_number }}</small></span>
+                                    {% else %}
+                                        <span class="movie-episode">ندارد</span>
+                                    {% endif %}
+                                    <span class="movie-quality">{{ item.get_dubbed_or_subtitle_display }}</span>
+                                    <div class="movie-img">
+                                        {% if item.vertical_banner %}
+                                            <img src="{{ item.vertical_banner.url }}" alt="{{ item.title|truncatewords:5 }}">
+                                        {% else %}
+                                            <img src="{% static 'images/movie_vertical_banner.jpg' %}" alt="{{ item.title|truncatewords:5 }}">
+                                        {% endif %}
+                                        <a href="{% url 'movie:series_detail' item.slug %}" class="movie-play"><i class="icon-play-3"></i></a>
+                                    </div>
+                                    <div class="movie-content">
+                                        <h6 class="movie-title"><a href="{% url 'movie:series_detail' item.slug %}">{{ item.title|truncatewords:5 }}</a></h6>
+                                        <div class="movie-info">
+                                            <span class="movie-time">فصل {{ item.last_chapter.order|default:'ندارد' }}</span>
+                                            <div class="movie-genre">
+                                                {% for genre in item.genre.all|slice:":2" %}
+                                                    <a href="{% url 'movie:genre_series' genre.slug %}">{{ genre.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-quality">اچ دی</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/07.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">ماموریت غیرممکن ۳</a>
-                                </h6>
-                                <div class="movie-info">
-                                    <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                    <div class="movie-genre">
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">قانتزی</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-episode">قسمت<small>۱۰</small></span>
-                            <span class="movie-quality">اچ دی</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/s1.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">لوکی</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-season">فصل دو</span>
-                                    <div class="movie-genre">
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">فانتزی</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-quality">پرده سینما</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/10.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">سوسک آبی</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                    <div class="movie-genre">
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">فانتزی</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-episode">قسمت<small>۱۰</small></span>
-                            <span class="movie-quality">اچ دی</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/s3.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">پیشتازان فضا: پیکارد</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-season">فصل ۳</span>
-                                    <div class="movie-genre">
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">فضایی</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-quality">اچ دی</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/11.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">حلقه انتقال</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                    <div class="movie-genre">
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">فانتزی</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-episode">قسمت<small>۱۰</small></span>
-                            <span class="movie-quality">اس دی</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/s7.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">سرنوشت: حماسه Winx</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-season">قسمت ۸</span>
-                                    <div class="movie-genre">
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">فانتزی</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-quality">پرده سینما</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/13.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">چگونه اژدهای 2 خودتان را آموزش دهید</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                    <div class="movie-genre">
-                                        <a href="#">انیمیشن</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-quality">اچ دی</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/14.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">پرنده عصبانی ۲</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-time">۲ ساعت ۱۰ دقیقه</span>
-                                    <div class="movie-genre">
-                                        <a href="#">انیمیشن</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 col-xl">
-                        <div class="movie-item">
-                            <span class="movie-episode">قسمت<small>۱۰</small></span>
-                            <span class="movie-quality">اچ دی</span>
-                            <div class="movie-img">
-                                <img src="{% static 'images/s10.jpg' %}" alt="">
-                                <a href="#" class="movie-play"><i class="icon-play-3"></i></a>
-                            </div>
-                            <div class="movie-content">
-                                <h6 class="movie-title"><a href="#">قفل خوشبخت</a></h6>
-                                <div class="movie-info">
-                                    <span class="movie-season">فصل یک</span>
-                                    <div class="movie-genre">
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">جنایی</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
