@@ -117,3 +117,27 @@ class ChangePasswordForm(forms.Form):
             raise ValidationError('رمز عبور جدید و تکرار آن مطابقت ندارند')
 
         return cleaned_data
+
+
+class WalletChargeForm(forms.Form):
+    amount = forms.DecimalField(
+        max_digits=16,
+        decimal_places=0,
+        min_value=1000,
+        max_value=999999999999999,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'مبلغ را وارد کنید (تومان)'
+        }),
+        error_messages={
+            'required': 'مبلغ الزامی است',
+            'min_value': 'حداقل مبلغ 1,000 تومان می‌باشد',
+            'max_value': 'حداکثر مبلغ 999,999,999,999,999 تومان می‌باشد'
+        }
+    )
+
+    def clean_amount(self):
+        amount = self.cleaned_data.get('amount')
+        if amount and amount < 1000:
+            raise ValidationError('حداقل مبلغ شارژ 1,000 تومان می‌باشد')
+        return amount
