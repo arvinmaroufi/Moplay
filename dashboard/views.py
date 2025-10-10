@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Notification
-from .forms import ProfileEditForm, ChangePasswordForm
+from .models import Notification, Wallet
+from .forms import ProfileEditForm, ChangePasswordForm, WalletChargeForm
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout
@@ -43,6 +43,7 @@ def dashboard(request):
     user = request.user
     password_form = None
     profile_form = None
+    wallet_form = None
 
     # Notification handling
     Notification.delete_expired_notifications()
@@ -53,6 +54,9 @@ def dashboard(request):
         notification.is_recent = notification.created_at > (timezone.now() - timezone.timedelta(hours=24))
 
     recent_notifications_count = Notification.get_recent_notifications_count(user)
+
+    # Get or create user wallet
+    wallet, created = Wallet.objects.get_or_create(user=user)
 
     # Handle POST requests
     if request.method == 'POST':
@@ -95,6 +99,17 @@ def dashboard(request):
                     for error in errors:
                         messages.error(request, f"{error}")
 
+        # Charge wallet
+        elif 'charge_wallet' in request.POST:
+            wallet_form = WalletChargeForm(request.POST)
+            if wallet_form.is_valid():
+                amount = wallet_form.cleaned_data['amount']
+                # Increase wallet balance
+                new_balance = wallet.deposit(amount)
+                messages.success(request,
+                                 f'کیف پول شما با موفقیت به مبلغ {amount:,} تومان شارژ شد. موجودی فعلی: {new_balance:,} تومان')
+                return redirect('accounts:dashboard')
+
     # Initialize profile form with current user data if not already set
     if profile_form is None:
         initial_data = {
@@ -109,11 +124,17 @@ def dashboard(request):
     if password_form is None:
         password_form = ChangePasswordForm()
 
+    # Initialize wallet form if not already set
+    if wallet_form is None:
+        wallet_form = WalletChargeForm()
+
     context = {
         'user': user,
         'notifications': notifications,
         'recent_notifications_count': recent_notifications_count,
         'form': profile_form,
-        'password_form': password_form
+        'password_form': password_form,
+        'wallet_form': wallet_form,
+        'wallet': wallet,
     }
     return render(request, 'dashboard/dashboard.html', context)
