@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}سوالات متداول{% endblock %}
+{% load static %}
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title"> سوالات متداول</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">سوالات متداول</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="faq-area py-80">
+            <div class="container">
+                <div class="row" dir="rtl">
+                    <div class="col-lg-6">
+                        <div class="faq-right">
+                            <div class="site-heading mb-3">
+                                <span class="site-title-tagline justify-content-start">سوالات متداول</span>
+                                <h2 class="site-title my-3">پاسخ به <span>پرسش های شما</span></h2>
+                            </div>
+                            <p class="mb-3">
+                                در این بخش به متداول‌ترین سوالات کاربران عزیز موپلی پاسخ داده‌ایم. اگر پاسخ سوال خود را
+                                پیدا نکردید، از طریق راه‌های ارتباطی با پشتیبانی تماس بگیرید.
+                            </p>
+                            <p class="mb-4">
+                                تیم پشتیبانی موپلی آماده پاسخگویی به سوالات و حل مشکلات شما در 24 ساعت شبانه‌روز و 7 روز
+                                هفته می‌باشد.
+                            </p>
+                            <a href="{% url 'core:contact' %}" class="theme-btn mt-2">تماس با پشتیبانی</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="accordion" id="accordionExample">
+                            {% for faq in faq_list %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
+                                                type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ forloop.counter }}"
+                                                aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                                                aria-controls="collapse{{ forloop.counter }}">
+                                            <span><i class="far fa-question"></i></span> {{ faq.question }}
+
+                                        </button>
+                                    </h2>
+                                    <div id="collapse{{ forloop.counter }}"
+                                         class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                                         aria-labelledby="heading{{ forloop.counter }}"
+                                         data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            {{ faq.answer|linebreaks }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
