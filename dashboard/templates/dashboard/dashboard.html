@@ -2,6 +2,7 @@
 {% block title %}پنل کاربری من{% endblock %}
 {% load static %}
 {% load jalali_tags %}
+{% load custom_filters %}
 
 {% block content %}
     <main class="main">
@@ -61,7 +62,7 @@
                                 </div>
                                 <div class="intro-item">
                                     <div class="intro-content">
-                                        <h4>۴۳۰,۰۰۰</h4>
+                                        <h4>{{ wallet.balance|format_price }}</h4>
                                         <p>موجودی حساب</p>
                                     </div>
                                     <div class="intro-icon">
@@ -631,8 +632,8 @@
                                             <div class="col-md-6 col-lg-12 col-xl-6">
                                                 <div class="profile-balance-item">
                                                     <div class="profile-balance-info">
-                                                        <h3>۲۵۰,۰۰۰</h3>
-                                                        <p>موجودی فعلی</p>
+                                                        <h3>{{ wallet.balance|format_price }}</h3>
+                                                        <p>موجودی فعلی (تومان)</p>
                                                     </div>
                                                     <span class="icon"><i class="fal fa-wallet"></i></span>
                                                 </div>
@@ -640,10 +641,10 @@
                                             <div class="col-md-6 col-lg-12 col-xl-6">
                                                 <div class="profile-balance-item">
                                                     <div class="profile-balance-info">
-                                                        <h3>۷۸۰,۰۰۰</h3>
-                                                        <p>کل مبلغ خرج</p>
+                                                        <h3>{{ wallet.created_at|to_jalali:"%Y/%m/%d" }}</h3>
+                                                        <p>تاریخ ایجاد کیف پول</p>
                                                     </div>
-                                                    <span class="icon"><i class="fal fa-sack-dollar"></i></span>
+                                                    <span class="icon"><i class="fal fa-calendar-alt"></i></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -651,36 +652,30 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="profile-menu-info">
-                                        <h4 class="title">افزایش موجودی</h4>
+                                        <h4 class="title">شارژ کیف پول</h4>
                                         <div class="profile-form">
-                                            <form action="#">
+                                            <form method="post" action="{% url 'dashboard:dashboard' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="charge_wallet" value="true">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label>میزان</label>
-                                                            <input type="number" class="form-control"
-                                                                   placeholder="مبلغ را وارد کنید">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="method"
-                                                                   id="method1" checked="">
-                                                            <label class="form-check-label" for="method1">
-                                                                درگاه آنلاین
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="method"
-                                                                   id="method2">
-                                                            <label class="form-check-label" for="method2">
-                                                                حواله
-                                                            </label>
+                                                            <label>مبلغ (تومان)</label>
+                                                            <input type="number" name="amount" class="form-control {% if wallet_form.amount.errors %}is-invalid{% endif %}"
+                                                                   placeholder="مبلغ را وارد کنید (حداقل ۱,۰۰۰ تومان)" min="1000"
+                                                                   max="999999999999999" required>
+                                                            {% if wallet_form.amount.errors %}
+                                                                <div class="invalid-feedback">
+                                                                    {% for error in wallet_form.amount.errors %}
+                                                                        {{ error }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <button class="theme-btn" type="submit"><span
-                                                                class="far fa-wallet"></span> افزایش موجودی
+                                                                class="far fa-wallet"></span> شارژ کیف پول
                                                         </button>
                                                     </div>
                                                 </div>
