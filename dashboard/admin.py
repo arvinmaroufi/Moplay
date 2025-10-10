@@ -55,3 +55,16 @@ class NotificationAdmin(admin.ModelAdmin):
     @admin.display(description='تاریخ انقضا', ordering='expiration_date')
     def get_expiration_date_jalali(self, obj):
         return datetime2jalali(obj.expiration_date).strftime('%a، %d %b %Y - %H:%M:%S')
+
+
+@admin.register(models.Wallet)
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ['user', 'balance', 'get_created_at_jalali', 'get_updated_at_jalali']
+
+    @admin.display(description='تاریخ ایجاد', ordering='created_at')
+    def get_created_at_jalali(self, obj):
+        return datetime2jalali(obj.created_at).strftime('%a، %d %b %Y - %H:%M:%S')
+
+    @admin.display(description='تاریخ بروزرسانی', ordering='updated_at')
+    def get_updated_at_jalali(self, obj):
+        return datetime2jalali(obj.updated_at).strftime('%a، %d %b %Y - %H:%M:%S')
