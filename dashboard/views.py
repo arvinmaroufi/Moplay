@@ -108,7 +108,7 @@ def dashboard(request):
                 new_balance = wallet.deposit(amount)
                 messages.success(request,
                                  f'کیف پول شما با موفقیت به مبلغ {amount:,} تومان شارژ شد. موجودی فعلی: {new_balance:,} تومان')
-                return redirect('accounts:dashboard')
+                return redirect('dashboard:dashboard')
 
     # Initialize profile form with current user data if not already set
     if profile_form is None:
