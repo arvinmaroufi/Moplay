@@ -45,3 +45,8 @@ def split_into_columns(lst, columns=3):
     items_per_column = ceil(length / columns)
 
     return [lst[i:i + items_per_column] for i in range(0, length, items_per_column)]
+
+
+@register.filter
+def format_price(value):
+    return f"{value:,}"
