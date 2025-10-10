@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import ContactForm
 from django.utils import timezone
 from datetime import timedelta
+from .models import FAQ
 
 
 def redirect_to_home(request):
@@ -115,3 +116,12 @@ def about(request):
 
 def terms(request):
     return render(request, 'core/terms.html')
+
+
+def faq(request):
+    faq_list = FAQ.objects.all()
+
+    context = {
+        'faq_list': faq_list
+    }
+    return render(request, 'core/faq.html', context)
