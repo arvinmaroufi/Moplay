@@ -64,3 +64,32 @@ class Notification(models.Model):
 
     def is_read_by_user(self, user):
         return self.read_by.filter(id=user.id).exists()
+
+
+class Wallet(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='wallet', verbose_name='کاربر')
+    balance = models.DecimalField(max_digits=16, decimal_places=0, default=0, verbose_name='موجودی (تومان)')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ بروزرسانی')
+
+    class Meta:
+        verbose_name = 'کیف پول'
+        verbose_name_plural = 'کیف پول‌ها'
+
+    def __str__(self):
+        return f"کیف پول {self.user.email} - موجودی: {self.balance} تومان"
+
+    def deposit(self, amount):
+        self.balance += amount
+        self.save()
+        return self.balance
+
+    def withdraw(self, amount):
+        if self.balance >= amount:
+            self.balance -= amount
+            self.save()
+            return True
+        return False
+
+    def get_balance(self):
+        return self.balance
