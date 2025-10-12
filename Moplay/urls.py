@@ -10,7 +10,8 @@ urlpatterns = [
     path('', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('', include('movie.urls')),
-    
+    path('', include('subscription.urls')),
+
     # search url
     path('/', search_results, name='search_results'),
 
