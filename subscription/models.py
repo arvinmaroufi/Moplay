@@ -75,3 +75,26 @@ class UserSubscription(models.Model):
                 self.end_date = self.start_date + timezone.timedelta(days=self.plan.duration_days)
 
         super().save(*args, **kwargs)
+
+
+class Payment(models.Model):
+    PAYMENT_STATUS = [
+        ('pending', 'در انتظار'),
+        ('completed', 'تکمیل شده'),
+        ('failed', 'ناموفق'),
+        ('refunded', 'بازپرداخت شده'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    subscription = models.ForeignKey(UserSubscription, on_delete=models.CASCADE, verbose_name='اشتراک')
+    amount = models.PositiveIntegerField(verbose_name='مبلغ')
+    status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='pending', verbose_name='وضعیت')
+    payment_date = models.DateTimeField(null=True, blank=True, verbose_name='تاریخ پرداخت')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'پرداخت'
+        verbose_name_plural = 'پرداخت‌ ها'
+
+    def __str__(self):
+        return f"{self.user.email} - {self.amount} تومان"
