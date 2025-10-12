@@ -19,7 +19,7 @@ class SubscriptionPlan(models.Model):
     name = models.CharField(max_length=100, verbose_name='نام پلن')
     plan_type = models.CharField(max_length=20, choices=PLAN_TYPES, verbose_name='نوع پلن')
     duration_type = models.CharField(max_length=20, choices=DURATION_TYPES, verbose_name='نوع مدت')
-    price = models.DecimalField(max_digits=10, decimal_places=0, verbose_name='قیمت')
+    price = models.PositiveIntegerField(verbose_name='قیمت')
     duration_days = models.IntegerField(verbose_name='مدت به روز')
     is_active = models.BooleanField(default=True, verbose_name='فعال')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
