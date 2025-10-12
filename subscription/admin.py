@@ -101,3 +101,33 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
     @admin.display(description='تاریخ ایجاد', ordering='created_at')
     def get_created_at_jalali(self, obj):
         return datetime2jalali(obj.created_at).strftime('%H:%M:%S - %Y/%m/%d')
+
+
+@admin.register(models.Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'subscription', 'amount', 'status', 'get_payment_date_jalali', 'get_created_at_jalali']
+    list_filter = ['status', 'payment_date', 'created_at']
+    search_fields = ['user__email']
+    readonly_fields = ['created_at']
+
+    fieldsets = [
+        ('اطلاعات پرداخت', {
+            'fields': ['user', 'subscription', 'amount', 'status']
+        }),
+        ('تاریخ پرداخت', {
+            'fields': ['payment_date']
+        }),
+        ('تاریخ ایجاد', {
+            'fields': ['created_at']
+        }),
+    ]
+
+    @admin.display(description='تاریخ پرداخت', ordering='payment_date')
+    def get_payment_date_jalali(self, obj):
+        if obj.payment_date:
+            return datetime2jalali(obj.payment_date).strftime('%H:%M:%S - %Y/%m/%d')
+        return "-"
+
+    @admin.display(description='تاریخ ایجاد', ordering='created_at')
+    def get_created_at_jalali(self, obj):
+        return datetime2jalali(obj.created_at).strftime('%H:%M:%S - %Y/%m/%d')
