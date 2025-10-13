@@ -7,6 +7,16 @@ from itertools import chain
 from operator import attrgetter
 from .decorators import check_content_access
 from django.contrib.auth.decorators import login_required
+from subscription.models import UserSubscription
+from django.utils import timezone
+
+
+def has_active_subscription(user):
+    # check if the user has an active subscription
+    if not user.is_authenticated:
+        return False
+
+    return UserSubscription.objects.filter(user=user, status='active', end_date__gt=timezone.now()).exists()
 
 
 def get_pages_to_show(current_page, total_pages):
