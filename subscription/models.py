@@ -5,13 +5,6 @@ import uuid
 
 
 class SubscriptionPlan(models.Model):
-    PLAN_TYPES = [
-        ('basic', 'پایه'),
-        ('standard', 'نقره‌ای'),
-        ('premium', 'طلایی'),
-        ('advanced', 'الماسی'),
-    ]
-
     DURATION_TYPES = [
         ('one_month', 'یک ماهه'),
         ('three_months', 'سه ماهه'),
@@ -20,7 +13,6 @@ class SubscriptionPlan(models.Model):
     ]
 
     name = models.CharField(max_length=100, verbose_name='نام پلن')
-    plan_type = models.CharField(max_length=20, choices=PLAN_TYPES, verbose_name='نوع پلن')
     duration_type = models.CharField(max_length=20, choices=DURATION_TYPES, verbose_name='نوع مدت')
     price = models.PositiveIntegerField(verbose_name='قیمت')
     duration_days = models.IntegerField(verbose_name='مدت به روز')

@@ -41,13 +41,13 @@ cancel_subscriptions.short_description = "لغو کردن اشتراک‌ های
 
 @admin.register(models.SubscriptionPlan)
 class SubscriptionPlanAdmin(admin.ModelAdmin):
-    list_display = ['name', 'plan_type', 'duration_type', 'price', 'duration_days', 'is_active', 'get_created_at_jalali']
-    list_filter = ['plan_type', 'duration_type', 'is_active', 'created_at']
+    list_display = ['name', 'duration_type', 'price', 'duration_days', 'is_active', 'get_created_at_jalali']
+    list_filter = ['duration_type', 'is_active', 'created_at']
     search_fields = ['name']
 
     fieldsets = [
         ('اطلاعات پایه', {
-            'fields': ['name', 'plan_type', 'duration_type']
+            'fields': ['name', 'duration_type']
         }),
         ('قیمت و مدت', {
             'fields': ['price', 'duration_days']
