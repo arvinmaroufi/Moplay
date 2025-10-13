@@ -126,21 +126,57 @@
                                 <div class="movie-download">
                                     <h5>تماشا و دانلود:</h5>
                                     {% if movie.subscription_status == 'subscription' %}
-                                        <a href="#subscription" class="theme-btn"><span class="fas fa-credit-card"></span> ابتدا باید اشتراک تهیه کنید</a>
-                                    {% else %}
-                                        {% if request.user.is_authenticated %}
-                                            <a href="{% url 'movie:movie_watch' movie.slug %}" class="theme-btn"><span class="fas fa-play"></span> تماشای آنلاین</a>
+                                        {% if has_access %}
+                                            <!-- user has subscription -->
+                                            <a href="{% url 'movie:movie_watch' movie.slug %}" class="theme-btn">
+                                                <span class="fas fa-play"></span> تماشای آنلاین
+                                            </a>
+                                            {% if movie.quality_480p %}
+                                                <a href="{{ movie.quality_480p }}" class="theme-btn">
+                                                    <span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 480p
+                                                </a>
+                                            {% endif %}
+                                            {% if movie.quality_720p %}
+                                                <a href="{{ movie.quality_720p }}" class="theme-btn">
+                                                    <span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 720p
+                                                </a>
+                                            {% endif %}
+                                            {% if movie.quality_1080p %}
+                                                <a href="{{ movie.quality_1080p }}" class="theme-btn">
+                                                    <span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 1080p
+                                                </a>
+                                            {% endif %}
                                         {% else %}
-                                            <a href="{% url 'accounts:login' %}" class="theme-btn"><span class="fas fa-user"></span> ابتدا وارد شوید</a>
+                                            <!-- user has not subscription -->
+                                            <a href="{% url 'subscription:plans' %}" class="theme-btn">
+                                                <span class="fas fa-credit-card"></span> ابتدا باید اشتراک تهیه کنید
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        <!-- free content -->
+                                        {% if request.user.is_authenticated %}
+                                            <a href="{% url 'movie:movie_watch' movie.slug %}" class="theme-btn">
+                                                <span class="fas fa-play"></span> تماشای آنلاین
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'accounts:login' %}" class="theme-btn">
+                                                <span class="fas fa-user"></span> برای تماشای آنلاین ابتدا وارد شوید
+                                            </a>
                                         {% endif %}
                                         {% if movie.quality_480p %}
-                                            <a href="{{ movie.quality_480p }}" class="theme-btn"><span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 480p</a>
+                                            <a href="{{ movie.quality_480p }}" class="theme-btn">
+                                                <span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 480p
+                                            </a>
                                         {% endif %}
                                         {% if movie.quality_720p %}
-                                            <a href="{{ movie.quality_720p }}" class="theme-btn"><span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 720p</a>
+                                            <a href="{{ movie.quality_720p }}" class="theme-btn">
+                                                <span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 720p
+                                            </a>
                                         {% endif %}
                                         {% if movie.quality_1080p %}
-                                            <a href="{{ movie.quality_1080p }}" class="theme-btn"><span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 1080p</a>
+                                            <a href="{{ movie.quality_1080p }}" class="theme-btn">
+                                                <span class="fas fa-arrow-down-to-arc"></span> دانلود کیفیت 1080p
+                                            </a>
                                         {% endif %}
                                     {% endif %}
                                 </div>
