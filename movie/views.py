@@ -183,6 +183,11 @@ def movie_detail(request, slug):
     movie.views += 1
     movie.save()
 
+    # check user access
+    has_access = True
+    if movie.subscription_status == 'subscription':
+        has_access = has_active_subscription(request.user)
+
     if request.method == 'POST':
         content = request.POST.get('content')
         if content and content.strip():
@@ -205,6 +210,7 @@ def movie_detail(request, slug):
     context = {
         'movie': movie,
         'similar_contents': similar_contents,
+        'has_access': has_access,
     }
     return render(request, 'movie/movie_detail.html', context)
 
@@ -214,6 +220,11 @@ def series_detail(request, slug):
     series.views += 1
     series.save()
     chapters = series.chapterseries_set.all()
+
+    # check user access
+    has_access = True
+    if series.subscription_status == 'subscription':
+        has_access = has_active_subscription(request.user)
 
     if request.method == 'POST':
         content = request.POST.get('content')
@@ -238,6 +249,7 @@ def series_detail(request, slug):
         'series': series,
         'chapters': chapters,
         'similar_contents': similar_contents,
+        'has_access': has_access,
     }
     return render(request, 'movie/series_detail.html', context)
 
