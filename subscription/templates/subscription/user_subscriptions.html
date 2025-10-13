@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+{% block title %}اشتراک‌ های من{% endblock %}
+{% load static %}
+{% load jalali_tags %}
+{% load custom_filters %}
+
+{% block content %}
+    <style>
+        .auth-wrap {
+            box-shadow: var(--box-shadow);
+            border-radius: 15px;
+            padding: 30px;
+            background: var(--theme-bg);
+        }
+
+        .active-subscription-alert {
+            box-shadow: var(--box-shadow);
+            border-right: 4px solid var(--color-white);
+        }
+
+        .subscription-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subscription-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .subscription-table thead {
+            background: var(--theme-bg-light);
+        }
+
+        .subscription-table th {
+            padding: 15px 12px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--heading-color);
+            border-bottom: 2px solid var(--border-info-color);
+            font-family: 'estedad-semibold';
+        }
+
+        .subscription-table td {
+            padding: 20px 12px;
+            border-bottom: 1px solid var(--border-info-color);
+            vertical-align: middle;
+        }
+
+        .subscription-row:hover {
+            background: var(--theme-bg-light);
+            transition: var(--transition);
+        }
+
+        .subscription-row.active-row {
+            background: rgba(41, 182, 246, 0.05);
+            border-right: 3px solid var(--theme-color);
+        }
+
+        .plan-info h6 {
+            font-family: 'estedad-semibold';
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .status-active {
+            background: rgba(34, 201, 158, 0.15);
+            color: #22C79C;
+            border: 1px solid #22C79C;
+        }
+
+        .status-expired {
+            background: rgba(245, 158, 11, 0.15);
+            color: #F59E0B;
+            border: 1px solid #F59E0B;
+        }
+
+        .status-canceled {
+            background: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+            border: 1px solid #EF4444;
+        }
+
+        .status-pending {
+            background: rgba(156, 163, 175, 0.15);
+            color: #9CA3AF;
+            border: 1px solid #9CA3AF;
+        }
+
+        .action-btn {
+            background: var(--theme-bg-light);
+            color: var(--theme-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid var(--border-info-color);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 100px;
+        }
+
+        .action-btn:hover {
+            background: var(--theme-color);
+            color: var(--color-white);
+            border-color: var(--theme-color);
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            opacity: 0.3;
+        }
+
+        .badge-light {
+            background: rgba(255,255,255,0.2) !important;
+            color: var(--color-white) !important;
+        }
+
+        .badge-lg {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .auth-wrap {
+                padding: 20px;
+            }
+
+            .active-subscription-alert .d-flex {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .active-subscription-alert .d-flex > div {
+                margin-bottom: 15px;
+            }
+
+            .subscription-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .subscription-table th,
+            .subscription-table td {
+                white-space: nowrap;
+                min-width: 120px;
+            }
+
+            .d-flex.justify-content-between.align-items-center {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .d-flex.justify-content-between.align-items-center h4 {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .subscription-table {
+                font-size: 14px;
+            }
+
+            .subscription-table th,
+            .subscription-table td {
+                padding: 12px 8px;
+                min-width: 100px;
+            }
+
+            .status-badge {
+                min-width: 60px;
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+
+            .action-btn {
+                min-width: 80px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+
+    <main class="main" dir="rtl">
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">اشتراک‌ های من</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">اشتراک ‌های من</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="py-80">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="site-heading text-center mb-5">
+                            <h2 class="site-title">اشتراک‌ های <span>من</span></h2>
+                            <p class="mt-3" style="color: var(--body-text-color);">مدیریت و مشاهده تاریخچه اشتراک ‌های شما</p>
+                        </div>
+                    </div>
+                </div>
+
+                {% if active_subscription %}
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div class="active-subscription-alert p-4 rounded" style="background: linear-gradient(135deg, var(--theme-color), #1e88e5); color: var(--color-white);">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subscription-icon mr-3">
+                                            <i class="fas fa-crown fa-2x"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-1">اشتراک فعال شما</h5>
+                                            <p class="mb-0">
+                                                <strong>{{ active_subscription.plan.name }}</strong> - اعتبار تا {{ active_subscription.end_date|to_jalali:'%H:%M:%S - %Y/%m/%d' }}
+                                                <span class="mr-2">({{ active_subscription.end_date|timeuntil }} باقی‌ مانده)</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <a href="{% url 'subscription:subscription_detail' active_subscription.id %}"
+                                           class="theme-btn" style="background: var(--color-white); color: var(--theme-color);">
+                                            <i class="fas fa-eye ml-2"></i>
+                                            مشاهده جزئیات
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="auth-wrap">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0" style="color: var(--heading-color);">
+                                    <i class="fas fa-history ml-2" style="color: var(--theme-color);"></i>
+                                    تاریخچه اشتراک‌ ها
+                                </h4>
+                                <a href="{% url 'subscription:plans' %}" class="theme-btn">
+                                    <i class="fas fa-plus ml-2"></i>
+                                    خرید اشتراک جدید
+                                </a>
+                            </div>
+
+                            {% if subscriptions %}
+                                <div class="table-container">
+                                    <div class="table-responsive">
+                                        <table class="subscription-table">
+                                            <thead>
+                                            <tr>
+                                                <th>پلن</th>
+                                                <th>تاریخ شروع</th>
+                                                <th>تاریخ پایان</th>
+                                                <th>مبلغ</th>
+                                                <th>وضعیت</th>
+                                                <th>عملیات</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for subscription in subscriptions %}
+                                                    <tr class="subscription-row {% if subscription.status == 'active' %}active-row{% endif %}">
+                                                        <td>
+                                                            <div>
+                                                                <h6 class="mb-1" style="color: var(--heading-color);">{{ subscription.plan.name }}</h6>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            {% if subscription.start_date %}
+                                                                <div>
+                                                                    <span style="color: var(--heading-color);">{{ subscription.start_date|to_jalali:'%Y/%m/%d' }}</span>
+                                                                    <small class="d-block">{{ subscription.start_date|to_jalali:'%H:%M:%S' }}</small>
+                                                                </div>
+                                                            {% else %}
+                                                                <span>-</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {% if subscription.end_date %}
+                                                                <div>
+                                                                    <span style="color: var(--heading-color);">{{ subscription.end_date|to_jalali:'%Y/%m/%d' }}</span>
+                                                                    <small class="d-block">{{ subscription.end_date|to_jalali:'%H:%M:%S' }}</small>
+                                                                </div>
+                                                            {% else %}
+                                                                <span>-</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <strong style="color: var(--theme-color2);">{{ subscription.payment_amount|format_price }}</strong>
+                                                                <small class="d-block">تومان</small>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="status-badge
+                                                                {% if subscription.status == 'active' %}status-active
+                                                                {% elif subscription.status == 'expired' %}status-expired
+                                                                {% elif subscription.status == 'canceled' %}status-canceled
+                                                                {% else %}status-pending{% endif %}">
+                                                                {{ subscription.get_status_display }}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{% url 'subscription:subscription_detail' subscription.id %}" class="action-btn">
+                                                                <i class="fas fa-eye ml-2"></i> جزئیات
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="empty-state text-center py-5">
+                                    <div class="empty-icon mb-4">
+                                        <i class="fas fa-list fa-4x" style="color: var(--body-text-color); opacity: 0.5;"></i>
+                                    </div>
+                                    <h5 class="mb-3" style="color: var(--heading-color);">شما هیچ اشتراکی ندارید</h5>
+                                    <p class="mb-4">برای شروع استفاده از خدمات، یک پلن اشتراک انتخاب کنید</p>
+                                    <a href="{% url 'subscription:plans' %}" class="theme-btn">
+                                        <i class="fas fa-rocket ml-2"></i>
+                                        مشاهده پلن ‌ها
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
