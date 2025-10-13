@@ -108,3 +108,13 @@ def select_plan(request, plan_id):
         'wallet_balance': wallet_balance
     }
     return render(request, 'subscription/select_plan.html', context)
+
+
+@login_required
+def subscription_detail(request, subscription_id):
+    subscription = get_object_or_404(UserSubscription, id=subscription_id, user=request.user)
+
+    context = {
+        'subscription': subscription
+    }
+    return render(request, 'subscription/subscription_detail.html', context)
