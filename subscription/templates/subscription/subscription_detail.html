@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% block title %}جزئیات اشتراک - {{ subscription.plan.name }}{% endblock %}
+{% load static %}
+{% load custom_filters %}
+{% load jalali_tags %}
+
+{% block content %}
+    <style>
+        .auth-wrap {
+            box-shadow: var(--box-shadow);
+            border-radius: 15px;
+            padding: 30px;
+            background: var(--theme-bg);
+        }
+
+        .status-icon.active {
+            color: var(--theme-color) !important;
+        }
+
+        .status-icon.expired {
+            color: var(--theme-color2) !important;
+        }
+
+        .badge-success {
+            background: rgba(34, 201, 158, .2) !important;
+            color: #22C79C !important;
+            border: 1px solid #22C79C;
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, .2) !important;
+            color: #F59E0B !important;
+            border: 1px solid #F59E0B;
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, .2) !important;
+            color: #EF4444 !important;
+            border: 1px solid #EF4444;
+        }
+
+        .badge-secondary {
+            background: rgba(156, 163, 175, .2) !important;
+            color: #9CA3AF !important;
+            border: 1px solid #9CA3AF;
+        }
+
+        .plan-features li, .technical-info .tech-item {
+            border-right: 3px solid var(--theme-color);
+            padding-right: 10px;
+        }
+
+        .remaining-time {
+            border-right: 4px solid var(--color-white);
+        }
+
+        .action-buttons .theme-btn {
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .security-status {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .auth-wrap {
+                padding: 20px;
+            }
+
+            .d-flex.justify-content-between.align-items-center {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .d-flex.justify-content-between.align-items-center .badge {
+                margin-top: 10px;
+            }
+        }
+    </style>
+
+    <main class="main" dir="rtl">
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">جزئیات اشتراک</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li><a href="{% url 'subscription:user_subscriptions' %}">اشتراک‌ های من</a></li>
+                    <li class="active">جزئیات اشتراک</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="py-80">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="auth-wrap">
+                            <!-- هدر کارت -->
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom"
+                                 style="border-color: var(--border-info-color) !important;">
+                                <div>
+                                    <h3 class="mb-1" style="color: var(--heading-color);">
+                                        <i class="fas fa-file-alt ml-2"></i> جزئیات اشتراک
+                                    </h3>
+                                </div>
+                                <span class="badge
+                                    {% if subscription.status == 'active' %}badge-success
+                                    {% elif subscription.status == 'expired' %}badge-warning
+                                    {% else %}badge-secondary{% endif %} px-3 py-2">
+                                    {{ subscription.get_status_display }}
+                                </span>
+                            </div>
+
+                            <!-- general information -->
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    <div class="p-4 rounded text-center" style="background: var(--theme-bg-light); border-right: 4px solid var(--theme-color);">
+                                        <small class="mb-2">پلن اشتراک</small>
+                                        <h4 class="mb-1" style="color: var(--theme-color);">{{ subscription.plan.name }}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="p-4 rounded text-center" style="background: var(--theme-bg-light); border-right: 4px solid var(--theme-color2);">
+                                        <small class="mb-2">مبلغ پرداختی</small>
+                                        <h4 class="mb-1" style="color: var(--theme-color2);">{{ subscription.payment_amount|format_price }} تومان</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- status and dates -->
+                            <div class="row mb-4">
+                                <div class="col-md-4 mb-3">
+                                    <div class="status-card text-center p-3 rounded" style="background: var(--theme-bg-light);">
+                                        <div class="status-icon mb-3 {% if subscription.is_active %}active{% else %}expired{% endif %}">
+                                            <i class="fas {% if subscription.is_active %}fa-play-circle{% else %}fa-pause-circle{% endif %} fa-2x"></i>
+                                        </div>
+                                        <h6 class="mb-2" style="color: var(--heading-color);">وضعیت</h6>
+                                        <span class="badge
+                                            {% if subscription.status == 'active' %}badge-success
+                                            {% elif subscription.status == 'expired' %}badge-warning
+                                            {% else %}badge-secondary{% endif %} px-3">
+                                            {{ subscription.get_status_display }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="date-card text-center p-3 rounded" style="background: var(--theme-bg-light);">
+                                        <div class="date-icon mb-3">
+                                            <i class="fas fa-calendar-plus fa-2x" style="color: var(--theme-color);"></i>
+                                        </div>
+                                        <h6 class="mb-2" style="color: var(--heading-color);">تاریخ شروع</h6>
+                                        <p class="mb-0">
+                                            {% if subscription.start_date %}
+                                                {{ subscription.start_date|to_jalali:'%Y/%m/%d' }}
+                                            {% else %}
+                                                <span class="text-muted">تعیین نشده</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="date-card text-center p-3 rounded" style="background: var(--theme-bg-light);">
+                                        <div class="date-icon mb-3">
+                                            <i class="fas fa-calendar-minus fa-2x" style="color: var(--theme-color2);"></i>
+                                        </div>
+                                        <h6 class="mb-2" style="color: var(--heading-color);">تاریخ پایان</h6>
+                                        <p class="mb-0">
+                                            {% if subscription.end_date %}
+                                                {{ subscription.end_date|to_jalali:'%Y/%m/%d' }}
+                                            {% else %}
+                                                <span class="text-muted">تعیین نشده</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- plan Specifications -->
+                            <div class="plan-features mb-4 p-4 rounded" style="background: var(--theme-bg-light);">
+                                <h5 class="mb-3 pb-2 border-bottom" style="border-color: var(--border-info-color) !important; color: var(--heading-color);">
+                                    <i class="fas fa-star ml-2" style="color: var(--theme-color);"></i>امکانات این پلن
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2">
+                                                <i class="fas fa-check ml-2" style="color: var(--theme-color);"></i>
+                                                <strong>مدت زمان:</strong> {{ subscription.plan.duration_days }} روز
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="fas fa-check ml-2" style="color: var(--theme-color);"></i>
+                                                <strong>رزولوشن:</strong> دسترسی به تمام کیفیت ها
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="fas fa-check ml-2" style="color: var(--theme-color);"></i>
+                                                <strong>نوع مدت:</strong> {{ subscription.plan.get_duration_type_display }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- technical information -->
+                            <div class="technical-info mb-4 p-4 rounded" style="background: var(--theme-bg-light);">
+                                <h5 class="mb-3 pb-2 border-bottom" style="border-color: var(--border-info-color) !important; color: var(--heading-color);">
+                                    <i class="fas fa-info-circle ml-2" style="color: var(--theme-color);"></i> اطلاعات فنی
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <div class="p-3 rounded" style="background: var(--theme-bg);">
+                                            <strong style="color: var(--heading-color);">شناسه تراکنش:</strong>
+                                            <code class="d-block mt-1 text-end">{{ subscription.transaction_id }}</code>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="p-3 rounded" style="background: var(--theme-bg);">
+                                            <strong style="color: var(--heading-color);">تاریخ ایجاد:</strong>
+                                            <span class="d-block mt-1 text-end">{{ subscription.created_at|to_jalali:'%H:%M - %Y/%m/%d' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- remaining status -->
+                            {% if subscription.is_active %}
+                                <div class="remaining-time p-4 rounded text-center" style="background: var(--theme-color); color: var(--color-white);">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-clock ml-2"></i>
+                                            <strong>زمان باقی‌مانده از اشتراک:</strong>
+                                        </div>
+                                        <span class="h4 mb-0">
+                                            {{ subscription.end_date|timeuntil }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <!-- additional information card -->
+                        <div class="row mt-4">
+                            <div class="col-md-6 mb-3">
+                                <div class="p-4 rounded" style="background: var(--theme-bg-light);">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="fas fa-question-circle ml-2 fa-lg" style="color: var(--theme-color);"></i>
+                                        <h5 class="mb-0 mr-2" style="color: var(--heading-color);">راهنمایی</h5>
+                                    </div>
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-2">
+                                            <i class="fas fa-info-circle ml-2" style="color: var(--theme-color);"></i>
+                                            پس از اتمام اشتراک، می‌توانید آن را تمدید کنید.
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-info-circle ml-2" style="color: var(--theme-color);"></i>
+                                            در صورت لغو اشتراک، با <a href="https://t.me/@moplay_support" class="text-primary">پشتیبانی</a> تماس بگیرید.
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-info-circle ml-2" style="color: var(--theme-color);"></i>
+                                            برای پشتیبانی با ما در تماس باشید.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="p-4 rounded" style="background: var(--theme-bg-light);">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="fas fa-shield-alt ml-2 fa-lg" style="color: var(--theme-color);"></i>
+                                        <h5 class="mb-0 mr-2" style="color: var(--heading-color);">وضعیت امنیتی</h5>
+                                    </div>
+                                    <div class="security-status">
+                                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded" style="background: var(--theme-bg);">
+                                            <span style="color: var(--body-text-color);">احراز هویت:</span>
+                                            <span class="badge badge-success px-3">تأیید شده</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded" style="background: var(--theme-bg);">
+                                            <span style="color: var(--body-text-color);">پرداخت:</span>
+                                            <span class="badge badge-success px-3">تکمیل شده</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: var(--theme-bg);">
+                                            <span style="color: var(--body-text-color);">وضعیت سرویس:</span>
+                                            <span class="badge
+                                                {% if subscription.is_active %}badge-success
+                                                {% else %}badge-secondary{% endif %} px-3">
+                                                {% if subscription.is_active %}فعال{% else %}غیرفعال{% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
