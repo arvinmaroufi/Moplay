@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}پلن‌ های اشتراک{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">خرید اشتراک</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">خرید اشتراک</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="pricing-area py-80" dir="rtl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">پلن های ما</span>
+                            <h2 class="site-title"> پلن اشتراک خود را<span> انتخاب کنید </span></h2>
+                        </div>
+                    </div>
+                </div>
+
+                {% if active_plan %}
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="alert alert-success text-center">
+                                <i class="fas fa-check-circle"></i>
+                                شما در حال حاضر اشتراک <strong>{{ active_plan.name }}</strong> فعال دارید.
+                                <a href="{% url 'subscription:user_subscriptions' %}" class="btn btn-outline-success btn-sm mr-2">مشاهده اشتراک‌ ها</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="row mt-3">
+                    {% if plans %}
+                        {% for plan in plans %}
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="pricing-item {% if active_plan and active_plan.id == plan.id %}active{% endif %} wow fadeInUp" data-wow-delay=".25s">
+                                    <div class="pricing-header">
+                                        <h4 class="pricing-title">{{ plan.name }}</h4>
+                                    </div>
+                                    <div class="pricing-icon">
+                                        <i class="icon-subscription"></i>
+                                    </div>
+                                    <div class="pricing-price">
+                                        <h1 class="pricing-amount">{{ plan.price|format_price }}<span class="pricing-duration">/{{ plan.get_duration_type_display }}</span></h1>
+                                    </div>
+                                    <div class="pricing-feature">
+                                        <ul>
+                                            <li>نام پلن: {{ plan.name }}</li>
+                                            <li>مدت زمان: {{ plan.duration_days }} روز</li>
+                                            <li>قیمت: {{ plan.price|format_price }} تومان</li>
+                                        </ul>
+                                    </div>
+                                    {% if active_plan and active_plan.id == plan.id %}
+                                        <a disabled class="theme-btn">فعال <i class="fas fa-check"></i></a>
+                                    {% else %}
+                                        <a href="{% url 'subscription:select_plan' plan.id %}" class="theme-btn">انتخاب پلن <i class="fas fa-arrow-right-long"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        در حال حاضر هیچ پلن اشتراکی موجود نیست!
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
