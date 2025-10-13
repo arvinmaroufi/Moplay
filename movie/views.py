@@ -279,7 +279,6 @@ def series_watch(request, series_slug, video_id):
 
 
 @check_content_access
-@login_required
 def series_download(request, series_slug, quality):
     series = get_object_or_404(Series, slug=series_slug, status='published')
     chapters = ChapterSeries.objects.filter(series=series).prefetch_related('videoseries_set')
