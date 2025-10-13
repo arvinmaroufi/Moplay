@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% block title %}انتخاب پلن - {{ plan.name }}{% endblock %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <style>
+        .plan-details .text-primary {
+            color: var(--theme-color) !important;
+        }
+
+        .auth-wrap {
+            box-shadow: var(--box-shadow);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            background: var(--theme-color);
+            color: var(--color-white);
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .payment-method {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--theme-color);
+        }
+
+        .payment-method.selected {
+            border-color: var(--theme-color);
+            background-color: rgba(var(--theme-color-rgb), 0.1);
+        }
+
+        .payment-method input[type="radio"] {
+            display: none;
+        }
+
+        .payment-icon {
+            font-size: 24px;
+            margin-left: 10px;
+        }
+
+        .insufficient-balance {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        @media (max-width: 576px) {
+            .auth-wrap {
+                padding: 20px;
+            }
+
+            .plan-details .col-6 {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <main class="main" dir="rtl">
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">تایید خرید اشتراک</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li><a href="{% url 'subscription:plans' %}">پلن ها</a></li>
+                    <li class="active">تایید خرید اشتراک</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="py-80">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="auth-wrap">
+                            <div class="auth-header">
+                                <h3>تایید خرید اشتراک</h3>
+                            </div>
+
+                            <div class="text-center mb-4">
+                                <div class="feature-icon mx-auto mb-3">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <h4 class="mb-2" style="color: var(--heading-color);">{{ plan.name }}</h4>
+                                <p>پلن انتخابی شما</p>
+                            </div>
+
+                            <div class="plan-details mb-4">
+                                <div class="row text-center">
+                                    <div class="col-6 mb-3">
+                                        <div class="p-3 rounded" style="background: var(--theme-bg-light);">
+                                            <strong class="d-block mb-2"
+                                                    style="color: var(--body-text-color);">قیمت:</strong>
+                                            <div class="h4 text-primary">{{ plan.price|format_price }} تومان</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <div class="p-3 rounded" style="background: var(--theme-bg-light);">
+                                            <strong class="d-block mb-2"
+                                                    style="color: var(--body-text-color);">مدت:</strong>
+                                            <div class="h4 text-primary">{{ plan.duration_days }} روز</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 mt-3 rounded" style="background: var(--theme-bg-light); border-right: 3px solid var(--theme-color);">
+                                    <h5 class="mb-3" style="color: var(--heading-color);">مزایای پلن:</h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> دسترسی نامحدود
+                                            به تمام محتوا
+                                        </li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> کیفیت پخش بالا</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> بدون تبلیغات</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> پشتیبانی 24/7</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <form method="post" class="auth-form" id="payment-form">
+                                {% csrf_token %}
+
+                                <!-- select payment method -->
+                                <div class="mb-4">
+                                    <h5 class="mb-3" style="color: var(--heading-color);">روش پرداخت را انتخاب کنید:</h5>
+
+                                    <!-- pay with wallet -->
+                                    <div class="payment-method" id="wallet-payment">
+                                        <input type="radio" name="payment_method" value="wallet" id="wallet_method"
+                                               {% if wallet_balance >= plan.price %}checked{% endif %}>
+                                        <label for="wallet_method" class="d-flex align-items-center mb-0">
+                                            <span class="payment-icon">
+                                                <i class="fas fa-wallet text-success"></i>
+                                            </span>
+                                            <div>
+                                                <strong>پرداخت با کیف پول</strong>
+                                                <small class="d-block">موجودی کیف پول: {{ wallet_balance|format_price }} تومان</small>
+                                            </div>
+                                        </label>
+                                        {% if wallet_balance < plan.price %}
+                                        <div class="insufficient-balance" id="insufficient-balance">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            موجودی کیف پول شما کافی نیست
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- direct payment -->
+                                    <div class="payment-method" id="direct-payment">
+                                        <input type="radio" name="payment_method" value="direct" id="direct_method"
+                                               {% if wallet_balance < plan.price %}checked{% endif %}>
+                                        <label for="direct_method" class="d-flex align-items-center mb-0">
+                                            <span class="payment-icon">
+                                                <i class="fas fa-credit-card text-primary"></i>
+                                            </span>
+                                            <div>
+                                                <strong>پرداخت مستقیم</strong>
+                                                <small class="d-block">پرداخت از طریق درگاه بانکی</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="agreement" name="agreement"
+                                               required>
+                                        <label class="form-check-label" for="agreement">
+                                            با <a href="{% url 'core:terms' %}" class="text-primary">قوانین و مقررات</a> موافقم
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="theme-btn w-100 mb-3" id="submit-btn">
+                                        <span id="submit-text">
+                                            {% if wallet_balance >= plan.price %}
+                                                پرداخت با کیف پول
+                                            {% else %}
+                                                پرداخت مستقیم
+                                            {% endif %}
+                                        </span>
+                                    </button>
+
+                                    {% if wallet_balance < plan.price %}
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            برای پرداخت با کیف پول، لطفا ابتدا کیف پول خود را شارژ کنید
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </form>
+
+                            <div class="auth-footer mt-4">
+                                <p class="text-center">
+                                    در صورت بروز مشکل با <a href="https://t.me/@moplay_support" class="text-primary">پشتیبانی</a> تماس بگیرید
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const walletPayment = document.getElementById('wallet-payment');
+            const directPayment = document.getElementById('direct-payment');
+            const walletMethod = document.getElementById('wallet_method');
+            const directMethod = document.getElementById('direct_method');
+            const submitText = document.getElementById('submit-text');
+            const submitBtn = document.getElementById('submit-btn');
+            const insufficientBalance = document.getElementById('insufficient-balance');
+
+            // manage payment method selection
+            function handlePaymentSelection() {
+                if (walletMethod.checked) {
+                    walletPayment.classList.add('selected');
+                    directPayment.classList.remove('selected');
+                    submitText.innerHTML = '<i class="fas fa-wallet me-2"></i> پرداخت با کیف پول';
+                } else {
+                    directPayment.classList.add('selected');
+                    walletPayment.classList.remove('selected');
+                    submitText.innerHTML = '<i class="fas fa-credit-card me-2"></i> پرداخت مستقیم';
+                }
+            }
+
+            // click on the payment card
+            walletPayment.addEventListener('click', function() {
+                if (!insufficientBalance) {
+                    walletMethod.checked = true;
+                    handlePaymentSelection();
+                }
+            });
+
+            directPayment.addEventListener('click', function() {
+                directMethod.checked = true;
+                handlePaymentSelection();
+            });
+
+            // initialization
+            handlePaymentSelection();
+
+            // form management
+            document.getElementById('payment-form').addEventListener('submit', function(e) {
+                if (walletMethod.checked && insufficientBalance) {
+                    e.preventDefault();
+                    alert('موجودی کیف پول شما کافی نیست. لطفا روش پرداخت دیگری انتخاب کنید یا کیف پول خود را شارژ کنید.');
+                    return false;
+                }
+            });
+        });
+    </script>
+{% endblock %}
