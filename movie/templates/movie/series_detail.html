@@ -42,9 +42,7 @@
                                     </div>
                                 </div>
                                 <div class="movie-action-right">
-                                    <a href="#"><i class="far fa-flag"></i></a>
                                     <a href="#"><i class="far fa-heart"></i></a>
-                                    <a href="#"><i class="far fa-share-alt"></i></a>
                                     <span><i class="far fa-eye"></i>{{ series.views }} بازدید</span>
                                 </div>
                             </div>
@@ -128,9 +126,8 @@
                                 <div class="movie-download">
                                     <h5>تماشا و دانلود:</h5>
                                     {% if series.subscription_status == 'subscription' %}
-                                        <a href="#subscription" class="theme-btn"><span class="fas fa-play"></span> ابتدا باید اشتراک تهیه کنید</a>
-                                    {% else %}
-                                        {% if request.user.is_authenticated %}
+                                        {% if has_access %}
+                                            <!-- user has subscription -->
                                             {% with first_chapter=series.chapterseries_set.first %}
                                                 {% if first_chapter %}
                                                     {% with first_video=first_chapter.videoseries_set.first %}
@@ -151,6 +148,7 @@
                                                 {% endif %}
                                             {% endwith %}
 
+                                            <!-- download links -->
                                             {% with first_video=series.chapterseries_set.first.videoseries_set.first %}
                                                 {% if first_video %}
                                                     {% if first_video.quality_480p %}
@@ -171,8 +169,58 @@
                                                 {% endif %}
                                             {% endwith %}
                                         {% else %}
-                                            <a href="{% url 'accounts:login' %}" class="theme-btn"><span class="fas fa-user"></span> ابتدا وارد شوید</a>
+                                            <!-- user has not subscription -->
+                                            <a href="{% url 'subscription:plans' %}" class="theme-btn">
+                                                <span class="fas fa-credit-card"></span> ابتدا باید اشتراک تهیه کنید
+                                            </a>
                                         {% endif %}
+                                    {% else %}
+                                        <!-- free content -->
+                                        {% if request.user.is_authenticated %}
+                                            {% with first_chapter=series.chapterseries_set.first %}
+                                                {% if first_chapter %}
+                                                    {% with first_video=first_chapter.videoseries_set.first %}
+                                                        {% if first_video %}
+                                                            <a href="{% url 'movie:series_watch' series.slug first_video.id %}" class="theme-btn">
+                                                                <span class="fas fa-play"></span> تماشای آنلاین
+                                                            </a>
+                                                        {% else %}
+                                                            <a class="theme-btn disabled">
+                                                                <span class="fas fa-play"></span> ویدیویی موجود نیست
+                                                            </a>
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                {% else %}
+                                                    <a class="theme-btn disabled">
+                                                        <span class="fas fa-play"></span> فصلی موجود نیست
+                                                    </a>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% else %}
+                                            <a href="{% url 'accounts:login' %}" class="theme-btn">
+                                                <span class="fas fa-user"></span> برای تماشای آنلاین ابتدا وارد شوید
+                                            </a>
+                                        {% endif %}
+                                        <!-- download links -->
+                                        {% with first_video=series.chapterseries_set.first.videoseries_set.first %}
+                                            {% if first_video %}
+                                                {% if first_video.quality_480p %}
+                                                    <a href="{% url 'movie:series_download' series.slug '480p' %}" class="theme-btn">
+                                                        <span class="fas fa-arrow-down-to-arc"></span> دانلود: 480p
+                                                    </a>
+                                                {% endif %}
+                                                {% if first_video.quality_720p %}
+                                                    <a href="{% url 'movie:series_download' series.slug '720p' %}" class="theme-btn">
+                                                        <span class="fas fa-arrow-down-to-arc"></span> دانلود: 720p
+                                                    </a>
+                                                {% endif %}
+                                                {% if first_video.quality_1080p %}
+                                                    <a href="{% url 'movie:series_download' series.slug '1080p' %}" class="theme-btn">
+                                                        <span class="fas fa-arrow-down-to-arc"></span> دانلود: 1080p
+                                                    </a>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endwith %}
                                     {% endif %}
                                 </div>
                             </div>
@@ -208,7 +256,7 @@
                                         {% for video in chapter.videoseries_set.all %}
                                             <div class="col-md-6 col-lg-4 col-xl-3">
                                                 <div class="movie-item">
-                                                    {% if series.subscription_status == 'subscription' %}
+                                                    {% if series.subscription_status == 'subscription' and not has_access %}
                                                         <div class="movie-img">
                                                             {% if series.vertical_banner %}
                                                                 <img src="{{ series.vertical_banner.url }}" alt="">
