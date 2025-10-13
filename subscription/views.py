@@ -118,3 +118,21 @@ def subscription_detail(request, subscription_id):
         'subscription': subscription
     }
     return render(request, 'subscription/subscription_detail.html', context)
+
+
+@login_required
+def user_subscriptions(request):
+    subscriptions = UserSubscription.objects.filter(user=request.user).order_by('-created_at')
+
+    # automatic update of expired subscription status
+    expired_subscriptions = subscriptions.filter(status='active', end_date__lte=timezone.now())
+    expired_subscriptions.update(status='expired')
+
+    # find the actual active subscription
+    active_subscription = subscriptions.filter(status='active', end_date__gt=timezone.now()).first()
+
+    context = {
+        'subscriptions': subscriptions,
+        'active_subscription': active_subscription
+    }
+    return render(request, 'subscription/user_subscriptions.html', context)
