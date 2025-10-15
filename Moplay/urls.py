@@ -16,6 +16,9 @@ urlpatterns = [
     # search url
     path('/', search_results, name='search_results'),
 
+    # ckeditor url
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+
     # redirect urls
     path('genre/', redirect_to_home, name='redirect_to_home'),
     path('genre/movies/', redirect_to_home, name='redirect_to_home'),

@@ -1,8 +1,10 @@
 asgiref==3.9.1
 Django==5.2.6
+django-ckeditor==6.7.3
 django-cleanup==9.0.0
 django-jalali-date==2.0.0
 django-jazzmin==3.0.1
+django-js-asset==3.1.2
 jalali_core==1.0.0
 jdatetime==5.2.0
 pillow==11.3.0

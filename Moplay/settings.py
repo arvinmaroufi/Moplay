@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     # installed apps
     'jalali_date',
     'django_cleanup.apps.CleanupConfig',
+    'ckeditor',
     # my apps
     'core',
     'accounts',
@@ -300,4 +301,33 @@ JAZZMIN_SETTINGS = {
     "changeform_format": "horizontal_tabs",
     # override change forms on a per modeladmin basis
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
+}
+
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 400,
+        'width': '100%',
+        'extraPlugins': 'image2',
+        'removePlugins': 'image',
+        'extraAllowedContent': 'img[!src,alt,width,height,style]{width,height};',
+        'image2_alignClasses': ['align-left', 'align-center', 'align-right'],
+        'image2_disableResizer': False,
+
+        # important section for responsive design:
+        'contentsCss': [
+            'body { max-width: 100%; }',
+            'img { max-width: 100%; height: auto; display: block; }'
+        ],
+
+        # prevent ckeditor from replacing existing content in templates
+        'templates_replaceContent': False,
+        'templates': [{
+            'title': 'Responsive Image',
+            'html': '<img style="max-width:100%; height:auto; display:block;">'
+        }],
+    }
 }
