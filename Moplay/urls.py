@@ -11,6 +11,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('', include('movie.urls')),
     path('', include('subscription.urls')),
+    path('', include('blog.urls')),
 
     # search url
     path('/', search_results, name='search_results'),
