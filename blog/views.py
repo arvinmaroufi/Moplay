@@ -53,3 +53,26 @@ def article_detail(request, slug):
         'recent_articles': recent_articles,
     }
     return render(request, 'blog/article_detail.html', context)
+
+
+def category_articles(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    articles = category.articles.filter(status='published').order_by('-views')
+
+    # pagination
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(articles, 9)
+    try:
+        object_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        object_list = paginator.page(1)
+    except EmptyPage:
+        object_list = paginator.page(paginator.num_pages)
+    pages_to_show = get_pages_to_show(object_list.number, paginator.num_pages)
+
+    context = {
+        'category': category,
+        'articles': object_list,
+        'pages_to_show': pages_to_show,
+    }
+    return render(request, 'blog/category_articles.html', context)
