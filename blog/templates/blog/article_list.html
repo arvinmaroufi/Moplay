@@ -44,7 +44,7 @@
                                             <ul>
                                                 <li><i class="far fa-book-open"></i>
                                                     {% for category in article.category.all %}
-                                                        <a href="#category_articles">{{ category.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                        <a href="{% url 'blog:category_articles' category.slug %}">{{ category.title }}</a>{% if not forloop.last %}،{% endif %}
                                                     {% endfor %}
                                                 </li>
                                             </ul>
