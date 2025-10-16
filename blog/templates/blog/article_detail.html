@@ -55,7 +55,7 @@
                                             <h5>تگ ها : </h5>
                                             <ul>
                                                 {% for tag in article.tag.all %}
-                                                    <li><a href="#tag_articles">{{ tag.title }}</a></li>
+                                                    <li><a href="{% url 'blog:tag_articles' tag.slug %}">{{ tag.title }}</a></li>
                                                 {% endfor %}
                                             </ul>
                                         </div>
@@ -103,7 +103,7 @@
                                 <h5 class="widget-title">تگ های محبوب</h5>
                                 <div class="tag-list">
                                     {% for tag in popular_tags %}
-                                        <a href="#tag_articles">{{ tag.title }}</a>
+                                        <a href="{% url 'blog:tag_articles' tag.slug %}">{{ tag.title }}</a>
                                     {% endfor %}
                                 </div>
                             </div>
