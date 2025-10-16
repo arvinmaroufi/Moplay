@@ -40,3 +40,12 @@ class FaqAdmin(admin.ModelAdmin):
             return obj.answer[:40] + '...'
         return obj.answer
     short_answer.short_description = 'جواب'
+
+
+@admin.register(models.Newsletter)
+class NewsletterAdmin(admin.ModelAdmin):
+    list_display = ['email', 'get_date_membership_jalali']
+
+    @admin.display(description='تاریخ عضویت', ordering='date_membership')
+    def get_date_membership_jalali(self, obj):
+        return datetime2jalali(obj.date_membership).strftime('%a، %d %b %Y')
