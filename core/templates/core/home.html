@@ -2,6 +2,7 @@
 {% block title %}دانلود فیلم و سریال بدون سانسور{% endblock %}
 {% load static %}
 {% load custom_filters %}
+{% load jalali_tags %}
 
 {% block content %}
     <main class="main">
@@ -311,7 +312,6 @@
             </div>
         </div>
 
-
         <div class="choose-area bg py-80" dir="rtl">
             <div class="container">
                 <div class="row align-items-center">
@@ -323,20 +323,17 @@
                                     ما به رضایت <span>مشتریان</span> خود اهمیت می دهیم
                                 </h2>
                             </div>
-                            <p>
-                                انواع مختلفی از معابر موجود است اما اکثریت آن ها را دارند
-                                با تزریق طنز واژگان تصادفی به شکلی دچار تغییر شده است که اینطور نیست
-                                نگاه حتی تمایل به تکرار از پیش تعریف شده کمی باورپذیر است.
-                            </p>
+                            <p>ما با ارائه محتوای باکیفیت و متنوع، پشتیبانی 24 ساعته و رابط کاربری ساده، تجربه استریم
+                                بی‌نظیری را برای شما به ارمغان می‌آوریم. تعهد ما به نوآوری و بهبود مستمر، ما را به
+                                انتخابی مطمئن برای هزاران کاربر تبدیل کرده است.</p>
                             <div class="choose-wrapper">
                                 <div class="choose-item">
                                     <div class="choose-icon">
                                         <i class="icon-stream-3"></i>
                                     </div>
                                     <div class="choose-item-content">
-                                        <h4>بهترین پلتفرم استریمینگ</h4>
-                                        <p>تنوع زیادی از معابر در دسترس اکثریت وجود دارد
-                                            دچار تغییر شوخ طبعی تزریق شده اند.</p>
+                                        <h4>بهترین پلتفرم استریم</h4>
+                                        <p>ارائه باکیفیت‌ترین خدمات استریم با آخرین فناوری‌های روز دنیا</p>
                                     </div>
                                 </div>
                                 <div class="choose-item">
@@ -344,9 +341,8 @@
                                         <i class="icon-stream-4"></i>
                                     </div>
                                     <div class="choose-item-content">
-                                        <h4>پخش جریانی بدون وقفه</h4>
-                                        <p>تنوع‌های زیادی از قسمت‌ها وجود دارد که اکثر آنها در دسترس هستند
-                                            دچار تغییر طنز تزریق شده اند.</p>
+                                        <h4>استریم بدون وقفه</h4>
+                                        <p>تجربه تماشای بی‌وقفه با سرورهای قدرتمند و پهنای باند بالا</p>
                                     </div>
                                 </div>
                             </div>
@@ -361,138 +357,6 @@
             </div>
         </div>
 
-
-        <div class="pricing-area py-80" dir="rtl">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 mx-auto">
-                        <div class="site-heading text-center">
-                            <span class="site-title-tagline">پلن های ما</span>
-                            <h2 class="site-title"> پلن اشتراک خود را<span> انتخاب کنید </span></h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-6 col-lg-4 col-xl-3">
-                        <div class="pricing-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="pricing-header">
-                                <h4 class="pricing-title">پایه</h4>
-                            </div>
-                            <div class="pricing-icon">
-                                <i class="icon-subscription"></i>
-                            </div>
-                            <div class="pricing-price">
-                                <h1 class="pricing-amount">۲۵۰,۰۰۰<span class="pricing-duration">/روزانه</span></h1>
-                            </div>
-                            <div class="pricing-feature">
-                                <ul>
-                                    <li>جریان ۷ روزه</li>
-                                    <li>رزولوشن 720p HD</li>
-                                    <li>فیلم‌ها، نمایش‌های تلویزیونی، تلویزیون زنده</li>
-                                    <li>درخواست سفارشی</li>
-                                    <li>پشتیبانی ۲۴ ساعته</li>
-                                </ul>
-                            </div>
-                            <a href="#" class="theme-btn">انتخاب پلن<i class="fas fa-arrow-right-long"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 col-xl-3">
-                        <div class="pricing-item wow fadeInDown" data-wow-delay=".25s">
-                            <div class="pricing-header">
-                                <h4 class="pricing-title">استاندارد</h4>
-                            </div>
-                            <div class="pricing-icon">
-                                <i class="icon-subscription"></i>
-                            </div>
-                            <div class="pricing-price">
-                                <h1 class="pricing-amount">۳۵۰,۰۰۰<span class="pricing-duration">/ماهانه</span></h1>
-                            </div>
-                            <div class="pricing-feature">
-                                <ul>
-                                    <li>جریان یک ماهه</li>
-                                    <li>رزولوشن 1080p HD</li>
-                                    <li>فیلم‌ها، نمایش‌های تلویزیونی، تلویزیون زنده</li>
-                                    <li>درخواست سفارشی</li>
-                                    <li>پشتیبانی ۲۴ ساعته</li>
-                                </ul>
-                            </div>
-                            <a href="#" class="theme-btn">انتخاب پلن<i class="fas fa-arrow-right-long"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 col-xl-3">
-                        <div class="pricing-item active wow fadeInUp" data-wow-delay=".25s">
-                            <div class="pricing-header">
-                                <h4 class="pricing-title">پرمیوم</h4>
-                            </div>
-                            <div class="pricing-icon">
-                                <i class="icon-subscription"></i>
-                            </div>
-                            <div class="pricing-price">
-                                <h1 class="pricing-amount">۷۹۰,۰۰۰<span class="pricing-duration">/ماهانه</span></h1>
-                            </div>
-                            <div class="pricing-feature">
-                                <ul>
-                                    <li>جریان ۱۲ ماهه</li>
-                                    <li>رزولوشن 4k HD</li>
-                                    <li>فیلم‌ها، نمایش‌های تلویزیونی، تلویزیون زنده</li>
-                                    <li>درخواست سفارشی</li>
-                                    <li>پشتیبانی ۲۴ ساعته</li>
-                                </ul>
-                            </div>
-                            <a href="#" class="theme-btn">انتخاب پلن<i class="fas fa-arrow-right-long"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 col-xl-3">
-                        <div class="pricing-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="pricing-header">
-                                <h4 class="pricing-title">پیشرفته</h4>
-                            </div>
-                            <div class="pricing-icon">
-                                <i class="icon-subscription"></i>
-                            </div>
-                            <div class="pricing-price">
-                                <h1 class="pricing-amount">۹۹۹,۰۰۰<span class="pricing-duration">/سالانه</span></h1>
-                            </div>
-                            <div class="pricing-feature">
-                                <ul>
-                                    <li>جریان مادام العمر</li>
-                                    <li>رزولیشن Ultra HD</li>
-                                    <li>فیلم‌ها، نمایش‌های تلویزیونی، تلویزیون زنده</li>
-                                    <li>درخواست سفارشی</li>
-                                    <li>پشتیبانی ۲۴ ساعته</li>
-                                </ul>
-                            </div>
-                            <a href="#" class="theme-btn">انتخاب پلن<i class="fas fa-arrow-right-long"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="partner-area bg pt-60 pb-60">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 mx-auto">
-                        <div class="site-heading text-center">
-                            <span class="site-title-tagline">شرکت های همکار ما</span>
-                            <h2 class="site-title">بهترین <span>دوستان</span></h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="partner-wrapper partner-slider owl-carousel owl-theme">
-                    <img src="{% static 'images/01.png' %}" alt="thumb">
-                    <img src="{% static 'images/02.png' %}" alt="thumb">
-                    <img src="{% static 'images/03.png' %}" alt="thumb">
-                    <img src="{% static 'images/04.png' %}" alt="thumb">
-                    <img src="{% static 'images/05.png' %}" alt="thumb">
-                    <img src="{% static 'images/06.png' %}" alt="thumb">
-                    <img src="{% static 'images/07.png' %}" alt="thumb">
-                </div>
-            </div>
-        </div>
-
-
         <div class="blog-area py-80" dir="rtl">
             <div class="container">
                 <div class="row">
@@ -504,83 +368,39 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="blog-img">
-                                <img src="{% static 'images/01_2.jpg' %}" alt="Thumb">
-                                <div class="blog-date"><i class="fal fa-calendar-alt"></i> ۰۲ خرداد , ۱۴۰۲</div>
-                            </div>
-                            <div class="blog-info">
-                                <div class="blog-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="far fa-user-circle"></i> نویسنده محسن دادار</a></li>
-                                        <li><a href="#"><i class="far fa-comments"></i> ۰۳ دیدگاه</a></li>
-                                    </ul>
+                    {% if recent_articles %}
+                        {% for article in recent_articles %}
+                            <div class="col-md-6 col-lg-4">
+                                <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                                    <div class="blog-img">
+                                        {% if article.list_banner %}
+                                            <img src="{{ article.list_banner.url }}" alt="{{ article.title|truncatewords:5 }}">
+                                        {% else %}
+                                            <img src="{% static 'images/blog_list_banner.jpg' %}" alt="{{ article.title|truncatewords:5 }}">
+                                        {% endif %}
+                                        <div class="blog-date"><i class="fal fa-calendar-alt"></i> {{ article.created_at|to_jalali:"%d %B، %Y" }}</div>
+                                    </div>
+                                    <div class="blog-info">
+                                        <div class="blog-meta">
+                                            <ul>
+                                                <li><i class="far fa-user-circle"></i>
+                                                    {% for category in article.category.all %}
+                                                        <a href="{% url 'blog:category_articles' category.slug %}">{{ category.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <h4 class="blog-title">
+                                            <a href="{% url 'blog:article_detail' article.slug %}">{{ article.title|truncatewords:5 }}</a>
+                                        </h4>
+                                        <a class="theme-btn" href="{% url 'blog:article_detail' article.slug %}">بیشتر بخوانید<i class="fas fa-arrow-right-long"></i></a>
+                                    </div>
                                 </div>
-                                <h4 class="blog-title">
-                                    <a href="#">بسیاری از تغییرات حقیقت عبور که رنج می برد در دسترس وجود دارد.</a>
-                                </h4>
-                                <a class="theme-btn" href="#">بیشتر بخوانید<i class="fas fa-arrow-right-long"></i></a>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
-                            <div class="blog-img">
-                                <img src="{% static 'images/02_1.jpg' %}" alt="Thumb">
-                                <div class="blog-date"><i class="fal fa-calendar-alt"></i> ۰۲ تیر , ۱۴۰۲</div>
-                            </div>
-                            <div class="blog-info">
-                                <div class="blog-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="far fa-user-circle"></i> نویسنده محسن دادار</a></li>
-                                        <li><a href="#"><i class="far fa-comments"></i>۰۳ دیدگاه</a></li>
-                                    </ul>
-                                </div>
-                                <h4 class="blog-title">
-                                    <a href="#">بسیاری از تغییرات حقیقت عبور که رنج می برد در دسترس وجود دارد.</a>
-                                </h4>
-                                <a class="theme-btn" href="#">بیشتر بخوانید<i class="fas fa-arrow-right-long"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
-                            <div class="blog-img">
-                                <img src="{% static 'images/03_1.jpg' %}" alt="Thumb">
-                                <div class="blog-date"><i class="fal fa-calendar-alt"></i> ۰۲ مرداد , ۱۴۰۲</div>
-                            </div>
-                            <div class="blog-info">
-                                <div class="blog-meta">
-                                    <ul>
-                                        <li><a href="#"><i class="far fa-user-circle"></i> نویسنده محسن دادار</a></li>
-                                        <li><a href="#"><i class="far fa-comments"></i> ۰۳ دیدگاه</a></li>
-                                    </ul>
-                                </div>
-                                <h4 class="blog-title">
-                                    <a href="#">بسیاری از تغییرات حقیقت عبور که رنج می برد در دسترس وجود دارد.</a>
-                                </h4>
-                                <a class="theme-btn" href="#">بیشتر بخوانید<i class="fas fa-arrow-right-long"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="cta-area pb-90" dir="rtl">
-            <div class="container">
-                <div class="cta-wrapper">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7 mx-auto">
-                            <div class="cta-content">
-                                <h1>دوره آزمایشی رایگان ۳۰ روزه را شروع کنید.</h1>
-                                <p>این یک واقعیت ثابت طولانی مدت است که خواننده با محتوای خواندنی پرت می شود.</p>
-                                <a href="#" class="theme-btn">شروع کنید<i class="fas fa-arrow-right-long"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% else %}
+                        مقاله ای یافت نشد!
+                    {% endif %}
                 </div>
             </div>
         </div>
