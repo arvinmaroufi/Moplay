@@ -208,39 +208,38 @@
                     <div class="row">
                         <div class="col-md-6 col-lg-3">
                             <div class="footer-widget-box about-us">
-                                <a href="#" class="footer-logo">
+                                <a href="{% url 'core:home' %}" class="footer-logo">
                                     <img src="{% static 'images/logo.png' %}" class="logo-dark-mode" alt="logo">
                                     <img src="{% static 'images/logo-dark.png' %}" class="logo-light-mode" alt="logo">
                                 </a>
                                 <p class="mb-3">
-                                    ما انواع مختلفی از معابر موجود داریم که اکثریت آنها دچار تغییر شده اند
-                                     به نوعی با تزریق کلمات طنز باورپذیر.
+                                    موپلی - پلتفرم استریم ویدیوی پیشرو در ایران
+                                دسترسی به هزاران محتوای جذاب با کیفیت بالا
+                                و تجربه کاربری بی‌نظیر برای شما
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-2">
                             <div class="footer-widget-box list">
-                                <h4 class="footer-widget-title">موپلی</h4>
+                                <h4 class="footer-widget-title">دسترسی سریع</h4>
                                 <ul class="footer-list">
-                                    <li><a href="#">درباره ما</a></li>
-                                    <li><a href="#">شاهدات</a></li>
-                                    <li><a href="#">با ما تماس بگیرید</a></li>
-                                    <li><a href="#">شرایط خدمات</a></li>
-                                    <li><a href="#">خط مشی رازداری</a></li>
-                                    <li><a href="#">اخبار به‌روزرسانی</a></li>
+                                    <li><a href="{% url 'movie:movies' %}">فیلم ‌ها</a></li>
+                                    <li><a href="{% url 'movie:series' %}">سریال‌ ها</a></li>
+                                    <li><a href="{% url 'movie:actors' %}">بازیگران</a></li>
+                                    <li><a href="{% url 'movie:directors' %}">کارگردانان</a></li>
+                                    <li><a href="{% url 'movie:suggestions' %}">پیشنهادات</a></li>
+                                    <li><a href="{% url 'blog:article_list' %}">وبلاگ</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-2">
                             <div class="footer-widget-box list">
-                                <h4 class="footer-widget-title">ژانر</h4>
+                                <h4 class="footer-widget-title">اطلاعات بیشتر</h4>
                                 <ul class="footer-list">
-                                    <li><a href="#">اکشن</a></li>
-                                    <li><a href="#">بیوگرافی</a></li>
-                                    <li><a href="#">مستند</a></li>
-                                    <li><a href="#">ماجراجویی</a></li>
-                                    <li><a href="#">ریلی تایم</a></li>
-                                    <li><a href="#">روانی</a></li>
+                                    <li><a href="{% url 'core:about' %}">درباره ما</a></li>
+                                    <li><a href="{% url 'core:faq' %}">سوالات متداول</a></li>
+                                    <li><a href="{% url 'core:terms' %}">قوانین و مقررات</a></li>
+                                    <li><a href="{% url 'subscription:plans' %}">خرید اشتراک</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -248,12 +247,8 @@
                             <div class="footer-widget-box list">
                                 <h4 class="footer-widget-title">پشتیبانی</h4>
                                 <ul class="footer-list">
-                                    <li><a href="#">مرکز راهنمایی</a></li>
-                                    <li><a href="#">سؤالات متداول</a></li>
-                                    <li><a href="#">حساب من</a></li>
-                                    <li><a href="#">درخواست فیلم</a></li>
-                                    <li><a href="#">پشتیبانی</a></li>
-                                    <li><a href="#">مرکز رسانه</a></li>
+                                    <li><a href="{% url 'core:faq' %}">راهنمای استفاده</a></li>
+                                <li><a href="{% url 'core:contact' %}">تماس با پشتیبانی</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -290,7 +285,7 @@
                 <div class="row" >
                     <div class="col-md-6 align-self-center">
                         <p class="copyright-text">
-                            © کلیه حقوق مادی و معنوی این وبسایت متعلق به <a href="#"> موپلی </a> میباشد.
+                            © کلیه حقوق مادی و معنوی این وبسایت متعلق به <a href="{% url 'core:home' %}"> موپلی </a> میباشد.
                         </p>
                     </div>
                     <div class="col-md-6 align-self-center">
