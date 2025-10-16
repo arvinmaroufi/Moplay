@@ -14,6 +14,7 @@ urlpatterns = [
     path('year/', redirect_to_home, name='redirect_to_home'),
     path('country/', redirect_to_home, name='redirect_to_home'),
     path('articles/category/', redirect_to_home, name='redirect_to_home'),
+    path('articles/tag/', redirect_to_home, name='redirect_to_home'),
 
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
