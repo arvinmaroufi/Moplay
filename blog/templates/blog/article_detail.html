@@ -100,9 +100,9 @@
                             </div>
 
                             <div class="widget tag">
-                                <h5 class="widget-title">تگ های محبوب</h5>
+                                <h5 class="widget-title">تگ های برتر</h5>
                                 <div class="tag-list">
-                                    {% for tag in popular_tags %}
+                                    {% for tag in top_tags %}
                                         <a href="{% url 'blog:tag_articles' tag.slug %}">{{ tag.title }}</a>
                                     {% endfor %}
                                 </div>

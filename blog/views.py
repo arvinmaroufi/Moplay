@@ -43,13 +43,13 @@ def article_detail(request, slug):
     article.save()
 
     categories = Category.objects.all()
-    popular_tags = Tag.objects.all().order_by('-views')[:9]
+    top_tags = Tag.objects.all().order_by('-views')[:9]
     recent_articles = Article.objects.filter(status='published').exclude(slug=slug).order_by('-created_at')[:3]
 
     context = {
         'article': article,
         'categories': categories,
-        'popular_tags': popular_tags,
+        'top_tags': top_tags,
         'recent_articles': recent_articles,
     }
     return render(request, 'blog/article_detail.html', context)
