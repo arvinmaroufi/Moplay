@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}{{ article.title }}{% endblock %}
+{% load static %}
+{% load jalali_tags %}
+
+{% block content %}
+<main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">{{ article.title }}</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li><a href="{% url 'blog:article_list' %}">وبلاگ</a></li>
+                    <li class="active">{{ article.title }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="blog-single py-120" dir="rtl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="blog-single-wrapper">
+                            <div class="blog-single-content">
+                                <div class="blog-thumb-img">
+                                    {% if article.detail_banner %}
+                                        <img src="{{ article.detail_banner.url }}" alt="{{ article.title|truncatewords:5 }}">
+                                    {% else %}
+                                        <img src="{% static 'images/blog_detail_banner.jpg' %}" alt="{{ article.title|truncatewords:5 }}">
+                                    {% endif %}
+                                </div>
+                                <div class="blog-single-info">
+                                    <div class="blog-meta">
+                                        <div class="blog-meta-left">
+                                            <ul>
+                                                <li><i class="far fa-book-open"></i>
+                                                    {% for category in article.category.all %}
+                                                        <a href="#category_articles">{{ category.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </li>
+                                                <li><i class="far fa-calendar-alt"></i>{{ article.created_at|to_jalali:"%d %B، %Y" }}</li>
+                                                <li><i class="far fa-eye"></i>{{ article.views }}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="blog-meta-right">
+                                            <span style="cursor: pointer" class="share-btn" onclick="copyLink(event)"><i class="far fa-copy"></i><span id="share-text">کپی لینک</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="blog-details">
+                                        <h3 class="blog-details-title mb-20">{{ article.title }}</h3>
+                                        <p class="mb-10">{{ article.description|safe }}</p>
+                                        <hr>
+                                        <div class="blog-details-tags pb-20">
+                                            <h5>تگ ها : </h5>
+                                            <ul>
+                                                {% for tag in article.tag.all %}
+                                                    <li><a href="#tag_articles">{{ tag.title }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <aside class="sidebar">
+
+                            <div class="widget category">
+                                <h5 class="widget-title">دسته بندی</h5>
+                                <div class="category-list">
+                                    {% for category in categories %}
+                                        <a href="#category_articles"><i class="far fa-arrow-left"></i>{{ category.title }}<span>({{ category.articles.count }})</span></a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="widget recent-post">
+                                <h5 class="widget-title">پست های اخیر</h5>
+                                {% if recent_articles %}
+                                    {% for a in recent_articles %}
+                                        <div class="recent-post-item">
+                                            <div class="recent-post-img">
+                                                {% if a.list_banner %}
+                                                    <img src="{{ a.list_banner.url }}" alt="{{ a.title|truncatewords:2 }}">
+                                                {% else %}
+                                                    <img src="{% static 'images/blog_list_banner.jpg' %}" alt="{{ a.title|truncatewords:2 }}">
+                                                {% endif %}
+                                            </div>
+                                            <div class="recent-post-info">
+                                                <h6><a href="{% url 'blog:article_detail' a.slug %}">{{ a.title|truncatewords:2 }}</a></h6>
+                                                <span><i class="far fa-clock"></i>{{ a.created_at|to_jalali:"%d %B، %Y" }}</span>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    مقاله ای یافت نشد!
+                                {% endif %}
+                            </div>
+
+                            <div class="widget tag">
+                                <h5 class="widget-title">تگ های محبوب</h5>
+                                <div class="tag-list">
+                                    {% for tag in popular_tags %}
+                                        <a href="#tag_articles">{{ tag.title }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="widget social-share">
+                                <h5 class="widget-title">ما را دنبال کنید</h5>
+                                <div class="social-share-link">
+                                    <a href="https://t.me/moplay"><i class="fab fa-telegram"></i></a>
+                                    <a href="https://instagram.com/moplay"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function copyLink(event) {
+            event.preventDefault();
+
+            const currentUrl = window.location.href;
+
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = currentUrl;
+            document.body.appendChild(tempTextArea);
+
+            tempTextArea.select();
+            tempTextArea.setSelectionRange(0, 99999);
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    const shareText = document.getElementById('share-text');
+                    shareText.textContent = 'کپی شد✅';
+
+                    setTimeout(() => {
+                        shareText.textContent = 'کپی لینک';
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('خطا در کپی کردن لینک: ', err);
+            }
+
+            document.body.removeChild(tempTextArea);
+        }
+    </script>
+{% endblock %}
