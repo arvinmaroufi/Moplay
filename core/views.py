@@ -8,6 +8,7 @@ from .forms import ContactForm
 from django.utils import timezone
 from datetime import timedelta
 from .models import FAQ
+from blog.models import Article
 
 
 def redirect_to_home(request):
@@ -52,6 +53,9 @@ def home(request):
     # popular series
     popular_series = Series.objects.filter(status='published').order_by('-views')[:10]
 
+    # recent articles
+    recent_articles = Article.objects.filter(status='published').order_by('-created_at')[:3]
+
     context = {
         'top_rated_contents': top_rated_contents,
         'suggestion_contents': suggestion_contents,
@@ -59,6 +63,7 @@ def home(request):
         'popular_movies': popular_movies,
         'latest_series': latest_series,
         'popular_series': popular_series,
+        'recent_articles': recent_articles,
     }
     return render(request, 'core/home.html', context)
 
