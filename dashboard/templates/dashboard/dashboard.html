@@ -93,6 +93,10 @@
                                         aria-controls="pills-profile5" aria-selected="false">افزایش موجودی
                                 </button>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <a href="{% url 'subscription:user_subscriptions' %}" class="nav-link" type="button" aria-selected="false">اشتراک های من
+                                </a>
+                            </li>
                             <li class="nav-item ms-auto" role="presentation" style="margin-right: auto;">
                                 <form method="post" action="{% url 'accounts:logout' %}">
                                     {% csrf_token %}
