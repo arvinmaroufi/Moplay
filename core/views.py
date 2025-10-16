@@ -4,11 +4,12 @@ from itertools import chain
 from operator import attrgetter
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import ContactForm
+from .forms import ContactForm, NewsletterForm
 from django.utils import timezone
 from datetime import timedelta
-from .models import FAQ
+from .models import FAQ, Newsletter
 from blog.models import Article
+from django.contrib import messages
 
 
 def redirect_to_home(request):
@@ -130,3 +131,20 @@ def faq(request):
         'faq_list': faq_list
     }
     return render(request, 'core/faq.html', context)
+
+
+def newsletter(request):
+    if request.method == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'با تشکر از عضویت شما در خبرنامه')
+            return redirect(request.META.get('HTTP_REFERER', 'core:home'))
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{error}')
+    else:
+        form = NewsletterForm()
+
+    return redirect(request.META.get('HTTP_REFERER', 'core:home'))
