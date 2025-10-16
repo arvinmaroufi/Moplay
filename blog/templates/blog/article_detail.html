@@ -36,7 +36,7 @@
                                             <ul>
                                                 <li><i class="far fa-book-open"></i>
                                                     {% for category in article.category.all %}
-                                                        <a href="#category_articles">{{ category.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                        <a href="{% url 'blog:category_articles' category.slug %}">{{ category.title }}</a>{% if not forloop.last %}،{% endif %}
                                                     {% endfor %}
                                                 </li>
                                                 <li><i class="far fa-calendar-alt"></i>{{ article.created_at|to_jalali:"%d %B، %Y" }}</li>
@@ -71,7 +71,7 @@
                                 <h5 class="widget-title">دسته بندی</h5>
                                 <div class="category-list">
                                     {% for category in categories %}
-                                        <a href="#category_articles"><i class="far fa-arrow-left"></i>{{ category.title }}<span>({{ category.articles.count }})</span></a>
+                                        <a href="{% url 'blog:category_articles' category.slug %}"><i class="far fa-arrow-left"></i>{{ category.title }}<span>({{ category.articles.count }})</span></a>
                                     {% endfor %}
                                 </div>
                             </div>
