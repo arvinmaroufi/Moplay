@@ -27,3 +27,15 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+
+
+class Newsletter(models.Model):
+    email = models.EmailField(max_length=100, unique=True, verbose_name='ایمیل')
+    date_membership = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ عضویت')
+
+    class Meta:
+        verbose_name = 'عضو خبرنامه'
+        verbose_name_plural = 'اعضای خبرنامه'
+
+    def __str__(self):
+        return self.email
