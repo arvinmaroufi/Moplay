@@ -50,9 +50,9 @@
                                             </ul>
                                         </div>
                                         <h4 class="blog-title">
-                                            <a href="#article_detail">{{ article.title|truncatewords:5 }}</a>
+                                            <a href="{% url 'blog:article_detail' article.slug %}">{{ article.title|truncatewords:5 }}</a>
                                         </h4>
-                                        <a class="theme-btn" href="#article_detail">بیشتر بخوانید<i class="fas fa-arrow-right-long"></i></a>
+                                        <a class="theme-btn" href="{% url 'blog:article_detail' article.slug %}">بیشتر بخوانید<i class="fas fa-arrow-right-long"></i></a>
                                     </div>
                                 </div>
                             </div>
