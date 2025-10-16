@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}وبلاگ{% endblock %}
+{% load static %}
+{% load jalali_tags %}
+
+{% block content %}
+    <main class="main">
+
+        <div class="site-breadcrumb" style="background: url({% static 'images/01-bg-ganr.jpg' %})">
+            <div class="container">
+                <h2 class="breadcrumb-title">وبلاگ ما</h2>
+                <ul class="breadcrumb-menu" dir="rtl">
+                    <li><a href="{% url 'core:home' %}">خانه</a></li>
+                    <li class="active">وبلاگ</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="blog-area py-80" dir="rtl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">وبلاگ ما</span>
+                            <h2 class="site-title">جدیدترین اخبار و مقالات در <span>وبلاگ</span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    {% if articles %}
+                        {% for article in articles %}
+                            <div class="col-md-6 col-lg-4">
+                                <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                                    <div class="blog-img">
+                                        {% if article.list_banner %}
+                                            <img src="{{ article.list_banner.url }}" alt="{{ article.title|truncatewords:5 }}">
+                                        {% else %}
+                                            <img src="{% static 'images/blog_list_banner.jpg' %}" alt="Thumb">
+                                        {% endif %}
+                                        <div class="blog-date"><i class="fal fa-calendar-alt"></i> {{ article.created_at|to_jalali:"%d %B، %Y" }}</div>
+                                    </div>
+                                    <div class="blog-info">
+                                        <div class="blog-meta">
+                                            <ul>
+                                                <li><i class="far fa-book-open"></i>
+                                                    {% for category in article.category.all %}
+                                                        <a href="#category_articles">{{ category.title }}</a>{% if not forloop.last %}،{% endif %}
+                                                    {% endfor %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <h4 class="blog-title">
+                                            <a href="#article_detail">{{ article.title|truncatewords:5 }}</a>
+                                        </h4>
+                                        <a class="theme-btn" href="#article_detail">بیشتر بخوانید<i class="fas fa-arrow-right-long"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        مقاله ای یافت نشد!
+                    {% endif %}
+                </div>
+
+                <div class="pagination-area mt-40">
+                    <div aria-label="Page navigation example">
+                        {% if articles.has_other_pages %}
+                            <ul class="pagination">
+                                {% if articles.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ articles.previous_page_number }}" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% for page in pages_to_show %}
+                                    {% if page == '...' %}
+                                        <li class="page-item"><span class="page-link">...</span></li>
+                                    {% elif articles.number == page %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if articles.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ articles.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fas fa-arrow-left"></i></span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
