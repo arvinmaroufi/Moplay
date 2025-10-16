@@ -1,0 +1,60 @@
+/* Force RTL layout */
+html {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+body {
+    text-align: right !important;
+}
+
+/* Sidebar to the right */
+.main-sidebar {
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* Shift the content area to the left */
+.content-wrapper,
+.main-footer,
+.main-header {
+    margin-left: 0 !important;
+    margin-right: 250px !important; /* or whatever the sidebar width is */
+}
+
+/* Fix nav toggle button */
+.sidebar-collapse .main-sidebar {
+    margin-right: -250px !important;
+    margin-left: 0 !important;
+}
+
+.nav {
+    padding-right: 0 !important;
+}
+
+.ml-auto, .mx-auto {
+    margin-right: auto !important;
+    margin-left: 0px !important;
+}
+
+.pl-3, .px-3 {
+    padding-right: 1rem !important;
+    padding-left: 0rem !important;
+}
+
+/* Menu items alignment */
+.nav-sidebar .nav-link {
+    text-align: right !important;
+}
+
+/* Brand alignment */
+.brand-link {
+    text-align: right !important;
+}
+
+/* Dropdowns and user menu */
+.user-panel,
+.navbar-nav {
+    direction: rtl !important;
+    text-align: right !important;
+}
