@@ -76,3 +76,29 @@ def category_articles(request, slug):
         'pages_to_show': pages_to_show,
     }
     return render(request, 'blog/category_articles.html', context)
+
+
+def tag_articles(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    tag.views += 1
+    tag.save()
+
+    articles = tag.articles.filter(status='published').order_by('-views')
+
+    # pagination
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(articles, 9)
+    try:
+        object_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        object_list = paginator.page(1)
+    except EmptyPage:
+        object_list = paginator.page(paginator.num_pages)
+    pages_to_show = get_pages_to_show(object_list.number, paginator.num_pages)
+
+    context = {
+        'tag': tag,
+        'articles': object_list,
+        'pages_to_show': pages_to_show,
+    }
+    return render(request, 'blog/tag_articles.html', context)
