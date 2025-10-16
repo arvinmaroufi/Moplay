@@ -263,8 +263,9 @@
                                 <div class="footer-newsletter">
                                     <p>برای دریافت آخرین به روز رسانی و اخبار، در خبرنامه ما مشترک شوید</p>
                                     <div class="subscribe-form">
-                                        <form action="#">
-                                            <input type="email" class="form-control" placeholder="ایمیل آدرس">
+                                        <form method="post" action="{% url 'core:newsletter' %}">
+                                            {% csrf_token %}
+                                            <input type="email" name="email" id="email" maxlength="100" class="form-control" required placeholder="ایمیل">
                                             <button class="theme-btn" type="submit">
                                                 <span class="icon-paper-plane"></span>عضویت
                                             </button>
