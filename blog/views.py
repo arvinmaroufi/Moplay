@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from .models import Article
+from django.shortcuts import render, get_object_or_404
+from .models import Article, Category, Tag
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -35,3 +35,21 @@ def article_list(request):
         'pages_to_show': pages_to_show,
     }
     return render(request, 'blog/article_list.html', context)
+
+
+def article_detail(request, slug):
+    article = get_object_or_404(Article, slug=slug, status='published')
+    article.views += 1
+    article.save()
+
+    categories = Category.objects.all()
+    popular_tags = Tag.objects.all().order_by('-views')[:9]
+    recent_articles = Article.objects.filter(status='published').exclude(slug=slug).order_by('-created_at')[:3]
+
+    context = {
+        'article': article,
+        'categories': categories,
+        'popular_tags': popular_tags,
+        'recent_articles': recent_articles,
+    }
+    return render(request, 'blog/article_detail.html', context)
