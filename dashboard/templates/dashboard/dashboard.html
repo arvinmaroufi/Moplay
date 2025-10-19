@@ -43,10 +43,17 @@
                         <div class="col-lg-8 col-xl-8">
                             <div class="intro-right">
                                 <div class="intro-item">
-                                    <div class="intro-content">
-                                        <h4 class="intro-amount">۷۹۰,۰۰۰<span>/ماهانه</span></h4>
-                                        <p>اکانت پرمیوم</p>
-                                    </div>
+                                    {% if active_subscription %}
+                                        <div class="intro-content">
+                                            <h4 class="intro-amount">{{ active_subscription.plan.price|format_price }}<span>/{{ active_subscription.plan.get_duration_type_display }}</span></h4>
+                                            <p>{{ active_subscription.plan.name }}</p>
+                                        </div>
+                                    {% else %}
+                                        <div class="intro-content">
+                                            <p>اشتراک ندارید</p>
+                                            <h4 class="intro-amount"><span>بدون اشتراک فعال</span></h4>
+                                        </div>
+                                    {% endif %}
                                     <div class="intro-icon">
                                         <i class="icon-subscription"></i>
                                     </div>

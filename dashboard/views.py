@@ -5,6 +5,7 @@ from .forms import ProfileEditForm, ChangePasswordForm, WalletChargeForm
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout
+from subscription.models import UserSubscription
 
 
 @login_required
@@ -57,6 +58,9 @@ def dashboard(request):
 
     # Get or create user wallet
     wallet, created = Wallet.objects.get_or_create(user=user)
+
+    # Get active user subscription
+    active_subscription = UserSubscription.objects.filter(user=user, status='active', end_date__gt=timezone.now()).first()
 
     # Handle POST requests
     if request.method == 'POST':
@@ -136,5 +140,6 @@ def dashboard(request):
         'password_form': password_form,
         'wallet_form': wallet_form,
         'wallet': wallet,
+        'active_subscription': active_subscription,
     }
     return render(request, 'dashboard/dashboard.html', context)
